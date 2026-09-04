@@ -91,10 +91,10 @@ O raciocínio completo está em [docs/linguagem.md](docs/linguagem.md).
 
 ## Estado atual
 
-O analisador léxico está implementado e testado. O parser, a análise semântica
-e o gerador de código ainda não existem.
+O analisador léxico está implementado. O parser, a análise semântica e o
+gerador de código ainda não existem.
 
-## Como compilar e testar
+## Como compilar e executar
 
 Requisitos: Flex, GCC e Make (o Make entra junto com o parser). Enquanto o
 parser não existe, dois comandos bastam:
@@ -107,18 +107,8 @@ gcc -Wall -Wextra -g -Isrc -o build/scanner build/lex.yy.c src/scanner_main.c
 Para ver a sequência de tokens de um programa:
 
 ```sh
-./build/scanner tests/validos/02-programa-basico.img
+./build/scanner examples/programa_basico.img
 ```
-
-Para rodar a suíte de testes:
-
-```sh
-./run_tests.sh
-```
-
-Cada arquivo `tests/<grupo>/<nome>.img` tem um par `<nome>.esperado` com a
-saída completa que o scanner deve produzir. O script compara as duas e informa
-`PASSOU` ou `FALHOU`.
 
 ## Decisões que precisam ser confirmadas com o professor
 

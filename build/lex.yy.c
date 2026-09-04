@@ -528,49 +528,31 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "src/scanner.l"
-/* FGA0003 - Compiladores 1
-   Curso de Engenharia de Software
-   Universidade de Brasilia (UnB)
-   ImagemLang - analisador lexico (Flex)
-
-   Reconhece as palavras-chave, identificadores, literais e simbolos
-   descritos em docs/tokens.md. Nao verifica a ordem dos tokens nem os
-   tipos das variaveis: essas responsabilidades pertencem, respectivamente,
-   as analises sintatica e semantica. */
-#line 12 "src/scanner.l"
+#line 2 "src/scanner.l"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "tokens.h"
 
-/* Nome do arquivo lido, usado nas mensagens de erro. */
 const char *arquivo_atual = "<stdin>";
-
-/* Numero de erros lexicos encontrados. */
 int erros_lexicos = 0;
 
-/* Coluna do proximo caractere a ser lido e coluna onde o token atual
-   comecou. O Flex controla a linha por conta propria (%option yylineno),
-   mas nao controla a coluna. */
 static int coluna = 1;
 int coluna_token = 1;
 
-/* Valores semanticos do ultimo token reconhecido. Serao substituidos por
-   yylval quando o parser existir. */
 long valor_inteiro = 0;
 char *valor_texto = NULL;
 
-/* Executado antes da acao de cada regra. */
 #define YY_USER_ACTION           \
     coluna_token = coluna;       \
     coluna += yyleng;
 
 static void erro_lexico(const char *mensagem, const char *lexema);
 static void guardar_texto(const char *inicio, int tamanho);
-#line 572 "build/lex.yy.c"
+#line 554 "build/lex.yy.c"
 #define YY_NO_INPUT 1
-#line 574 "build/lex.yy.c"
+#line 556 "build/lex.yy.c"
 
 #define INITIAL 0
 
@@ -785,10 +767,10 @@ YY_DECL
 		}
 
 	{
-#line 56 "src/scanner.l"
+#line 37 "src/scanner.l"
 
 
-#line 792 "build/lex.yy.c"
+#line 774 "build/lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -857,132 +839,129 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 58 "src/scanner.l"
-{ /* comentario de uma linha: ignorado */ }
+#line 39 "src/scanner.l"
+{ }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 60 "src/scanner.l"
-{ /* separadores: ignorados */ }
+#line 41 "src/scanner.l"
+{ }
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 62 "src/scanner.l"
+#line 43 "src/scanner.l"
 { coluna = 1; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 64 "src/scanner.l"
+#line 45 "src/scanner.l"
 { return KW_IMAGEM; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 65 "src/scanner.l"
+#line 46 "src/scanner.l"
 { return KW_INTEIRO; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 66 "src/scanner.l"
+#line 47 "src/scanner.l"
 { return KW_REDIMENSIONAR; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 67 "src/scanner.l"
+#line 48 "src/scanner.l"
 { return KW_PARA; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 68 "src/scanner.l"
+#line 49 "src/scanner.l"
 { return KW_POR; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 69 "src/scanner.l"
+#line 50 "src/scanner.l"
 { return KW_TONS_DE_CINZA; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 70 "src/scanner.l"
+#line 51 "src/scanner.l"
 { return KW_ROTACIONAR; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 71 "src/scanner.l"
+#line 52 "src/scanner.l"
 { return KW_RECORTAR; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 72 "src/scanner.l"
+#line 53 "src/scanner.l"
 { return KW_DE; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 73 "src/scanner.l"
+#line 54 "src/scanner.l"
 { return KW_TAMANHO; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 74 "src/scanner.l"
+#line 55 "src/scanner.l"
 { return KW_SALVAR; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 75 "src/scanner.l"
+#line 56 "src/scanner.l"
 { return KW_COMO; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 77 "src/scanner.l"
+#line 58 "src/scanner.l"
 { guardar_texto(yytext, yyleng);
                     return IDENTIFICADOR; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 80 "src/scanner.l"
+#line 61 "src/scanner.l"
 { valor_inteiro = strtol(yytext, NULL, 10);
                     return LITERAL_INTEIRO; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 83 "src/scanner.l"
-{ /* descarta as aspas de abertura e fechamento */
-                    guardar_texto(yytext + 1, yyleng - 2);
+#line 64 "src/scanner.l"
+{ guardar_texto(yytext + 1, yyleng - 2);
                     return LITERAL_STRING; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 87 "src/scanner.l"
-{ erro_lexico("string nao terminada", yytext);
-                    /* nao devolve token: o parser nao deve tentar usar
-                       um literal que a linguagem nao reconhece */ }
+#line 67 "src/scanner.l"
+{ erro_lexico("string nao terminada", yytext); }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 91 "src/scanner.l"
+#line 69 "src/scanner.l"
 { return ATRIBUICAO; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 92 "src/scanner.l"
+#line 70 "src/scanner.l"
 { return VIRGULA; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 93 "src/scanner.l"
+#line 71 "src/scanner.l"
 { return PONTO_E_VIRGULA; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 95 "src/scanner.l"
+#line 73 "src/scanner.l"
 { erro_lexico("caractere invalido", yytext); }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 97 "src/scanner.l"
+#line 75 "src/scanner.l"
 ECHO;
 	YY_BREAK
-#line 986 "build/lex.yy.c"
+#line 965 "build/lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1958,11 +1937,9 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 97 "src/scanner.l"
+#line 75 "src/scanner.l"
 
 
-/* Guarda o valor textual do token atual. A memoria anterior e liberada
-   porque apenas o ultimo token reconhecido precisa estar disponivel. */
 static void guardar_texto(const char *inicio, int tamanho)
 {
     free(valor_texto);
@@ -1975,7 +1952,6 @@ static void guardar_texto(const char *inicio, int tamanho)
     valor_texto[tamanho] = '\0';
 }
 
-/* Formato adotado no projeto: arquivo:linha:coluna: categoria: mensagem */
 static void erro_lexico(const char *mensagem, const char *lexema)
 {
     erros_lexicos++;

@@ -1,8 +1,0 @@
-  1:1   KW_IMAGEM
-01-caractere-invalido.img:1:8: erro lexico: caractere invalido: '@'
-  1:9   IDENTIFICADOR      foto
-  1:14  ATRIBUICAO
-  1:16  LITERAL_STRING     foto.jpg
-  1:26  PONTO_E_VIRGULA
-
-analise lexica concluida com 1 erro(s).

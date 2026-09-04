@@ -1,14 +1,3 @@
-/* FGA0003 - Compiladores 1
-   Curso de Engenharia de Software
-   Universidade de Brasilia (UnB)
-   ImagemLang - programa de demonstracao do analisador lexico
-
-   Le um arquivo .img e imprime a sequencia de tokens reconhecida. Serve
-   para inspecionar o scanner enquanto o parser nao existe, e continua util
-   depois dele como ferramenta de depuracao. Quando o parser entrar, quem
-   consome yylex() passa a ser o Bison; este arquivo permanece como alvo
-   separado de compilacao. */
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -53,9 +42,6 @@ int main(int argc, char **argv)
 {
     int token;
 
-    /* Torna a saida padrao line-buffered para que as mensagens de erro,
-       escritas em stderr, aparecam na ordem correta quando as duas saidas
-       sao redirecionadas para o mesmo arquivo. */
     setvbuf(stdout, NULL, _IOLBF, 0);
 
     if (argc > 2) {
