@@ -1,0 +1,4 @@
+# Artefatos gerados pelo Flex e pelo GCC
+build/
+lex.yy.c
+*.o

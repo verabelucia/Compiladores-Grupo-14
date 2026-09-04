@@ -1,3 +1,8 @@
+/* FGA0003 - Compiladores 1 */
+/* Curso de Engenharia de Software */
+/* Universidade de Brasília (UnB) */
+/* ImagemLang - analisador léxico com Flex */
+
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,6 +13,7 @@
 const char *arquivo_atual = "<stdin>";
 int erros_lexicos = 0;
 
+/* O Flex conta a linha sozinho (%option yylineno), mas nao conta a coluna. */
 static int coluna = 1;
 int coluna_token = 1;
 
@@ -61,7 +67,7 @@ STRING_ABERTA \"[^\"\n]*
 {INTEIRO}         { valor_inteiro = strtol(yytext, NULL, 10);
                     return LITERAL_INTEIRO; }
 
-{STRING}          { guardar_texto(yytext + 1, yyleng - 2);
+{STRING}          { guardar_texto(yytext + 1, yyleng - 2);  /* sem as aspas */
                     return LITERAL_STRING; }
 
 {STRING_ABERTA}   { erro_lexico("string nao terminada", yytext); }

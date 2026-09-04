@@ -1,3 +1,8 @@
+/* FGA0003 - Compiladores 1 */
+/* Curso de Engenharia de Software */
+/* Universidade de Brasília (UnB) */
+/* ImagemLang - códigos dos tokens do analisador léxico */
+
 #ifndef IMAGEMLANG_TOKENS_H
 #define IMAGEMLANG_TOKENS_H
 

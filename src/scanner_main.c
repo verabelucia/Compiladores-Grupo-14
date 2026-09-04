@@ -1,3 +1,8 @@
+/* FGA0003 - Compiladores 1 */
+/* Curso de Engenharia de Software */
+/* Universidade de Brasília (UnB) */
+/* ImagemLang - programa de demonstração do analisador léxico */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -42,6 +47,8 @@ int main(int argc, char **argv)
 {
     int token;
 
+    /* stdout line-buffered: sem isso o stderr sai fora de ordem quando as
+       duas saidas vao para o mesmo arquivo, como no run_tests.sh. */
     setvbuf(stdout, NULL, _IOLBF, 0);
 
     if (argc > 2) {

@@ -1,0 +1,4 @@
+imagem foto = "foto.jpg";
+tons_de_cinza @foto;
+rotacionar foto 90;
+salvar foto como "saida.jpg#;

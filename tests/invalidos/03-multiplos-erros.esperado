@@ -1,0 +1,19 @@
+  1:1   KW_IMAGEM
+  1:8   IDENTIFICADOR      foto
+  1:13  ATRIBUICAO
+  1:15  LITERAL_STRING     foto.jpg
+  1:25  PONTO_E_VIRGULA
+  2:1   KW_TONS_DE_CINZA
+03-multiplos-erros.img:2:15: erro lexico: caractere invalido: '@'
+  2:16  IDENTIFICADOR      foto
+  2:20  PONTO_E_VIRGULA
+  3:1   KW_ROTACIONAR
+  3:12  IDENTIFICADOR      foto
+  3:17  LITERAL_INTEIRO    90
+  3:19  PONTO_E_VIRGULA
+  4:1   KW_SALVAR
+  4:8   IDENTIFICADOR      foto
+  4:13  KW_COMO
+03-multiplos-erros.img:4:18: erro lexico: string nao terminada: '"saida.jpg#;'
+
+analise lexica concluida com 2 erro(s).
