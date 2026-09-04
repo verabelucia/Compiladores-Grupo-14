@@ -1,0 +1,54 @@
+(* Gramática preliminar da ImagemLang. *)
+
+(* Os comandos de operação mutam a imagem no lugar e não produzem valor.
+   A composição - por exemplo, "imagem cinza = tons_de_cinza foto;" - está
+   fora do escopo inicial. Se vier a ser implementada, o ponto de extensão é
+   declaracao_imagem, cujo lado direito deixaria de ser apenas "string" e
+   passaria a ser um nao-terminal "expressao". Ver docs/linguagem.md. *)
+
+programa = { comando } ;
+
+comando = declaracao_imagem
+        | declaracao_inteiro
+        | redimensionamento
+        | conversao_cinza
+        | rotacao
+        | recorte
+        | salvamento
+        ;
+
+declaracao_imagem = "imagem", identificador, "=", string, ";" ;
+
+declaracao_inteiro = "inteiro", identificador, "=", inteiro, ";" ;
+
+redimensionamento = "redimensionar", identificador,
+                    "para", valor_inteiro, "por", valor_inteiro, ";" ;
+
+conversao_cinza = "tons_de_cinza", identificador, ";" ;
+
+rotacao = "rotacionar", identificador, valor_inteiro, ";" ;
+
+recorte = "recortar", identificador,
+          "de", valor_inteiro, ",", valor_inteiro,
+          "tamanho", valor_inteiro, "por", valor_inteiro, ";" ;
+
+salvamento = "salvar", identificador, "como", string, ";" ;
+
+valor_inteiro = inteiro | identificador ;
+
+identificador = letra_ou_sublinhado,
+                { letra_ou_sublinhado | digito } ;
+
+inteiro = digito, { digito } ;
+
+string = '"', { caractere_string }, '"' ;
+
+letra_ou_sublinhado = "A" | "B" | "..." | "Z"
+                     | "a" | "b" | "..." | "z"
+                     | "_" ;
+
+digito = "0" | "1" | "2" | "3" | "4"
+       | "5" | "6" | "7" | "8" | "9" ;
+
+(* caractere_string representa qualquer caractere permitido, exceto uma
+   quebra de linha ou uma aspa dupla não escapada. *)

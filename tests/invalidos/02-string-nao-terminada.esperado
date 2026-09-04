@@ -1,0 +1,6 @@
+  1:1   KW_IMAGEM
+  1:8   IDENTIFICADOR      foto
+  1:13  ATRIBUICAO
+02-string-nao-terminada.img:1:15: erro lexico: string nao terminada: '"foto.jpg;'
+
+analise lexica concluida com 1 erro(s).
