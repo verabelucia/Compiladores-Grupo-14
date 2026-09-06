@@ -1,4 +1,8 @@
-# Cronograma inicial - semestre 2026/2
+---
+layout: default
+title: "Cronograma"
+nav_order: 6
+---
 
 Este planejamento associa a ImagemLang ao plano de ensino da disciplina. As
 entregas sugeridas são metas da equipe e poderão ser ajustadas após orientação

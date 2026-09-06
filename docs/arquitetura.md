@@ -1,4 +1,8 @@
-# Arquitetura inicial
+---
+layout: default
+title: "Arquitetura"
+nav_order: 5
+---
 
 ## Fluxo do compilador
 
