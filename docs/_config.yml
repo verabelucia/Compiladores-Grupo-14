@@ -1,0 +1,38 @@
+title: ImagemLang
+description: >-
+  DSL para processamento de imagens desenvolvida na disciplina
+  FGA0003 - Compiladores 1 (UnB/FGA) - Grupo 14.
+
+url: "https://verabelucia.github.io"
+baseurl: "/Compiladores-Grupo-14"
+
+remote_theme: just-the-docs/just-the-docs
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-relative-links
+  - jekyll-seo-tag
+
+relative_links:
+  enabled: true
+  collections: false
+
+color_scheme: dark
+search_enabled: true
+
+heading_anchors: true
+
+aux_links:
+  Repositório no GitHub:
+    - https://github.com/verabelucia/Compiladores-Grupo-14
+aux_links_new_tab: true
+
+back_to_top: true
+back_to_top_text: Voltar ao topo
+
+footer_content: >-
+  FGA0003 - Compiladores 1 - Grupo 14 - Universidade de Brasília, Faculdade do Gama.
+
+exclude:
+  - Gemfile
+  - Gemfile.lock

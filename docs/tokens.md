@@ -1,4 +1,8 @@
-# Tokens iniciais
+---
+layout: default
+title: "Tokens"
+nav_order: 3
+---
 
 O analisador léxico será implementado com Flex. Sua função será transformar os
 caracteres do programa em tokens consumidos pelo parser.

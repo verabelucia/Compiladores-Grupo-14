@@ -1,4 +1,8 @@
-# Especificação inicial da ImagemLang
+---
+layout: default
+title: "Especificação da linguagem"
+nav_order: 2
+---
 
 ## Propósito
 

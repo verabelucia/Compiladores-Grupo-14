@@ -1,5 +1,7 @@
 # ImagemLang
 
+Documentação publicada: <https://verabelucia.github.io/Compiladores-Grupo-14/>
+
 ImagemLang é uma linguagem específica de domínio (DSL) para processamento de
 imagens. O projeto será desenvolvido na disciplina FGA0003 - Compiladores 1 e
 terá C como linguagem-alvo.
@@ -81,6 +83,10 @@ O raciocínio completo está em [docs/linguagem.md](docs/linguagem.md).
   e ficam versionadas no próprio repositório, sem dependência de instalação.
 
 ## Documentação inicial
+
+A documentação também está publicada como site em
+<https://verabelucia.github.io/Compiladores-Grupo-14/>, gerado pelo GitHub
+Pages a partir da pasta `docs/` do branch `main`.
 
 - [Especificação da linguagem](docs/linguagem.md)
 - [Tokens](docs/tokens.md)
