@@ -8,24 +8,24 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "tokens.h"
+#include "parser.tab.h"
 
 const char *arquivo_atual = "<stdin>";
 int erros_lexicos = 0;
 
-/* O Flex conta a linha sozinho (%option yylineno), mas nao conta a coluna. */
+/* O Flex conta a linha sozinho (%option yylineno), mas nao conta a coluna.
+   A posicao de cada token vai para yylloc, que o Bison usa em @1, @2... */
 static int coluna = 1;
-int coluna_token = 1;
 
-long valor_inteiro = 0;
-char *valor_texto = NULL;
-
-#define YY_USER_ACTION           \
-    coluna_token = coluna;       \
+#define YY_USER_ACTION                   \
+    yylloc.first_line = yylineno;        \
+    yylloc.first_column = coluna;        \
+    yylloc.last_line = yylineno;         \
+    yylloc.last_column = coluna + yyleng - 1; \
     coluna += yyleng;
 
 static void erro_lexico(const char *mensagem, const char *lexema);
-static void guardar_texto(const char *inicio, int tamanho);
+static char *copiar_texto(const char *inicio, int tamanho);
 %}
 
 %option noyywrap
@@ -61,13 +61,14 @@ STRING_ABERTA \"[^\"\n]*
 "salvar"          { return KW_SALVAR; }
 "como"            { return KW_COMO; }
 
-{IDENT}           { guardar_texto(yytext, yyleng);
+{IDENT}           { yylval.texto = copiar_texto(yytext, yyleng);
                     return IDENTIFICADOR; }
 
-{INTEIRO}         { valor_inteiro = strtol(yytext, NULL, 10);
+{INTEIRO}         { yylval.inteiro = strtol(yytext, NULL, 10);
                     return LITERAL_INTEIRO; }
 
-{STRING}          { guardar_texto(yytext + 1, yyleng - 2);  /* sem as aspas */
+{STRING}          { /* sem as aspas */
+                    yylval.texto = copiar_texto(yytext + 1, yyleng - 2);
                     return LITERAL_STRING; }
 
 {STRING_ABERTA}   { erro_lexico("string nao terminada", yytext); }
@@ -80,21 +81,23 @@ STRING_ABERTA \"[^\"\n]*
 
 %%
 
-static void guardar_texto(const char *inicio, int tamanho)
+/* Devolve uma copia propria do lexema; quem recebe o token libera. */
+static char *copiar_texto(const char *inicio, int tamanho)
 {
-    free(valor_texto);
-    valor_texto = malloc((size_t) tamanho + 1);
-    if (valor_texto == NULL) {
+    char *texto = malloc((size_t) tamanho + 1);
+    if (texto == NULL) {
         fprintf(stderr, "erro: memoria insuficiente no analisador lexico\n");
         exit(1);
     }
-    memcpy(valor_texto, inicio, (size_t) tamanho);
-    valor_texto[tamanho] = '\0';
+    memcpy(texto, inicio, (size_t) tamanho);
+    texto[tamanho] = '\0';
+    return texto;
 }
 
 static void erro_lexico(const char *mensagem, const char *lexema)
 {
     erros_lexicos++;
     fprintf(stderr, "%s:%d:%d: erro lexico: %s: '%s'\n",
-            arquivo_atual, yylineno, coluna_token, mensagem, lexema);
+            arquivo_atual, yylloc.first_line, yylloc.first_column,
+            mensagem, lexema);
 }

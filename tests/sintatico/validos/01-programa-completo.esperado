@@ -1,0 +1,9 @@
+  2:1   imagem foto = "foto.jpg"
+  3:1   inteiro largura = 750
+  5:1   redimensionar foto para largura por 800
+  6:1   tons_de_cinza foto
+  7:1   rotacionar foto 90
+  8:1   recortar foto de 10, 20 tamanho 300 por 200
+  9:1   salvar foto como "resultado.jpg"
+
+analise sintatica concluida sem erros.
