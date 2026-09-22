@@ -1,0 +1,3 @@
+imagem foto = "foto.jpg;
+tons_de_cinza foto;
+salvar foto como "resultado.jpg";

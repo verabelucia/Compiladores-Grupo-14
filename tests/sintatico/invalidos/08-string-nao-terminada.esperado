@@ -1,0 +1,5 @@
+08-string-nao-terminada.img:1:15: erro lexico: string nao terminada: '"foto.jpg;'
+08-string-nao-terminada.img:2:1: erro sintatico: encontrado 'tons_de_cinza', esperado texto entre aspas
+  3:1   salvar foto como "resultado.jpg"
+
+analise concluida com 2 erro(s): 1 lexico(s), 1 sintatico(s).

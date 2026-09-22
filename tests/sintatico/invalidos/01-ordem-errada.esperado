@@ -1,0 +1,4 @@
+  1:1   imagem foto = "foto.jpg"
+01-ordem-errada.img:2:8: erro sintatico: encontrado 'como', esperado identificador
+
+analise concluida com 1 erro(s): 0 lexico(s), 1 sintatico(s).

@@ -1,0 +1,6 @@
+imagem foto = "foto.jpg";
+redimensionar foto para 750 x 800;
+tons_de_cinza foto;
+recortar foto de 10 20 tamanho 300 por 200;
+rotacionar foto 90;
+salvar foto "resultado.jpg";

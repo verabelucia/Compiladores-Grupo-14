@@ -1,0 +1,4 @@
+imagem foto = "foto.jpg";
+rotacionar foto @90;
+inteiro angulo = "noventa";
+salvar foto como "resultado.jpg";

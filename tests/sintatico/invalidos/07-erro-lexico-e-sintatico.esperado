@@ -1,0 +1,7 @@
+  1:1   imagem foto = "foto.jpg"
+07-erro-lexico-e-sintatico.img:2:17: erro lexico: caractere invalido: '@'
+  2:1   rotacionar foto 90
+07-erro-lexico-e-sintatico.img:3:18: erro sintatico: encontrado texto entre aspas, esperado numero inteiro
+  4:1   salvar foto como "resultado.jpg"
+
+analise concluida com 2 erro(s): 1 lexico(s), 1 sintatico(s).

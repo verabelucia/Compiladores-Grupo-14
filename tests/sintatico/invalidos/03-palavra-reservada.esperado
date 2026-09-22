@@ -1,0 +1,4 @@
+03-palavra-reservada.img:1:8: erro sintatico: encontrado 'de', esperado identificador
+03-palavra-reservada.img:2:9: erro sintatico: encontrado 'tamanho', esperado identificador
+
+analise concluida com 2 erro(s): 0 lexico(s), 2 sintatico(s).

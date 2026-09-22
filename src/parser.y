@@ -20,6 +20,7 @@ static char *texto_de_inteiro(long valor);
 %}
 
 %locations
+%define parse.error custom
 
 %union {
     long inteiro;
@@ -67,6 +68,7 @@ comando
     | rotacao
     | recorte
     | salvamento
+    | error PONTO_E_VIRGULA   { yyerrok; }
     ;
 
 declaracao_imagem
@@ -137,9 +139,33 @@ static char *texto_de_inteiro(long valor)
     return texto;
 }
 
+/* Chamada pelo Bison (parse.error custom) a cada erro sintático. Monta a
+   mensagem no formato arquivo:linha:coluna: erro sintatico: ... */
+static int yyreport_syntax_error(const yypcontext_t *contexto)
+{
+    enum { MAX_ESPERADOS = 5 };
+    yysymbol_kind_t esperados[MAX_ESPERADOS];
+    const YYLTYPE *local = yypcontext_location(contexto);
+    int n = yypcontext_expected_tokens(contexto, esperados, MAX_ESPERADOS);
+
+    erros_sintaticos++;
+    fprintf(stderr, "%s:%d:%d: erro sintatico: encontrado %s",
+            arquivo_atual, local->first_line, local->first_column,
+            yysymbol_name(yypcontext_token(contexto)));
+
+    /* n == 0 quando ha mais de MAX_ESPERADOS alternativas. Nesta gramatica
+       isso so acontece onde comeca um comando (sao 7 palavras-chave). */
+    if (n == 0)
+        fprintf(stderr, ", esperado inicio de comando");
+    for (int i = 0; i < n; i++)
+        fprintf(stderr, "%s %s", i == 0 ? ", esperado" : " ou",
+                yysymbol_name(esperados[i]));
+    fprintf(stderr, "\n");
+    return 0;
+}
+
+/* Erros que nao sao sintaticos (ex.: pilha esgotada) passam por aqui. */
 void yyerror(const char *mensagem)
 {
-    erros_sintaticos++;
-    fprintf(stderr, "%s:%d:%d: erro sintatico: %s\n",
-            arquivo_atual, yylloc.first_line, yylloc.first_column, mensagem);
+    fprintf(stderr, "%s: erro: %s\n", arquivo_atual, mensagem);
 }
