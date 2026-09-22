@@ -97,44 +97,82 @@ Pages a partir da pasta `docs/` do branch `main`.
 
 ## Estado atual
 
-O analisador léxico está implementado e coberto por testes automatizados. O
-parser, a análise semântica e o gerador de código ainda não existem.
+Os analisadores léxico e sintático estão implementados e cobertos por 17
+testes automatizados. O parser reconhece os sete comandos do escopo mínimo,
+relata erros sintáticos com linha e coluna e se recupera no `;` para relatar
+vários erros numa só execução. A AST, a tabela de símbolos, a análise
+semântica e o gerador de código ainda não existem.
 
 ## Como compilar e executar
 
-Requisitos: Flex, GCC e Make (o Make entra junto com o parser). Enquanto o
-parser não existe, dois comandos bastam:
+Requisitos: Flex, Bison 3.6 ou mais recente, GCC e Make.
 
 ```sh
-mkdir -p build
-flex -o build/lex.yy.c src/scanner.l
-gcc -Wall -Wextra -g -Isrc -o build/scanner build/lex.yy.c src/scanner_main.c
+make          # gera build/imagemc
+make test     # compila, se preciso, e roda a suíte de testes
+make clean    # apaga a pasta build/
 ```
 
-A pasta `build/` não é versionada: ela guarda apenas o `lex.yy.c` gerado pelo
-Flex e o executável produzido pelo GCC, ambos reconstruíveis a partir de
-`src/`.
+A pasta `build/` não é versionada: ela guarda o `parser.tab.c` e o
+`parser.tab.h` gerados pelo Bison, o `lex.yy.c` gerado pelo Flex e o
+executável `imagemc`, todos reconstruíveis a partir de `src/`.
 
-Para ver a sequência de tokens de um programa:
+### Executando o compilador
+
+Por padrão, `imagemc` faz a análise sintática e imprime cada comando
+reconhecido com linha e coluna:
 
 ```sh
-./build/scanner examples/programa_basico.img
+./build/imagemc examples/programa_basico.img
 ```
 
-Para rodar a suíte de testes:
+```text
+  2:1   imagem foto = "foto.jpg"
+  5:1   redimensionar foto para 750 por 800
+  6:1   tons_de_cinza foto
+  7:1   rotacionar foto 90
+  8:1   recortar foto de 10, 20 tamanho 300 por 200
+ 11:1   salvar foto como "resultado.jpg"
+
+analise sintatica concluida sem erros.
+```
+
+Essa saída é provisória: a partir da semana 06, o parser passa a construir a
+AST em vez de imprimir os comandos.
+
+Com `--tokens`, `imagemc` para na análise léxica e lista os tokens:
 
 ```sh
-./run_tests.sh
+./build/imagemc --tokens examples/programa_basico.img
 ```
 
-Cada arquivo `tests/<grupo>/<nome>.img` tem um par `<nome>.esperado` com a
-saída completa que o scanner deve produzir. O script compara as duas e informa
-`PASSOU` ou `FALHOU`.
+Erros saem em `stderr`, no formato `arquivo:linha:coluna: categoria: mensagem`:
 
-Os testes em `tests/validos/` cobrem declarações, um programa completo e o
-tratamento de comentários. Os de `tests/invalidos/` cobrem caractere fora do
-vocabulário, string não terminada e a recuperação após vários erros na mesma
-entrada.
+```text
+programa.img:2:8: erro sintatico: encontrado 'como', esperado identificador
+```
+
+Códigos de saída: `0` sem erros, `1` com erros léxicos ou sintáticos, `2` para
+uso incorreto ou arquivo inexistente.
+
+### Suíte de testes
+
+```sh
+make test
+```
+
+Cada arquivo `tests/<fase>/<grupo>/<nome>.img` tem um par `<nome>.esperado`
+com a saída completa (stdout e stderr) que o compilador deve produzir. O
+script `run_tests.sh` compara as duas e informa `PASSOU` ou `FALHOU`. A fase
+decide o modo: `tests/lexico/` roda `imagemc --tokens` e `tests/sintatico/`
+roda `imagemc`.
+
+| Pasta | Cobre |
+|---|---|
+| `tests/lexico/validos/` | declarações, programa completo, comentários |
+| `tests/lexico/invalidos/` | caractere inválido, string não terminada, vários erros léxicos |
+| `tests/sintatico/validos/` | os sete comandos, valores passados por variável, programa sem comandos |
+| `tests/sintatico/invalidos/` | ordem errada, falta de `;`, palavra reservada como nome, fim inesperado, lixo no início de comando, vários erros com recuperação, erro léxico somado a sintático, string não terminada |
 
 ## Decisões que precisam ser confirmadas com o professor
 

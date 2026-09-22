@@ -26,8 +26,11 @@ pequeno runtime próprio, construído sobre as bibliotecas header-only
 
 ## Estado atual
 
-O analisador léxico está implementado e coberto por testes automatizados. O
-parser, a análise semântica e o gerador de código ainda não existem.
+Os analisadores léxico e sintático estão implementados e cobertos por 17
+testes automatizados. O parser reconhece os sete comandos do escopo mínimo,
+relata erros sintáticos com linha e coluna e se recupera no `;` para relatar
+vários erros numa só execução. A AST, a tabela de símbolos, a análise
+semântica e o gerador de código ainda não existem.
 
 ## Fases do compilador
 
