@@ -1,0 +1,9 @@
+// Usa os sete comandos da linguagem.
+imagem foto = "foto.jpg";
+inteiro largura = 750;
+
+redimensionar foto para largura por 800;
+tons_de_cinza foto;
+rotacionar foto 90;
+recortar foto de 10, 20 tamanho 300 por 200;
+salvar foto como "resultado.jpg";

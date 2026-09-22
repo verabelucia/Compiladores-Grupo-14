@@ -1,0 +1,8 @@
+imagem foto = "foto.jpg";
+inteiro angulo = 180;
+inteiro x = 0;
+inteiro y = 0;
+inteiro lado = 64;
+rotacionar foto angulo;
+recortar foto de x, y tamanho lado por lado;
+salvar foto como "miniatura.png";
