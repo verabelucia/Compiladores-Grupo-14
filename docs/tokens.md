@@ -4,8 +4,13 @@ title: "Tokens"
 nav_order: 3
 ---
 
-O analisador léxico será implementado com Flex. Sua função será transformar os
-caracteres do programa em tokens consumidos pelo parser.
+O analisador léxico é implementado com Flex (`src/scanner.l`). Sua função é
+transformar os caracteres do programa em tokens consumidos pelo parser.
+
+Os códigos numéricos dos tokens não são escritos à mão: eles vêm das
+declarações `%token` em `src/parser.y`, e o Bison os gera em
+`build/parser.tab.h`, que o lexer inclui. Assim, lexer e parser nunca
+divergem sobre o número de um token.
 
 ## Palavras-chave
 
@@ -49,9 +54,26 @@ comum, como `de`, `por`, `para` e `tamanho`. A decisão está registrada em
 | `VIRGULA` | `,` |
 | `PONTO_E_VIRGULA` | `;` |
 
-O fim de arquivo não é declarado como token. No Flex, o fim da entrada é
-sinalizado por `yylex()` retornando `0`, valor que o Bison interpreta como
-`$end`.
+O fim de arquivo é o token `FIM`, de código `0`: é o valor que o Bison
+espera de `yylex()` quando a entrada acaba. Ele é declarado explicitamente
+para ganhar o apelido "fim do arquivo" e uma posição própria. A regra
+`<<EOF>>` do lexer registra a linha e a coluna onde o arquivo termina; sem
+ela, um erro como `encontrado fim do arquivo, esperado ';'` apontaria para a
+coluna do último `\n` lido, uma posição que não existe no arquivo.
+
+## Apelidos nas mensagens de erro
+
+Cada token tem um apelido em `src/parser.y`, usado nas mensagens de erro
+sintático no lugar do nome interno:
+
+| Token | Apelido na mensagem |
+|---|---|
+| palavras-chave | a própria palavra entre aspas simples, ex.: `'como'` |
+| `IDENTIFICADOR` | `identificador` |
+| `LITERAL_INTEIRO` | `numero inteiro` |
+| `LITERAL_STRING` | `texto entre aspas` |
+| símbolos | o próprio símbolo entre aspas simples, ex.: `';'` |
+| `FIM` | `fim do arquivo` |
 
 ## Elementos ignorados
 
@@ -67,7 +89,12 @@ sinalizado por `yylex()` retornando `0`, valor que o Bison interpreta como
 - acompanhar linha e coluna;
 - reportar caracteres inválidos;
 - reportar strings não terminadas;
-- entregar os tokens ao Bison.
+- entregar os tokens ao Bison, com o valor em `yylval` (`texto` ou `inteiro`)
+  e a posição em `yylloc`.
+
+As strings de identificadores e literais são alocadas pelo lexer, e quem
+consome o token as libera. Durante a recuperação de erros, o Bison descarta
+tokens; a diretiva `%destructor` libera as strings desses tokens descartados.
 
 O lexer não verifica a ordem dos tokens nem a compatibilidade de tipos. Essas
 responsabilidades pertencem, respectivamente, às análises sintática e

@@ -41,6 +41,29 @@ linha e coluna.
 
 Verifica se a sequência de tokens pertence à gramática e cria a AST.
 
+Implementado em `src/parser.y` (Bison), com uma regra por comando da
+[gramática](gramatica.md). Até a AST existir (semana 06), cada comando
+reconhecido é impresso com sua linha e coluna. `valor_inteiro` aceita tanto
+um literal quanto um identificador; checar se o identificador é mesmo um
+`inteiro` fica para a análise semântica.
+
+Erros sintáticos:
+
+- **Mensagens:** com `%define parse.error custom`, a função
+  `yyreport_syntax_error` monta mensagens em português com o token encontrado
+  e os esperados: `encontrado 'como', esperado identificador`. Onde há mais de
+  cinco alternativas, o que nesta gramática só acontece no início de um
+  comando, a mensagem diz `esperado inicio de comando`.
+- **Recuperação:** a regra `comando: error ';' { yyerrok; }` descarta tokens
+  até o próximo `;` e retoma no comando seguinte. Um programa com três erros
+  em linhas diferentes gera três mensagens, e os comandos corretos entre eles
+  continuam sendo reconhecidos.
+- **Limitação conhecida:** uma string não terminada engole o restante da
+  linha, inclusive o `;`. O erro léxico vem acompanhado de um erro sintático
+  em cascata na linha seguinte. O teste
+  `tests/sintatico/invalidos/08-string-nao-terminada` registra esse
+  comportamento.
+
 ### AST
 
 Terá inicialmente os seguintes tipos de nó:
@@ -123,14 +146,24 @@ compilador e a biblioteca de imagens.
 
 ## Tratamento de erros
 
-O formato pretendido é:
+O formato é:
 
 ```text
 arquivo.img:linha:coluna: categoria: mensagem
 ```
 
-Exemplo:
+As categorias `erro lexico` e `erro sintatico` já estão implementadas:
 
 ```text
-programa.img:3:16: erro semântico: 'tons_de_cinza' espera imagem, mas 'x' é inteiro
+programa.img:1:8: erro lexico: caractere invalido: '@'
+programa.img:2:8: erro sintatico: encontrado 'como', esperado identificador
 ```
+
+A categoria semântica virá com a análise semântica:
+
+```text
+programa.img:3:16: erro semantico: 'tons_de_cinza' espera imagem, mas 'x' e inteiro
+```
+
+Ao final, o compilador resume a contagem por categoria e sai com código `1`
+se houve qualquer erro.
