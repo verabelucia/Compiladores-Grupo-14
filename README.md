@@ -105,7 +105,16 @@ semântica e o gerador de código ainda não existem.
 
 ## Como compilar e executar
 
-Requisitos: Flex, Bison 3.6 ou mais recente, GCC e Make.
+Requisitos: Flex, Bison 3.6 ou mais recente (testado com 3.8.2), GCC e Make.
+Confira a versão com `bison --version`; com Bison antigo, o `make` para logo
+no início com a mensagem `require bison 3.6`.
+
+- **Linux / WSL:** Ubuntu 22.04 ou mais recente e Debian 12 já trazem o Bison
+  3.8 (`sudo apt install flex bison gcc make`). O Ubuntu 20.04 traz o 3.5,
+  que não serve: use uma distribuição mais nova no WSL.
+- **macOS:** o `/usr/bin/bison` do sistema é o 2.3. Instale pelo Homebrew
+  (`brew install bison flex`) e coloque-o antes no PATH:
+  `export PATH="$(brew --prefix bison)/bin:$PATH"`.
 
 ```sh
 make          # gera build/imagemc

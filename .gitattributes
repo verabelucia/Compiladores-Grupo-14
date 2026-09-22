@@ -1,0 +1,3 @@
+# Fim de linha LF em todos os arquivos de texto, inclusive em clones feitos
+# no Windows: run_tests.sh e os .esperado deixam de funcionar com CRLF.
+* text=auto eol=lf
