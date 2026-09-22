@@ -1,0 +1,5 @@
+  1:1   imagem foto = "foto.jpg"
+02-falta-ponto-e-virgula.img:3:1: erro sintatico: encontrado 'rotacionar', esperado ';'
+  4:1   salvar foto como "resultado.jpg"
+
+analise concluida com 1 erro(s): 0 lexico(s), 1 sintatico(s).

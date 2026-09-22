@@ -79,6 +79,13 @@ STRING_ABERTA \"[^\"\n]*
 
 .                 { erro_lexico("caractere invalido", yytext); }
 
+<<EOF>>           { /* O fim do arquivo nao passa por YY_USER_ACTION: sem
+                       isto, um erro "encontrado fim do arquivo" citaria a
+                       posicao do ultimo caractere lido. */
+                    yylloc.first_line = yylloc.last_line = yylineno;
+                    yylloc.first_column = yylloc.last_column = coluna;
+                    return FIM; }
+
 %%
 
 /* Devolve uma copia propria do lexema; quem recebe o token libera. */

@@ -1,0 +1,8 @@
+  1:1   imagem foto = "foto.jpg"
+06-multiplos-erros.img:2:29: erro sintatico: encontrado identificador, esperado 'por'
+  3:1   tons_de_cinza foto
+06-multiplos-erros.img:4:21: erro sintatico: encontrado numero inteiro, esperado ','
+  5:1   rotacionar foto 90
+06-multiplos-erros.img:6:13: erro sintatico: encontrado texto entre aspas, esperado 'como'
+
+analise concluida com 3 erro(s): 0 lexico(s), 3 sintatico(s).

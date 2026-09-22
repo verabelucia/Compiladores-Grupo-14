@@ -1,0 +1,4 @@
+  1:1   imagem foto = "foto.jpg"
+04-fim-inesperado.img:3:1: erro sintatico: encontrado fim do arquivo, esperado ';'
+
+analise concluida com 1 erro(s): 0 lexico(s), 1 sintatico(s).
