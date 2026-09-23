@@ -66,6 +66,7 @@ Não fazem parte do escopo inicial:
 - expressões aritméticas completas;
 - filtros definidos pelo usuário;
 - otimizações avançadas.
+- Interface gráfica (GUI).
 
 ## Decisões de projeto já tomadas
 
