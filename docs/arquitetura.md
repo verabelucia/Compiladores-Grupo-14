@@ -42,10 +42,10 @@ linha e coluna.
 Verifica se a sequência de tokens pertence à gramática e cria a AST.
 
 Implementado em `src/parser.y` (Bison), com uma regra por comando da
-[gramática](gramatica.md). Até a AST existir (semana 06), cada comando
-reconhecido é impresso com sua linha e coluna. `valor_inteiro` aceita tanto
-um literal quanto um identificador; checar se o identificador é mesmo um
-`inteiro` fica para a análise semântica.
+[gramática](gramatica.md). A ação de cada regra cria o nó correspondente da
+AST, e a regra inicial entrega a raiz em `raiz_ast`. `valor_inteiro` aceita
+tanto um literal quanto um identificador; checar se o identificador é mesmo
+um `inteiro` fica para a análise semântica.
 
 Erros sintáticos:
 
@@ -66,21 +66,38 @@ Erros sintáticos:
 
 ### AST
 
-Terá inicialmente os seguintes tipos de nó:
+Implementada em `src/ast.h` e `src/ast.c`. O programa é um nó `PROGRAM` com a
+lista encadeada dos comandos; cada comando é um nó de um destes tipos:
 
-```text
-PROGRAM
-IMAGE_DECL
-INTEGER_DECL
-RESIZE
-GRAYSCALE
-ROTATE
-CROP
-SAVE
+| Nó | Comando | Campos usados |
+|---|---|---|
+| `AST_IMAGE_DECL` | `imagem foto = "foto.jpg";` | `alvo`, `arquivo` |
+| `AST_INTEGER_DECL` | `inteiro angulo = 90;` | `alvo`, `numero` |
+| `AST_RESIZE` | `redimensionar foto para L por A;` | `alvo`, `args[RESIZE_LARGURA]`, `args[RESIZE_ALTURA]` |
+| `AST_GRAYSCALE` | `tons_de_cinza foto;` | `alvo` |
+| `AST_ROTATE` | `rotacionar foto ANGULO;` | `alvo`, `args[ROTATE_ANGULO]` |
+| `AST_CROP` | `recortar foto de X, Y tamanho L por A;` | `alvo`, `args[CROP_X]` … `args[CROP_ALTURA]` |
+| `AST_SAVE` | `salvar foto como "x.png";` | `alvo`, `arquivo` |
+
+- `alvo` é a variável declarada ou operada, com a sua posição.
+- Cada argumento inteiro é um `Valor`: um literal (`VALOR_LITERAL`, em
+  `numero`) ou o nome de uma variável (`VALOR_VARIAVEL`, em `nome`), também
+  com posição. Isso permite que a semântica aponte o erro no argumento exato.
+- Cada nó guarda a posição da palavra-chave que inicia o comando.
+- A AST é dona das strings que recebe do lexer; `liberar_ast` libera tudo.
+  Durante a recuperação de erros, o Bison libera os nós descartados com
+  `%destructor`.
+
+As fases seguintes percorrem os comandos assim:
+
+```c
+for (const NoAST *cmd = raiz_ast->comandos; cmd != NULL; cmd = cmd->proximo) {
+    switch (cmd->tipo) {
+    case AST_ROTATE: /* cmd->alvo.nome, cmd->args[ROTATE_ANGULO] */ break;
+    /* ... */
+    }
+}
 ```
-
-Cada nó conservará sua posição no código-fonte para permitir mensagens de erro
-claras.
 
 ### Tabela de símbolos e análise semântica
 

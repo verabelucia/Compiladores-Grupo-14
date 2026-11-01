@@ -27,26 +27,52 @@ executável `imagemc`, todos reconstruíveis a partir de `src/`.
 
 ## Executando o compilador
 
-Por padrão, `imagemc` faz a análise sintática e imprime cada comando
-reconhecido com linha e coluna:
+Por padrão, `imagemc` analisa o programa e informa se há erros:
 
 ```sh
 ./build/imagemc examples/programa_basico.img
 ```
 
 ```text
-  2:1   imagem foto = "foto.jpg"
-  5:1   redimensionar foto para 750 por 800
-  6:1   tons_de_cinza foto
-  7:1   rotacionar foto 90
-  8:1   recortar foto de 10, 20 tamanho 300 por 200
- 11:1   salvar foto como "resultado.jpg"
-
-analise sintatica concluida sem erros.
+analise concluida sem erros.
 ```
 
-Essa saída é provisória: a partir da semana 06, o parser passa a construir a
-AST em vez de imprimir os comandos.
+Com `--ast`, imprime também a árvore sintática abstrata, com a posição
+(`[linha:coluna]`) de cada comando e de cada argumento:
+
+```sh
+./build/imagemc --ast examples/programa_basico.img
+```
+
+```text
+PROGRAM (6 comandos)
+|-- IMAGE_DECL [2:1]
+|   |-- nome: foto [2:8]
+|   `-- arquivo: "foto.jpg"
+|-- RESIZE [5:1]
+|   |-- imagem: foto [5:15]
+|   |-- largura: 750 [5:25]
+|   `-- altura: 800 [5:33]
+|-- GRAYSCALE [6:1]
+|   `-- imagem: foto [6:15]
+|-- ROTATE [7:1]
+|   |-- imagem: foto [7:12]
+|   `-- angulo: 90 [7:17]
+|-- CROP [8:1]
+|   |-- imagem: foto [8:10]
+|   |-- x: 10 [8:18]
+|   |-- y: 20 [8:22]
+|   |-- largura: 300 [8:33]
+|   `-- altura: 200 [8:41]
+`-- SAVE [11:1]
+    |-- imagem: foto [11:8]
+    `-- arquivo: "resultado.jpg"
+
+analise concluida sem erros.
+```
+
+Se houver qualquer erro, a árvore não é impressa: saem só as mensagens de erro
+e o resumo.
 
 Com `--tokens`, `imagemc` para na análise léxica e lista os tokens:
 
@@ -73,11 +99,11 @@ Cada arquivo `tests/<fase>/<grupo>/<nome>.img` tem um par `<nome>.esperado`
 com a saída completa (stdout e stderr) que o compilador deve produzir. O
 script `run_tests.sh` compara as duas e informa `PASSOU` ou `FALHOU`. A fase
 decide o modo: `tests/lexico/` roda `imagemc --tokens` e `tests/sintatico/`
-roda `imagemc`.
+roda `imagemc --ast`.
 
 | Pasta | Cobre |
 |---|---|
 | `tests/lexico/validos/` | declarações, programa completo, comentários |
 | `tests/lexico/invalidos/` | caractere inválido, string não terminada, vários erros léxicos |
-| `tests/sintatico/validos/` | os sete comandos, valores passados por variável, programa sem comandos |
+| `tests/sintatico/validos/` | a AST dos sete comandos, de valores passados por variável e de um programa sem comandos |
 | `tests/sintatico/invalidos/` | ordem errada, falta de `;`, palavra reservada como nome, fim inesperado, lixo no início de comando, vários erros com recuperação, erro léxico somado a sintático, string não terminada |
