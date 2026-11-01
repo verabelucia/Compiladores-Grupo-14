@@ -1,4 +1,4 @@
 07-erro-lexico-e-sintatico.img:2:17: erro lexico: caractere invalido: '@'
 07-erro-lexico-e-sintatico.img:3:18: erro sintatico: encontrado texto entre aspas, esperado numero inteiro
 
-analise concluida com 2 erro(s): 1 lexico(s), 1 sintatico(s).
+analise concluida com 2 erro(s): 1 lexico(s), 1 sintatico(s), 0 semantico(s).

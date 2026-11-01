@@ -1,4 +1,4 @@
 05-inicio-de-comando.img:2:1: erro sintatico: encontrado identificador, esperado inicio de comando
 05-inicio-de-comando.img:3:20: erro sintatico: encontrado ';', esperado inicio de comando
 
-analise concluida com 2 erro(s): 0 lexico(s), 2 sintatico(s).
+analise concluida com 2 erro(s): 0 lexico(s), 2 sintatico(s), 0 semantico(s).

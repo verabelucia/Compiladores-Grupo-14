@@ -10,8 +10,13 @@
 #
 # Fases:
 #   lexico     - roda "imagemc --tokens" (sequencia de tokens)
-#   sintatico  - roda "imagemc --ast" (arvore sintatica abstrata e erros
-#                sintaticos; com erro, a arvore nao e impressa)
+#   sintatico      - roda "imagemc --ast" (arvore sintatica abstrata e
+#                    erros sintaticos)
+#   semantico      - roda "imagemc --tabela" (tabela de simbolos e erros
+#                    semanticos)
+#   intermediario  - roda "imagemc --ri" (representacao intermediaria)
+#
+# Com qualquer erro, o compilador imprime so as mensagens e o resumo.
 
 set -u
 
@@ -33,9 +38,11 @@ for entrada in "$RAIZ"/tests/*/*/*.img; do
     nome=$fase/$(basename "$grupo")/$(basename "$entrada")
 
     case "$fase" in
-        lexico)    opcoes="--tokens" ;;
-        sintatico) opcoes="--ast" ;;
-        *)         opcoes="" ;;
+        lexico)        opcoes="--tokens" ;;
+        sintatico)     opcoes="--ast" ;;
+        semantico)     opcoes="--tabela" ;;
+        intermediario) opcoes="--ri" ;;
+        *)             opcoes="" ;;
     esac
 
     if [ ! -f "$esperado" ]; then

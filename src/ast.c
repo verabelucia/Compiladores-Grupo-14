@@ -140,6 +140,21 @@ const char *nome_tipo_no(TipoNo tipo)
     return "DESCONHECIDO";
 }
 
+const char *palavra_chave_no(TipoNo tipo)
+{
+    switch (tipo) {
+    case AST_IMAGE_DECL:    return "imagem";
+    case AST_INTEGER_DECL:  return "inteiro";
+    case AST_RESIZE:        return "redimensionar";
+    case AST_GRAYSCALE:     return "tons_de_cinza";
+    case AST_ROTATE:        return "rotacionar";
+    case AST_CROP:          return "recortar";
+    case AST_SAVE:          return "salvar";
+    case AST_PROGRAM:       break;
+    }
+    return "";
+}
+
 /* ---- Impressão ---------------------------------------------------------- */
 
 /* Rótulos dos argumentos de cada comando, na ordem de NoAST.args. */
@@ -158,6 +173,15 @@ static const char *const *rotulos_args(TipoNo tipo)
 }
 
 /* Desenha o começo de uma linha da árvore: "|-- " ou, no último filho, "`-- ". */
+const char *rotulo_arg(TipoNo tipo, int i)
+{
+    const char *const *rotulos = rotulos_args(tipo);
+    int quantidade = tipo == AST_RESIZE ? 2 : tipo == AST_ROTATE ? 1
+                   : tipo == AST_CROP ? 4 : 0;
+
+    return (rotulos != NULL && i >= 0 && i < quantidade) ? rotulos[i] : NULL;
+}
+
 static void ramo(FILE *saida, const char *prefixo, int ultimo)
 {
     fprintf(saida, "%s%s", prefixo, ultimo ? "`-- " : "|-- ");

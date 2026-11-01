@@ -2,4 +2,4 @@
 06-multiplos-erros.img:4:21: erro sintatico: encontrado numero inteiro, esperado ','
 06-multiplos-erros.img:6:13: erro sintatico: encontrado texto entre aspas, esperado 'como'
 
-analise concluida com 3 erro(s): 0 lexico(s), 3 sintatico(s).
+analise concluida com 3 erro(s): 0 lexico(s), 3 sintatico(s), 0 semantico(s).

@@ -95,6 +95,14 @@ NoAST *criar_no_salvar(Posicao pos, Identificador imagem, char *arquivo);
 /* Nome do tipo de nó ("RESIZE", ...), usado na impressão. */
 const char *nome_tipo_no(TipoNo tipo);
 
+/* Palavra-chave que inicia o comando ("redimensionar", "tons_de_cinza"...),
+   para mensagens de erro. */
+const char *palavra_chave_no(TipoNo tipo);
+
+/* Nome do i-ésimo argumento do comando ("largura", "angulo", "x"...), na
+   ordem de NoAST.args. Devolve NULL se o comando não tem esse argumento. */
+const char *rotulo_arg(TipoNo tipo, int i);
+
 /* Imprime a árvore em formato texto (modo --ast). */
 void imprimir_ast(FILE *saida, const NoAST *raiz);
 

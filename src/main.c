@@ -8,6 +8,9 @@
 #include <string.h>
 
 #include "parser.tab.h"
+#include "ri.h"
+#include "semantico.h"
+#include "tabela.h"
 
 extern int yylex(void);
 extern FILE *yyin;
@@ -72,36 +75,80 @@ static int listar_tokens(void)
     return 0;
 }
 
-/* Modo padrao: analise do programa. Com --ast, imprime tambem a arvore.
-   Se houver qualquer erro, a arvore nao e impressa. */
-static int analisar(int mostrar_ast)
+/* O que imprimir quando o programa nao tem erros. */
+typedef enum {
+    MODO_ANALISE,       /* so o resumo */
+    MODO_TOKENS,        /* --tokens: sequencia de tokens (so o lexico) */
+    MODO_AST,           /* --ast: arvore sintatica abstrata */
+    MODO_TABELA,        /* --tabela: tabela de simbolos */
+    MODO_RI             /* --ri: representacao intermediaria */
+} Modo;
+
+/* Analise completa: lexico + sintatico (yyparse) e, se nao houve erro,
+   semantica. Com qualquer erro, so as mensagens e o resumo sao impressos. */
+static int analisar(Modo modo)
 {
+    TabelaSimbolos tabela;
+    ProgramaRI *ri;
     int erros;
+
+    tabela_iniciar(&tabela);
 
     yyparse();
 
-    erros = erros_lexicos + erros_sintaticos;
+    /* A semantica precisa de uma arvore completa e confiavel. */
+    if (erros_lexicos + erros_sintaticos == 0)
+        analisar_semantica(raiz_ast, &tabela);
+
+    erros = erros_lexicos + erros_sintaticos + erros_semanticos;
     if (erros > 0) {
+        tabela_liberar(&tabela);
         liberar_ast(raiz_ast);
         fprintf(stderr, "\nanalise concluida com %d erro(s): "
-                "%d lexico(s), %d sintatico(s).\n",
-                erros, erros_lexicos, erros_sintaticos);
+                "%d lexico(s), %d sintatico(s), %d semantico(s).\n",
+                erros, erros_lexicos, erros_sintaticos, erros_semanticos);
         return 1;
     }
 
-    if (mostrar_ast) {
+    switch (modo) {
+    case MODO_AST:
         imprimir_ast(stdout, raiz_ast);
         printf("\n");
+        break;
+    case MODO_TABELA:
+        tabela_imprimir(stdout, &tabela);
+        printf("\n");
+        break;
+    case MODO_RI:
+        ri = gerar_ri(raiz_ast);
+        imprimir_ri(stdout, ri);
+        printf("\n");
+        liberar_ri(ri);
+        break;
+    default:
+        break;
     }
+
+    tabela_liberar(&tabela);
     liberar_ast(raiz_ast);
 
     printf("analise concluida sem erros.\n");
     return 0;
 }
 
+static const struct {
+    const char *opcao;
+    Modo modo;
+} OPCOES[] = {
+    { "--tokens", MODO_TOKENS },
+    { "--ast",    MODO_AST },
+    { "--tabela", MODO_TABELA },
+    { "--ri",     MODO_RI },
+};
+
 int main(int argc, char **argv)
 {
-    enum { MODO_ANALISE, MODO_TOKENS, MODO_AST } modo = MODO_ANALISE;
+    Modo modo = MODO_ANALISE;
     const char *caminho = NULL;
 
     /* stdout line-buffered: sem isso o stderr sai fora de ordem quando as
@@ -109,15 +156,21 @@ int main(int argc, char **argv)
     setvbuf(stdout, NULL, _IOLBF, 0);
 
     for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "--tokens") == 0 && modo == MODO_ANALISE) {
-            modo = MODO_TOKENS;
-        } else if (strcmp(argv[i], "--ast") == 0 && modo == MODO_ANALISE) {
-            modo = MODO_AST;
-        } else if (caminho == NULL && argv[i][0] != '-') {
+        int reconhecida = 0;
+
+        for (size_t k = 0; k < sizeof OPCOES / sizeof OPCOES[0]; k++) {
+            if (strcmp(argv[i], OPCOES[k].opcao) == 0 && modo == MODO_ANALISE) {
+                modo = OPCOES[k].modo;
+                reconhecida = 1;
+            }
+        }
+        if (reconhecida)
+            continue;
+        if (caminho == NULL && argv[i][0] != '-') {
             caminho = argv[i];
         } else {
-            fprintf(stderr, "uso: %s [--tokens | --ast] [arquivo.img]\n",
-                    argv[0]);
+            fprintf(stderr, "uso: %s [--tokens | --ast | --tabela | --ri] "
+                    "[arquivo.img]\n", argv[0]);
             return 2;
         }
     }
@@ -133,5 +186,5 @@ int main(int argc, char **argv)
 
     if (modo == MODO_TOKENS)
         return listar_tokens();
-    return analisar(modo == MODO_AST);
+    return analisar(modo);
 }
