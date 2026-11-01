@@ -1,9 +1,27 @@
-  2:1   imagem foto = "foto.jpg"
-  3:1   inteiro largura = 750
-  5:1   redimensionar foto para largura por 800
-  6:1   tons_de_cinza foto
-  7:1   rotacionar foto 90
-  8:1   recortar foto de 10, 20 tamanho 300 por 200
-  9:1   salvar foto como "resultado.jpg"
+PROGRAM (7 comandos)
+|-- IMAGE_DECL [2:1]
+|   |-- nome: foto [2:8]
+|   `-- arquivo: "foto.jpg"
+|-- INTEGER_DECL [3:1]
+|   |-- nome: largura [3:9]
+|   `-- valor: 750
+|-- RESIZE [5:1]
+|   |-- imagem: foto [5:15]
+|   |-- largura: largura (variavel) [5:25]
+|   `-- altura: 800 [5:37]
+|-- GRAYSCALE [6:1]
+|   `-- imagem: foto [6:15]
+|-- ROTATE [7:1]
+|   |-- imagem: foto [7:12]
+|   `-- angulo: 90 [7:17]
+|-- CROP [8:1]
+|   |-- imagem: foto [8:10]
+|   |-- x: 10 [8:18]
+|   |-- y: 20 [8:22]
+|   |-- largura: 300 [8:33]
+|   `-- altura: 200 [8:41]
+`-- SAVE [9:1]
+    |-- imagem: foto [9:8]
+    `-- arquivo: "resultado.jpg"
 
-analise sintatica concluida sem erros.
+analise concluida sem erros.

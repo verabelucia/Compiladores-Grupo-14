@@ -5,18 +5,27 @@
 
 %require "3.6"
 
+/* A AST precisa ser conhecida em parser.tab.h, que o lexer e o main incluem. */
+%code requires {
+#include "ast.h"
+}
+
 %{
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "ast.h"
 
 int yylex(void);
 void yyerror(const char *mensagem);
 
 extern const char *arquivo_atual;
 int erros_sintaticos = 0;
+NoAST *raiz_ast = NULL;
 
-static char *texto_de_inteiro(long valor);
+/* Posição (linha e coluna) de um símbolo da regra, a partir de @n. */
+#define POS(local) posicao((local).first_line, (local).first_column)
 %}
 
 %locations
@@ -25,6 +34,8 @@ static char *texto_de_inteiro(long valor);
 %union {
     long inteiro;
     char *texto;
+    NoAST *no;
+    Valor valor;
 }
 
 /* Os apelidos entre aspas aparecem nas mensagens de erro sintático. */
@@ -48,16 +59,29 @@ static char *texto_de_inteiro(long valor);
 %token VIRGULA                  "','"
 %token PONTO_E_VIRGULA          "';'"
 
-%type <texto> valor_inteiro
+%type <no> programa comando declaracao_imagem declaracao_inteiro
+%type <no> redimensionamento conversao_cinza rotacao recorte salvamento
+%type <valor> valor_inteiro
 
-/* Libera strings descartadas durante a recuperação de erros. */
+/* Libera o que o parser descarta durante a recuperação de erros ou quando
+   a análise é abortada. */
 %destructor { free($$); } <texto>
+%destructor { liberar_ast($$); } <no>
+%destructor { liberar_valor(&$$); } <valor>
+
+%start inicio
 
 %%
 
+/* inicio não tem valor: quando a análise termina, a árvore já foi entregue
+   em raiz_ast e o Bison não tem nada a descartar. */
+inicio
+    : programa                  { raiz_ast = $1; }
+    ;
+
 programa
-    : %empty
-    | programa comando
+    : %empty                    { $$ = criar_no_programa(); }
+    | programa comando          { adicionar_comando($1, $2); $$ = $1; }
     ;
 
 comando
@@ -68,76 +92,52 @@ comando
     | rotacao
     | recorte
     | salvamento
-    | error PONTO_E_VIRGULA   { yyerrok; }
+    | error PONTO_E_VIRGULA     { yyerrok; $$ = NULL; }
     ;
 
 declaracao_imagem
     : KW_IMAGEM IDENTIFICADOR ATRIBUICAO LITERAL_STRING PONTO_E_VIRGULA
-        { printf("%3d:%-3d imagem %s = \"%s\"\n",
-                 @1.first_line, @1.first_column, $2, $4);
-          free($2); free($4); }
+        { $$ = criar_no_decl_imagem(POS(@1), identificador($2, POS(@2)), $4); }
     ;
 
 declaracao_inteiro
     : KW_INTEIRO IDENTIFICADOR ATRIBUICAO LITERAL_INTEIRO PONTO_E_VIRGULA
-        { printf("%3d:%-3d inteiro %s = %ld\n",
-                 @1.first_line, @1.first_column, $2, $4);
-          free($2); }
+        { $$ = criar_no_decl_inteiro(POS(@1), identificador($2, POS(@2)), $4); }
     ;
 
 redimensionamento
     : KW_REDIMENSIONAR IDENTIFICADOR KW_PARA valor_inteiro KW_POR valor_inteiro PONTO_E_VIRGULA
-        { printf("%3d:%-3d redimensionar %s para %s por %s\n",
-                 @1.first_line, @1.first_column, $2, $4, $6);
-          free($2); free($4); free($6); }
+        { $$ = criar_no_redimensionar(POS(@1), identificador($2, POS(@2)), $4, $6); }
     ;
 
 conversao_cinza
     : KW_TONS_DE_CINZA IDENTIFICADOR PONTO_E_VIRGULA
-        { printf("%3d:%-3d tons_de_cinza %s\n",
-                 @1.first_line, @1.first_column, $2);
-          free($2); }
+        { $$ = criar_no_tons_de_cinza(POS(@1), identificador($2, POS(@2))); }
     ;
 
 rotacao
     : KW_ROTACIONAR IDENTIFICADOR valor_inteiro PONTO_E_VIRGULA
-        { printf("%3d:%-3d rotacionar %s %s\n",
-                 @1.first_line, @1.first_column, $2, $3);
-          free($2); free($3); }
+        { $$ = criar_no_rotacionar(POS(@1), identificador($2, POS(@2)), $3); }
     ;
 
 recorte
     : KW_RECORTAR IDENTIFICADOR KW_DE valor_inteiro VIRGULA valor_inteiro
       KW_TAMANHO valor_inteiro KW_POR valor_inteiro PONTO_E_VIRGULA
-        { printf("%3d:%-3d recortar %s de %s, %s tamanho %s por %s\n",
-                 @1.first_line, @1.first_column, $2, $4, $6, $8, $10);
-          free($2); free($4); free($6); free($8); free($10); }
+        { $$ = criar_no_recortar(POS(@1), identificador($2, POS(@2)),
+                                 $4, $6, $8, $10); }
     ;
 
 salvamento
     : KW_SALVAR IDENTIFICADOR KW_COMO LITERAL_STRING PONTO_E_VIRGULA
-        { printf("%3d:%-3d salvar %s como \"%s\"\n",
-                 @1.first_line, @1.first_column, $2, $4);
-          free($2); free($4); }
+        { $$ = criar_no_salvar(POS(@1), identificador($2, POS(@2)), $4); }
     ;
 
 valor_inteiro
-    : LITERAL_INTEIRO   { $$ = texto_de_inteiro($1); }
-    | IDENTIFICADOR     { $$ = $1; }
+    : LITERAL_INTEIRO           { $$ = valor_literal($1, POS(@1)); }
+    | IDENTIFICADOR             { $$ = valor_variavel($1, POS(@1)); }
     ;
 
 %%
-
-static char *texto_de_inteiro(long valor)
-{
-    char *texto = malloc(24);
-    if (texto == NULL) {
-        fprintf(stderr, "erro: memoria insuficiente no analisador sintatico\n");
-        exit(1);
-    }
-    snprintf(texto, 24, "%ld", valor);
-    return texto;
-}
 
 /* Chamada pelo Bison (parse.error custom) a cada erro sintático. Monta a
    mensagem no formato arquivo:linha:coluna: erro sintatico: ... */

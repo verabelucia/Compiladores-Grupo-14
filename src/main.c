@@ -72,8 +72,9 @@ static int listar_tokens(void)
     return 0;
 }
 
-/* Modo padrao: analise sintatica; cada comando reconhecido e impresso. */
-static int analisar(void)
+/* Modo padrao: analise do programa. Com --ast, imprime tambem a arvore.
+   Se houver qualquer erro, a arvore nao e impressa. */
+static int analisar(int mostrar_ast)
 {
     int erros;
 
@@ -81,19 +82,26 @@ static int analisar(void)
 
     erros = erros_lexicos + erros_sintaticos;
     if (erros > 0) {
+        liberar_ast(raiz_ast);
         fprintf(stderr, "\nanalise concluida com %d erro(s): "
                 "%d lexico(s), %d sintatico(s).\n",
                 erros, erros_lexicos, erros_sintaticos);
         return 1;
     }
 
-    printf("\nanalise sintatica concluida sem erros.\n");
+    if (mostrar_ast) {
+        imprimir_ast(stdout, raiz_ast);
+        printf("\n");
+    }
+    liberar_ast(raiz_ast);
+
+    printf("analise concluida sem erros.\n");
     return 0;
 }
 
 int main(int argc, char **argv)
 {
-    int so_tokens = 0;
+    enum { MODO_ANALISE, MODO_TOKENS, MODO_AST } modo = MODO_ANALISE;
     const char *caminho = NULL;
 
     /* stdout line-buffered: sem isso o stderr sai fora de ordem quando as
@@ -101,12 +109,15 @@ int main(int argc, char **argv)
     setvbuf(stdout, NULL, _IOLBF, 0);
 
     for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "--tokens") == 0 && !so_tokens) {
-            so_tokens = 1;
+        if (strcmp(argv[i], "--tokens") == 0 && modo == MODO_ANALISE) {
+            modo = MODO_TOKENS;
+        } else if (strcmp(argv[i], "--ast") == 0 && modo == MODO_ANALISE) {
+            modo = MODO_AST;
         } else if (caminho == NULL && argv[i][0] != '-') {
             caminho = argv[i];
         } else {
-            fprintf(stderr, "uso: %s [--tokens] [arquivo.img]\n", argv[0]);
+            fprintf(stderr, "uso: %s [--tokens | --ast] [arquivo.img]\n",
+                    argv[0]);
             return 2;
         }
     }
@@ -120,5 +131,7 @@ int main(int argc, char **argv)
         arquivo_atual = caminho;
     }
 
-    return so_tokens ? listar_tokens() : analisar();
+    if (modo == MODO_TOKENS)
+        return listar_tokens();
+    return analisar(modo == MODO_AST);
 }

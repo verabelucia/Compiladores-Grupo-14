@@ -10,7 +10,8 @@
 #
 # Fases:
 #   lexico     - roda "imagemc --tokens" (sequencia de tokens)
-#   sintatico  - roda "imagemc" (comandos reconhecidos e erros sintaticos)
+#   sintatico  - roda "imagemc --ast" (arvore sintatica abstrata e erros
+#                sintaticos; com erro, a arvore nao e impressa)
 
 set -u
 
@@ -32,8 +33,9 @@ for entrada in "$RAIZ"/tests/*/*/*.img; do
     nome=$fase/$(basename "$grupo")/$(basename "$entrada")
 
     case "$fase" in
-        lexico) opcoes="--tokens" ;;
-        *)      opcoes="" ;;
+        lexico)    opcoes="--tokens" ;;
+        sintatico) opcoes="--ast" ;;
+        *)         opcoes="" ;;
     esac
 
     if [ ! -f "$esperado" ]; then

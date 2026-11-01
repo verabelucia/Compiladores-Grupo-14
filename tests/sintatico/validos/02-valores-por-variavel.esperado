@@ -1,10 +1,30 @@
-  1:1   imagem foto = "foto.jpg"
-  2:1   inteiro angulo = 180
-  3:1   inteiro x = 0
-  4:1   inteiro y = 0
-  5:1   inteiro lado = 64
-  6:1   rotacionar foto angulo
-  7:1   recortar foto de x, y tamanho lado por lado
-  8:1   salvar foto como "miniatura.png"
+PROGRAM (8 comandos)
+|-- IMAGE_DECL [1:1]
+|   |-- nome: foto [1:8]
+|   `-- arquivo: "foto.jpg"
+|-- INTEGER_DECL [2:1]
+|   |-- nome: angulo [2:9]
+|   `-- valor: 180
+|-- INTEGER_DECL [3:1]
+|   |-- nome: x [3:9]
+|   `-- valor: 0
+|-- INTEGER_DECL [4:1]
+|   |-- nome: y [4:9]
+|   `-- valor: 0
+|-- INTEGER_DECL [5:1]
+|   |-- nome: lado [5:9]
+|   `-- valor: 64
+|-- ROTATE [6:1]
+|   |-- imagem: foto [6:12]
+|   `-- angulo: angulo (variavel) [6:17]
+|-- CROP [7:1]
+|   |-- imagem: foto [7:10]
+|   |-- x: x (variavel) [7:18]
+|   |-- y: y (variavel) [7:21]
+|   |-- largura: lado (variavel) [7:31]
+|   `-- altura: lado (variavel) [7:40]
+`-- SAVE [8:1]
+    |-- imagem: foto [8:8]
+    `-- arquivo: "miniatura.png"
 
-analise sintatica concluida sem erros.
+analise concluida sem erros.
