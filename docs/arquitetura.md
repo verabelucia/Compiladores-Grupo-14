@@ -108,7 +108,8 @@ Registrarão o nome e o tipo de cada variável. As verificações mínimas serã
 - operação de imagem aplicada a um inteiro;
 - argumentos inteiros inválidos;
 - dimensões não positivas;
-- coordenadas negativas;
+- coordenadas negativas (hoje não ocorrem: a linguagem não tem números
+  negativos);
 - ângulo de rotação não permitido.
 
 Limites de recorte que dependam das dimensões reais da imagem serão verificados

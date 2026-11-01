@@ -94,6 +94,7 @@ Pages a partir da pasta `docs/` do branch `main`.
 - [Gramática preliminar](docs/gramatica.ebnf)
 - [Arquitetura](docs/arquitetura.md)
 - [Cronograma](docs/cronograma.md)
+- [Módulos e contratos entre as fases](docs/modulos.md)
 - [Programa de exemplo](examples/programa_basico.img)
 
 ## Estado atual
