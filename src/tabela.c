@@ -32,10 +32,14 @@ void tabela_iniciar(TabelaSimbolos *tabela)
 int tabela_declarar(TabelaSimbolos *tabela, Identificador id,
                     TipoSimbolo tipo, long valor)
 {
+    const Simbolo *existente = tabela_buscar(tabela, id.nome);
     Simbolo *novo;
 
-    if (tabela_buscar(tabela, id.nome) != NULL)
+    if (existente != NULL) {
+        erro_semantico(id.pos, "'%s' ja foi declarada na linha %d",
+                       id.nome, existente->pos.linha);
         return 0;
+    }
 
     novo = malloc(sizeof *novo);
     if (novo == NULL) {
@@ -60,8 +64,11 @@ int tabela_declarar(TabelaSimbolos *tabela, Identificador id,
 const Simbolo *tabela_usar(TabelaSimbolos *tabela, const char *nome,
                            Posicao pos)
 {
-    (void) pos;
-    return tabela_buscar(tabela, nome);
+    const Simbolo *simbolo = tabela_buscar(tabela, nome);
+
+    if (simbolo == NULL)
+        erro_semantico(pos, "'%s' nao foi declarada", nome);
+    return simbolo;
 }
 
 const Simbolo *tabela_buscar(const TabelaSimbolos *tabela, const char *nome)
