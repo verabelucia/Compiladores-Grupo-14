@@ -101,7 +101,8 @@ for (const NoAST *cmd = raiz_ast->comandos; cmd != NULL; cmd = cmd->proximo) {
 
 ### Tabela de símbolos e análise semântica
 
-Registrarão o nome e o tipo de cada variável. As verificações mínimas serão:
+Implementadas em `src/tabela.c` e `src/semantico.c`. A tabela registra o nome,
+o tipo e a posição de cada variável; a semântica percorre a AST e verifica:
 
 - uso antes da declaração;
 - redeclaração;
@@ -170,14 +171,14 @@ O formato é:
 arquivo.img:linha:coluna: categoria: mensagem
 ```
 
-As categorias `erro lexico` e `erro sintatico` já estão implementadas:
+Exemplos das categorias `erro lexico` e `erro sintatico`:
 
 ```text
 programa.img:1:8: erro lexico: caractere invalido: '@'
 programa.img:2:8: erro sintatico: encontrado 'como', esperado identificador
 ```
 
-A categoria semântica virá com a análise semântica:
+E da categoria `erro semantico`:
 
 ```text
 programa.img:3:16: erro semantico: 'tons_de_cinza' espera imagem, mas 'x' e inteiro
