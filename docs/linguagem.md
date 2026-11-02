@@ -1,7 +1,8 @@
 ---
-layout: default
 title: "Especificação da linguagem"
-nav_order: 2
+parent: Linguagem
+nav_order: 1
+description: "Tipos, comandos e as decisões de design que moldaram a sintaxe da ImagemLang."
 ---
 
 ## Propósito
@@ -26,7 +27,7 @@ de alto nível. O compilador verifica o programa e gera código C equivalente.
 
 Representa uma imagem carregada de um arquivo.
 
-```text
+```imagemlang
 imagem foto = "foto.jpg";
 ```
 
@@ -35,7 +36,7 @@ imagem foto = "foto.jpg";
 Representa um valor inteiro que pode ser utilizado como argumento de uma
 operação.
 
-```text
+```imagemlang
 inteiro angulo = 90;
 ```
 
@@ -45,7 +46,7 @@ Não haverá expressões aritméticas na primeira versão.
 
 ### Redimensionar
 
-```text
+```imagemlang
 redimensionar foto para 750 por 800;
 ```
 
@@ -53,13 +54,13 @@ Os dois valores representam largura e altura.
 
 ### Converter para tons de cinza
 
-```text
+```imagemlang
 tons_de_cinza foto;
 ```
 
 ### Rotacionar
 
-```text
+```imagemlang
 rotacionar foto 90;
 ```
 
@@ -67,7 +68,7 @@ Na primeira versão, serão aceitos os ângulos `90`, `180` e `270`.
 
 ### Recortar
 
-```text
+```imagemlang
 recortar foto de 10, 20 tamanho 300 por 200;
 ```
 
@@ -76,7 +77,7 @@ Os primeiros valores representam as coordenadas `x` e `y`. Os valores após
 
 ### Salvar
 
-```text
+```imagemlang
 salvar foto como "resultado.jpg";
 ```
 
@@ -89,14 +90,14 @@ alterá-las depois exigiria reescrever a gramática.
 
 Uma operação altera a imagem no lugar e não produz um valor:
 
-```text
+```imagemlang
 tons_de_cinza foto;
 ```
 
 A forma alternativa, em que a operação retorna uma nova imagem, não faz parte
 do escopo inicial:
 
-```text
+```imagemlang
 imagem cinza = tons_de_cinza foto;   // fora do escopo inicial
 ```
 
@@ -152,7 +153,7 @@ palavras-chave sensíveis a contexto.
 
 ### Erro léxico
 
-```text
+```imagemlang
 imagem @foto = "foto.jpg";
 ```
 
@@ -160,7 +161,7 @@ O caractere `@` não pertence ao vocabulário inicial da linguagem.
 
 ### Erro sintático
 
-```text
+```imagemlang
 salvar como foto "resultado.jpg";
 ```
 
@@ -169,7 +170,7 @@ gramática.
 
 ### Erro semântico
 
-```text
+```imagemlang
 inteiro x = 10;
 tons_de_cinza x;
 ```

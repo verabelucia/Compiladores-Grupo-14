@@ -1,7 +1,8 @@
 ---
-layout: default
 title: "Gramática"
-nav_order: 4
+parent: Linguagem
+nav_order: 3
+description: "A gramática em EBNF, fonte única das regras implementadas no parser Bison."
 ---
 
 Gramática preliminar da ImagemLang, em EBNF. O arquivo canônico é

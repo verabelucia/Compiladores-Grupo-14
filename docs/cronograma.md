@@ -1,7 +1,8 @@
 ---
-layout: default
 title: "Cronograma"
-nav_order: 6
+parent: Projeto
+nav_order: 2
+description: "Datas da disciplina, metas de cada ponto de controle e problemas resolvidos no caminho."
 ---
 
 Este planejamento associa a ImagemLang ao plano de ensino da disciplina. As
