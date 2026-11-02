@@ -77,8 +77,20 @@ const Simbolo *tabela_buscar(const TabelaSimbolos *tabela, const char *nome)
 
 void tabela_imprimir(FILE *saida, const TabelaSimbolos *tabela)
 {
-    (void) saida;
-    (void) tabela;
+    const Simbolo *s;
+
+    fprintf(saida, "TABELA DE SIMBOLOS (%d %s)\n", tabela->quantidade,
+            tabela->quantidade == 1 ? "simbolo" : "simbolos");
+    for (s = tabela->primeiro; s != NULL; s = s->proximo) {
+        const char *ramo = s->proximo == NULL ? "`-- " : "|-- ";
+
+        if (s->tipo == TIPO_IMAGEM)
+            fprintf(saida, "%s%s: imagem [%d:%d]\n",
+                    ramo, s->nome, s->pos.linha, s->pos.coluna);
+        else
+            fprintf(saida, "%s%s: inteiro = %ld [%d:%d]\n",
+                    ramo, s->nome, s->valor, s->pos.linha, s->pos.coluna);
+    }
 }
 
 void tabela_liberar(TabelaSimbolos *tabela)
