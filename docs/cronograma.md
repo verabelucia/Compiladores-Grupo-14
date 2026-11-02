@@ -16,7 +16,7 @@ do professor.
 | 16/09 | AST e tabela de símbolos | Construir a AST e registrar declarações | ✅ concluído |
 | 23/09, 23h59 | Formulário P1 | Líder registra o progresso da equipe | ⏳ pendente |
 | 30/09 (equipes 9 a 16) | P1 | Apresentar proposta, lexer, parser e AST inicial |  |
-| 07/10 | Análise semântica | Implementar declarações, tipos e validação de argumentos |  |
+| 07/10 | Análise semântica | Implementar declarações, tipos e validação de argumentos | ✅ concluído |
 | 14/10 | Código intermediário | Gerar instruções intermediárias da DSL |  |
 | 21/10 | Otimização | Avaliar uma otimização simples, sem ampliar o escopo |  |
 | 28/10 | Código final | Gerar a primeira versão de C |  |

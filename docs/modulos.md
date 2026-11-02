@@ -23,7 +23,7 @@ tokens
    │  yyparse()          src/parser.y      (pronto)
    ▼
 AST (raiz_ast)           src/ast.c         (pronto)
-   │  analisar_semantica src/semantico.c   Pessoa 3
+   │  analisar_semantica src/semantico.c   (pronto)
    │    └ tabela_*       src/tabela.c      (pronto)
    ▼
 AST validada + tabela de símbolos
@@ -42,7 +42,7 @@ resumo.
 |---|---|---|
 | Pessoa 1: AST e parser | `src/ast.h`, `src/ast.c`, `src/parser.y` | **pronto** |
 | Pessoa 2: tabela de símbolos | `src/tabela.h`, `src/tabela.c` | **pronto** |
-| Pessoa 3: análise semântica | `src/semantico.h` (congelado), `src/semantico.c` | percurso e `erro_semantico` prontos; implementar as verificações |
+| Pessoa 3: análise semântica | `src/semantico.h`, `src/semantico.c` | **pronto** |
 | Pessoa 4: RI e testes | `src/ri.h` (congelado), `src/ri.c`, `tests/semantico/`, `tests/intermediario/` | esqueleto; implementar |
 | Compartilhados | `src/main.c`, `Makefile`, `run_tests.sh` | **prontos**; não precisam mudar no P2 |
 
@@ -116,7 +116,8 @@ Contrato: `src/semantico.h`. O percurso da AST já está pronto em
 3. cada argumento que é variável passa por `tabela_usar`, e todo argumento
    passa por `verificar_argumento`.
 
-A Pessoa 3 implementa `verificar_alvo` e `verificar_argumento`.
+`verificar_alvo` e `verificar_argumento` fazem a checagem de tipos e de
+domínio descrita abaixo.
 
 ### Catálogo de erros semânticos
 
@@ -131,16 +132,18 @@ Todos saem por `erro_semantico(pos, formato, ...)`, já pronta, no formato
 | 4 | argumento que é variável do tipo imagem | semântica (`verificar_argumento`) | do argumento | `%s deve ser inteiro, mas '%s' e imagem` (rótulo, nome) |
 | 5 | largura ou altura ≤ 0 (`redimensionar`, `recortar`) | semântica (`verificar_argumento`) | do argumento | `%s deve ser maior que zero, mas vale %ld` (rótulo, valor) |
 | 6 | ângulo fora de {90, 180, 270} | semântica (`verificar_argumento`) | do argumento | `angulo deve ser 90, 180 ou 270, mas vale %ld` |
+| 7 | coordenada `x` ou `y` < 0 (`recortar`) | semântica (`verificar_argumento`) | do argumento | `%s nao pode ser negativo, mas vale %ld` (rótulo, valor) |
 
 Regras para não gerar erros em cascata:
 
 - Se o nome não foi declarado (erro 1), não há mais verificações sobre ele.
-- O domínio (erros 5 e 6) usa o número do literal ou, para uma variável
+- O domínio (erros 5, 6 e 7) usa o número do literal ou, para uma variável
   inteira, o `valor` guardado na tabela. Isso funciona porque a linguagem não
   tem atribuição: todo `inteiro` é constante. Se a variável não existe ou é
   imagem, o domínio não é verificado.
-- As coordenadas `x` e `y` do recorte não precisam de verificação: a
-  linguagem não tem números negativos, e zero é válido.
+- O erro 7 hoje não ocorre: a linguagem não tem números negativos, e zero
+  é válido. A verificação existe para manter a regra caso eles sejam
+  introduzidos.
 - Se uma declaração repetida for recusada (erro 2), o símbolo original
   continua valendo.
 
