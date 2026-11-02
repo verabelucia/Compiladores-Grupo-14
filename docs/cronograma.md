@@ -13,7 +13,7 @@ do professor.
 | 26/08 | Projeto inicial: fase léxica | Fechar escopo, sintaxe e tokens | ✅ concluído |
 | 02/09 | Implementação inicial do parser | Implementar a primeira gramática no Bison | ✅ concluído |
 | 09/09 | Parser e erros sintáticos | Reconhecer programas válidos e recuperar erros em `;` | ✅ concluído |
-| 16/09 | AST e tabela de símbolos | Construir a AST e registrar declarações | ⏳ AST concluída; tabela em andamento |
+| 16/09 | AST e tabela de símbolos | Construir a AST e registrar declarações | ✅ concluído |
 | 23/09, 23h59 | Formulário P1 | Líder registra o progresso da equipe | ⏳ pendente |
 | 30/09 (equipes 9 a 16) | P1 | Apresentar proposta, lexer, parser e AST inicial |  |
 | 07/10 | Análise semântica | Implementar declarações, tipos e validação de argumentos |  |

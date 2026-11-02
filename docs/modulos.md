@@ -24,7 +24,7 @@ tokens
    ▼
 AST (raiz_ast)           src/ast.c         (pronto)
    │  analisar_semantica src/semantico.c   Pessoa 3
-   │    └ tabela_*       src/tabela.c      Pessoa 2
+   │    └ tabela_*       src/tabela.c      (pronto)
    ▼
 AST validada + tabela de símbolos
    │  gerar_ri           src/ri.c          Pessoa 4
@@ -41,7 +41,7 @@ resumo.
 | Papel | Arquivos | Situação |
 |---|---|---|
 | Pessoa 1: AST e parser | `src/ast.h`, `src/ast.c`, `src/parser.y` | **pronto** |
-| Pessoa 2: tabela de símbolos | `src/tabela.h` (congelado), `src/tabela.c` | esqueleto; implementar |
+| Pessoa 2: tabela de símbolos | `src/tabela.h`, `src/tabela.c` | **pronto** |
 | Pessoa 3: análise semântica | `src/semantico.h` (congelado), `src/semantico.c` | percurso e `erro_semantico` prontos; implementar as verificações |
 | Pessoa 4: RI e testes | `src/ri.h` (congelado), `src/ri.c`, `tests/semantico/`, `tests/intermediario/` | esqueleto; implementar |
 | Compartilhados | `src/main.c`, `Makefile`, `run_tests.sh` | **prontos**; não precisam mudar no P2 |
