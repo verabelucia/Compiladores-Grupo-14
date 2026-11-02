@@ -160,6 +160,13 @@ O raciocínio completo está na [especificação da linguagem](docs/linguagem.md
 <table>
   <tr>
     <td align="center" width="180">
+      <a href="https://github.com/verabelucia">
+        <img src="https://github.com/verabelucia.png?size=120" width="80" alt="Vera Lucia Bezerra da Silva"><br>
+        <b>Vera Lucia</b>
+      </a><br>
+      <sub>dona do repositório</sub>
+    </td>
+    <td align="center" width="180">
       <a href="https://github.com/lucasbbranco">
         <img src="https://github.com/lucasbbranco.png?size=120" width="80" alt="Lucas Branco"><br>
         <b>Lucas Branco</b>
