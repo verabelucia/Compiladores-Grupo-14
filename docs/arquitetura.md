@@ -1,7 +1,8 @@
 ---
-layout: default
 title: "Arquitetura"
-nav_order: 5
+parent: Compilador
+nav_order: 1
+description: "As fases do compilador, do arquivo .img ao executável, e como cada uma relata erros."
 ---
 
 ## Fluxo do compilador
@@ -173,14 +174,14 @@ arquivo.img:linha:coluna: categoria: mensagem
 
 Exemplos das categorias `erro lexico` e `erro sintatico`:
 
-```text
+```saida
 programa.img:1:8: erro lexico: caractere invalido: '@'
 programa.img:2:8: erro sintatico: encontrado 'como', esperado identificador
 ```
 
 E da categoria `erro semantico`:
 
-```text
+```saida
 programa.img:3:16: erro semantico: 'tons_de_cinza' espera imagem, mas 'x' e inteiro
 ```
 

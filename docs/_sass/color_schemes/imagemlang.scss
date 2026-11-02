@@ -1,0 +1,19 @@
+// Esquema escuro da ImagemLang: parte do "dark" do tema e troca a paleta.
+@import "./color_schemes/dark";
+
+$color-scheme: dark;
+$body-background-color: #0e1015;
+$sidebar-color: #0b0c10;
+$body-heading-color: #f2f4f8;
+$body-text-color: #c3c8d4;
+$link-color: #8da2ff;
+$nav-child-link-color: #8b91a1;
+$base-button-color: #1b1e27;
+$btn-primary-color: #5b6cf0;
+$code-background-color: #090a0e;
+$code-linenumber-color: #5c6273;
+$feedback-color: #12141a;
+$table-background-color: #13151c;
+$search-background-color: #14161d;
+$search-result-preview-color: #9aa1b2;
+$border-color: #232631;

@@ -2,6 +2,7 @@ title: ImagemLang
 description: >-
   DSL para processamento de imagens desenvolvida na disciplina
   FGA0003 - Compiladores 1 (UnB/FGA) - Grupo 14.
+lang: pt-BR
 
 url: "https://verabelucia.github.io"
 baseurl: "/Compiladores-Grupo-14"
@@ -12,26 +13,59 @@ plugins:
   - jekyll-remote-theme
   - jekyll-relative-links
   - jekyll-seo-tag
+  - jekyll-include-cache
 
 relative_links:
   enabled: true
   collections: false
 
-color_scheme: dark
+# Esquema próprio: docs/_sass/color_schemes/imagemlang.scss.
+color_scheme: imagemlang
 search_enabled: true
+search:
+  heading_level: 3
+  previews: 2
+  button: true
 
 heading_anchors: true
 
+# As páginas internas usam docs/_layouts/pagina.html, que imprime o título e
+# a descrição do front matter acima do conteúdo.
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: pagina
+
 aux_links:
-  Repositório no GitHub:
+  "GitHub":
     - https://github.com/verabelucia/Compiladores-Grupo-14
 aux_links_new_tab: true
 
 back_to_top: true
 back_to_top_text: Voltar ao topo
 
-footer_content: >-
-  FGA0003 - Compiladores 1 - Grupo 14 - Universidade de Brasília, Faculdade do Gama.
+gh_edit_link: true
+gh_edit_link_text: Editar esta página no GitHub
+gh_edit_repository: https://github.com/verabelucia/Compiladores-Grupo-14
+gh_edit_branch: main
+gh_edit_source: docs
+gh_edit_view_mode: edit
+
+# Blocos de destaque: {: .nota }, {: .dica }, {: .atencao }, {: .importante }.
+callouts:
+  nota:
+    title: Nota
+    color: blue
+  dica:
+    title: Dica
+    color: green
+  atencao:
+    title: Atenção
+    color: yellow
+  importante:
+    title: Importante
+    color: purple
 
 exclude:
   - Gemfile

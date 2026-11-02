@@ -1,7 +1,8 @@
 ---
-layout: default
 title: "Módulos e contratos"
-nav_order: 8
+parent: Compilador
+nav_order: 2
+description: "Interfaces entre os módulos, formato exato de cada saída e o catálogo de erros semânticos."
 ---
 
 Esta página registra as interfaces entre os módulos do compilador, combinadas
@@ -70,7 +71,7 @@ Regras:
 Nos modos `--ast`, `--tabela` e `--ri`, depois da estrutura vem uma linha em
 branco e `analise concluida sem erros.`. Com erro, a saída é:
 
-```text
+```saida
 <mensagens de erro, em stderr>
 
 analise concluida com N erro(s): L lexico(s), S sintatico(s), M semantico(s).
@@ -91,7 +92,7 @@ blocos), então uma lista encadeada na ordem das declarações basta.
 **Formato do `--tabela`**, para o programa de
 `tests/sintatico/validos/01-programa-completo.img`:
 
-```text
+```saida
 TABELA DE SIMBOLOS (2 simbolos)
 |-- foto: imagem [2:8]
 `-- largura: inteiro = 750 [3:9]
@@ -151,7 +152,7 @@ Regras para não gerar erros em cascata:
 
 Entrada:
 
-```text
+```imagemlang
 imagem foto = "foto.jpg";
 inteiro angulo = 45;
 tons_de_cinza angulo;
@@ -164,7 +165,7 @@ recortar foto de 0, 0 tamanho foto por 10;
 
 Saída esperada (`imagemc --tabela erros.img`):
 
-```text
+```saida
 erros.img:3:15: erro semantico: 'tons_de_cinza' espera imagem, mas 'angulo' e inteiro
 erros.img:4:17: erro semantico: angulo deve ser 90, 180 ou 270, mas vale 45
 erros.img:5:25: erro semantico: largura deve ser maior que zero, mas vale 0
@@ -200,7 +201,7 @@ otimização da semana 09.
 
 **Formato do `--ri`**, para `tests/sintatico/validos/01-programa-completo.img`:
 
-```text
+```saida
 RI (8 instrucoes)
    1  LOAD_IMAGE "foto.jpg" -> foto
    2  CONST 750 -> largura

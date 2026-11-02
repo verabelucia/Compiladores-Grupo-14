@@ -1,0 +1,732 @@
+// Estilos próprios da documentação da ImagemLang, aplicados por cima do
+// just-the-docs. Cores base em _sass/color_schemes/imagemlang.scss.
+
+$il-accent: #8da2ff;
+$il-accent-2: #5eead4;
+$il-muted: #8b91a1;
+$il-surface: #13151c;
+$il-surface-2: #181b24;
+$il-ok: #4ade80;
+$il-wip: #fbbf24;
+$il-plan: #8b91a1;
+$il-error: #f87171;
+
+// ---- Base ------------------------------------------------------------------
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "cv11", "ss01";
+}
+
+::selection {
+  background: rgba($il-accent, 0.35);
+}
+
+.main-content {
+  h1, h2, h3, h4 {
+    letter-spacing: -0.015em;
+  }
+
+  // Cada seção de primeiro nível ganha uma linha divisória, para separar
+  // visualmente os assuntos da página.
+  h2 {
+    margin-top: 3rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid $border-color;
+    font-size: 1.5rem !important;
+    font-weight: 650;
+  }
+
+  h3 {
+    margin-top: 2rem;
+    font-size: 1.15rem !important;
+    font-weight: 600;
+    color: $body-heading-color;
+  }
+
+  p, li {
+    max-width: 46rem;
+  }
+
+  a:not(.btn):not(.il-card) {
+    text-decoration: none;
+    background-image: linear-gradient(rgba($il-accent, 0.35), rgba($il-accent, 0.35));
+    background-size: 100% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: color 0.15s, background-size 0.15s;
+
+    &:hover {
+      color: lighten($il-accent, 8%);
+      background-image: linear-gradient($il-accent, $il-accent);
+    }
+  }
+
+  .anchor-heading {
+    background-image: none !important;
+  }
+
+  hr {
+    border-color: $border-color;
+  }
+}
+
+// ---- Cabeçalho das páginas --------------------------------------------------
+
+.il-page-header {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid $border-color;
+
+  h1 {
+    margin: 0 0 0.6rem;
+    font-size: 2.4rem !important;
+    font-weight: 750;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    background: linear-gradient(100deg, #fff 30%, $il-accent 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .il-lead {
+    margin: 0;
+    color: $il-muted;
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+}
+
+// ---- Barra lateral e topo ---------------------------------------------------
+
+.site-title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  gap: 0.6rem;
+}
+
+.il-logo {
+  display: inline-grid;
+  grid-template-columns: repeat(3, 6px);
+  gap: 2px;
+  margin-right: 0.55rem;
+  vertical-align: middle;
+
+  span {
+    width: 6px;
+    height: 6px;
+    border-radius: 1.5px;
+    background: $il-accent;
+
+    &:nth-child(2n) { background: $il-accent-2; }
+    &:nth-child(3n) { opacity: 0.45; }
+  }
+}
+
+.nav-list .nav-list-item .nav-list-link {
+  border-radius: 6px;
+  margin: 1px 0.5rem 1px 0;
+  transition: background-color 0.12s, color 0.12s;
+
+  &:hover {
+    background-image: none;
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+
+  &.active {
+    color: #fff;
+    font-weight: 600;
+    background-image: none;
+    background-color: rgba($il-accent, 0.12);
+    box-shadow: inset 2px 0 0 $il-accent;
+  }
+}
+
+.nav-list .nav-list-item > .nav-list-link {
+  color: $body-text-color;
+}
+
+.nav-list .nav-list-item .nav-list .nav-list-link {
+  color: $il-muted;
+  font-size: 0.875rem !important;
+}
+
+.main-header {
+  background: rgba($body-background-color, 0.85);
+  backdrop-filter: blur(8px);
+}
+
+.aux-nav .aux-nav-list-link {
+  border: 1px solid $border-color;
+  border-radius: 999px;
+  padding: 0.25rem 0.9rem !important;
+  margin-left: 0.5rem;
+  color: $body-text-color;
+
+  &:hover {
+    border-color: $il-accent;
+    color: #fff;
+  }
+}
+
+.breadcrumb-nav-list-item {
+  color: $il-muted;
+}
+
+.il-nav-footer {
+  padding: 1rem 2rem 1.5rem;
+  color: $il-muted;
+  font-size: 0.75rem;
+  line-height: 1.5;
+
+  strong {
+    display: block;
+    color: $body-text-color;
+    font-weight: 600;
+  }
+}
+
+// ---- Código -----------------------------------------------------------------
+
+.main-content {
+  code {
+    padding: 0.15em 0.4em;
+    border: 1px solid $border-color;
+    border-radius: 5px;
+    background: $il-surface;
+    color: #dfe3ff;
+    font-size: 0.85em;
+  }
+
+  div.highlighter-rouge,
+  figure.highlight,
+  pre.highlight,
+  .il-code-window {
+    border: 1px solid $border-color;
+    border-radius: 10px;
+  }
+
+  div.highlighter-rouge {
+    margin: 1.25rem 0;
+    padding: 0;
+    background: $code-background-color;
+
+    pre.highlight {
+      border: 0;
+      margin: 0;
+      padding: 1rem 1.25rem;
+      background: transparent;
+    }
+
+    code {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: #d4d8e2;
+      font-size: 0.85rem;
+      line-height: 1.65;
+    }
+  }
+}
+
+// Linguagens que o Rouge não conhece (imagemlang, saida, ebnf) saem como um
+// <pre><code> sem o invólucro do tema; recebem a mesma caixa.
+.main-content > pre,
+.main-content main > pre,
+.main-content li > pre {
+  margin: 1.25rem 0;
+  padding: 1rem 1.25rem;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  background: $code-background-color;
+  overflow-x: auto;
+
+  > code {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: #d4d8e2;
+    font-size: 0.85rem;
+    line-height: 1.65;
+    white-space: pre;
+  }
+}
+
+// Realce da ImagemLang, da saída do compilador e da EBNF
+// (assets/js/realce.js).
+.il-kw { color: #c4a7ff; font-weight: 500; }
+.il-str { color: #86efac; }
+.il-num { color: #fdba74; }
+.il-com { color: #6b7280; font-style: italic; }
+.il-id { color: #e5e7eb; }
+.il-op { color: #7dd3fc; }
+.il-nt { color: #93c5fd; }
+.il-pos { color: #6b7280; }
+.il-err { color: $il-error; font-weight: 600; }
+.il-ok { color: $il-ok; font-weight: 600; }
+.il-warn { color: $il-wip; font-weight: 600; }
+
+// ---- Tabelas ----------------------------------------------------------------
+
+.main-content .table-wrapper {
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  box-shadow: none;
+  margin: 1.5rem 0;
+}
+
+.main-content table {
+  border-collapse: collapse;
+  background: transparent;
+
+  th, td {
+    border-bottom: 1px solid $border-color !important;
+    border-left: 0 !important;
+    background: transparent;
+    padding: 0.65rem 1rem;
+  }
+
+  th {
+    background: $il-surface-2;
+    color: $body-heading-color;
+    font-size: 0.75rem !important;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0 !important;
+  }
+
+  tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+}
+
+// ---- Blocos de destaque (callouts) ---------------------------------------
+
+@mixin il-callout($cor, $titulo) {
+  border: 1px solid rgba($cor, 0.3);
+  border-left: 3px solid $cor;
+  border-radius: 8px;
+  background: rgba($cor, 0.06);
+  box-shadow: none;
+  padding: 0.9rem 1.1rem;
+  color: $body-text-color;
+
+  &::before {
+    content: $titulo;
+    display: block;
+    margin-bottom: 0.25rem;
+    color: $cor;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+.main-content {
+  p.nota, blockquote.nota { @include il-callout(#60a5fa, "Nota"); }
+  p.dica, blockquote.dica { @include il-callout($il-ok, "Dica"); }
+  p.atencao, blockquote.atencao { @include il-callout($il-wip, "Atenção"); }
+  p.importante, blockquote.importante { @include il-callout(#c084fc, "Importante"); }
+}
+
+// ---- Componentes da página inicial e das seções -----------------------------
+
+.il-hero {
+  position: relative;
+  margin: 0 0 1rem;
+  padding: 0.5rem 0 2.5rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -4rem -2rem auto auto;
+    width: 26rem;
+    height: 18rem;
+    background: radial-gradient(closest-side, rgba($il-accent, 0.18), transparent),
+      radial-gradient(closest-side at 70% 60%, rgba($il-accent-2, 0.1), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  h1 {
+    margin: 0.75rem 0 0.75rem;
+    font-size: 3.25rem !important;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    background: linear-gradient(100deg, #fff 25%, $il-accent 75%, $il-accent-2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .il-tagline {
+    max-width: 38rem;
+    margin: 0 0 1.75rem;
+    color: $body-text-color;
+    font-size: 1.2rem;
+    line-height: 1.6;
+  }
+}
+
+.il-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid $border-color;
+  border-radius: 999px;
+  background: $il-surface;
+  color: $il-muted;
+  font-size: 0.78rem;
+  font-weight: 500;
+
+  &::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $il-ok;
+    box-shadow: 0 0 0 3px rgba($il-ok, 0.2);
+  }
+}
+
+.il-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2.25rem;
+
+  .btn {
+    padding: 0.55rem 1.1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: none;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #6d7cf7, #5b6cf0);
+    border: 0;
+  }
+
+  .btn-ghost {
+    border: 1px solid $border-color;
+    background: transparent;
+    color: $body-text-color;
+
+    &:hover {
+      border-color: $il-accent;
+      color: #fff;
+    }
+  }
+}
+
+.main-content .il-code-window {
+  overflow: hidden;
+  margin: 0;
+  background: $code-background-color;
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.7);
+
+  .il-code-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid $border-color;
+    background: $il-surface;
+    color: $il-muted;
+    font-family: $mono-font-family;
+    font-size: 0.75rem;
+
+    i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #2c2f3a;
+    }
+
+    span {
+      margin-left: 0.5rem;
+    }
+  }
+
+  pre {
+    margin: 0;
+    padding: 1.1rem 1.25rem;
+    border: 0;
+    background: transparent;
+  }
+
+  code {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    font-size: 0.875rem;
+    line-height: 1.75;
+  }
+}
+
+.il-eyebrow {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: $il-accent;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+// Grade de cartões.
+.il-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+
+  &.il-grid-2 {
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  }
+}
+
+.main-content .il-card {
+  display: block;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid $border-color;
+  border-radius: 12px;
+  background: linear-gradient(180deg, $il-surface-2, $il-surface);
+  color: $body-text-color;
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+
+  h3, h4 {
+    margin: 0 0 0.4rem !important;
+    padding: 0;
+    border: 0;
+    color: $body-heading-color;
+    font-size: 1rem !important;
+    font-weight: 650;
+    text-transform: none;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    margin: 0;
+    color: $il-muted;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  code {
+    font-size: 0.8em;
+  }
+
+  .il-card-ex {
+    display: block;
+    margin-top: 0.8rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 6px;
+    background: $code-background-color;
+    font-family: $mono-font-family;
+    font-size: 0.78rem;
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+}
+
+.main-content a.il-card {
+  &:hover {
+    border-color: rgba($il-accent, 0.6);
+    transform: translateY(-2px);
+  }
+
+  .il-card-more {
+    display: inline-block;
+    margin-top: 0.75rem;
+    color: $il-accent;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+}
+
+// Linha do tempo das fases do compilador.
+.main-content .il-pipeline {
+  list-style: none;
+  margin: 1.5rem 0 2rem;
+  padding: 0 !important;
+  counter-reset: fase;
+
+  > li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2.25rem 1fr auto;
+    align-items: start;
+    gap: 0.9rem;
+    max-width: none;
+    margin: 0;
+    padding: 0 0 1.25rem;
+
+    // O tema numera "ol > li" com um ::before absoluto; aqui ele vira a
+    // primeira coluna da grade.
+    &::before {
+      counter-increment: fase;
+      content: counter(fase);
+      position: static;
+      top: auto;
+      left: auto;
+      display: grid;
+      place-items: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      border: 1px solid $border-color;
+      border-radius: 50%;
+      background: $il-surface;
+      color: $il-muted;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    // Traço vertical que liga as fases.
+    &:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      left: calc(1.125rem - 0.5px);
+      top: 2.4rem;
+      bottom: 0.15rem;
+      width: 1px;
+      background: $border-color;
+    }
+
+    &.il-ok::before {
+      border-color: rgba($il-ok, 0.5);
+      background: rgba($il-ok, 0.1);
+      color: $il-ok;
+    }
+
+    &.il-wip::before {
+      border-color: rgba($il-wip, 0.5);
+      background: rgba($il-wip, 0.1);
+      color: $il-wip;
+    }
+  }
+
+  .il-status {
+    justify-self: end;
+  }
+
+  .il-fase {
+    padding-top: 0.3rem;
+
+    strong {
+      display: block;
+      color: $body-heading-color;
+      font-weight: 600;
+    }
+
+    span {
+      color: $il-muted;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.il-status {
+  display: inline-block;
+  margin-top: 0.35rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &.il-ok { background: rgba($il-ok, 0.12); color: $il-ok; }
+  &.il-wip { background: rgba($il-wip, 0.12); color: $il-wip; }
+  &.il-plan { background: rgba($il-plan, 0.12); color: $il-plan; }
+}
+
+// Números em destaque.
+.il-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 1rem;
+  margin: 0 0 2rem;
+
+  div {
+    padding: 1rem 1.15rem;
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    background: $il-surface;
+  }
+
+  strong {
+    display: block;
+    color: $body-heading-color;
+    font-size: 1.75rem;
+    font-weight: 750;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  span {
+    color: $il-muted;
+    font-size: 0.82rem;
+  }
+}
+
+// Listas "dentro" e "fora" do escopo.
+.il-scope {
+  ul {
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    position: relative;
+    margin: 0.35rem 0;
+    padding-left: 1.5rem;
+    color: $body-text-color;
+    font-size: 0.92rem;
+
+    &::before {
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+    }
+  }
+
+  .il-in li::before { content: "✓"; color: $il-ok; }
+  .il-out li::before { content: "–"; color: $il-muted; }
+}
+
+// ---- Rodapé -------------------------------------------------------------------
+
+.il-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  color: $il-muted;
+  font-size: 0.8rem;
+}
+
+// ---- Telas pequenas -----------------------------------------------------------
+
+@media (max-width: 50rem) {
+  .il-hero h1 { font-size: 2.4rem !important; }
+  .il-hero .il-tagline { font-size: 1.05rem; }
+  .il-page-header h1 { font-size: 1.9rem !important; }
+  .main-content .il-pipeline > li { grid-template-columns: 2.25rem 1fr; }
+  .main-content .il-pipeline .il-status { grid-column: 2; margin-top: -0.5rem; }
+}

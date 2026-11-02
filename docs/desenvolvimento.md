@@ -1,11 +1,16 @@
 ---
-layout: default
 title: "Como compilar e testar"
-nav_order: 7
+parent: Projeto
+nav_order: 1
+description: "Requisitos, compilação, modos de execução do imagemc e a suíte de testes automatizados."
 ---
 
-Requisitos: Flex, Bison 3.6 ou mais recente (testado com 3.8.2), GCC e Make.
-Confira a versão com `bison --version`; com Bison antigo, o `make` para logo
+## Requisitos
+
+Flex, Bison 3.6 ou mais recente (testado com 3.8.2), GCC e Make.
+
+{: .atencao }
+Confira a versão com `bison --version`. Com Bison antigo, o `make` para logo
 no início com a mensagem `require bison 3.6`.
 
 - **Linux / WSL:** Ubuntu 22.04 ou mais recente e Debian 12 já trazem o Bison
@@ -14,6 +19,8 @@ no início com a mensagem `require bison 3.6`.
 - **macOS:** o `/usr/bin/bison` do sistema é o 2.3. Instale pelo Homebrew
   (`brew install bison flex`) e coloque-o antes no PATH:
   `export PATH="$(brew --prefix bison)/bin:$PATH"`.
+
+## Compilando
 
 ```sh
 make          # gera build/imagemc
@@ -27,13 +34,21 @@ executável `imagemc`, todos reconstruíveis a partir de `src/`.
 
 ## Executando o compilador
 
+| Comando | Imprime quando não há erro |
+|---|---|
+| `imagemc prog.img` | só `analise concluida sem erros.` |
+| `imagemc --tokens prog.img` | a sequência de tokens (só a análise léxica) |
+| `imagemc --ast prog.img` | a árvore sintática abstrata |
+| `imagemc --tabela prog.img` | a tabela de símbolos |
+| `imagemc --ri prog.img` | a representação intermediária (em andamento) |
+
 Por padrão, `imagemc` analisa o programa e informa se há erros:
 
 ```sh
 ./build/imagemc examples/programa_basico.img
 ```
 
-```text
+```saida
 analise concluida sem erros.
 ```
 
@@ -44,7 +59,7 @@ Com `--ast`, imprime também a árvore sintática abstrata, com a posição
 ./build/imagemc --ast examples/programa_basico.img
 ```
 
-```text
+```saida
 PROGRAM (6 comandos)
 |-- IMAGE_DECL [2:1]
 |   |-- nome: foto [2:8]
@@ -82,12 +97,12 @@ Com `--tokens`, `imagemc` para na análise léxica e lista os tokens:
 
 Erros saem em `stderr`, no formato `arquivo:linha:coluna: categoria: mensagem`:
 
-```text
+```saida
 programa.img:2:8: erro sintatico: encontrado 'como', esperado identificador
 ```
 
-Códigos de saída: `0` sem erros, `1` com erros léxicos ou sintáticos, `2` para
-uso incorreto ou arquivo inexistente.
+Códigos de saída: `0` sem erros, `1` com erros léxicos, sintáticos ou
+semânticos, `2` para uso incorreto ou arquivo inexistente.
 
 ## Suíte de testes
 

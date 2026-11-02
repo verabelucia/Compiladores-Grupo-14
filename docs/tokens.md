@@ -1,7 +1,8 @@
 ---
-layout: default
 title: "Tokens"
-nav_order: 3
+parent: Linguagem
+nav_order: 2
+description: "Palavras-chave, literais e símbolos reconhecidos pelo analisador léxico (Flex)."
 ---
 
 O analisador léxico é implementado com Flex (`src/scanner.l`). Sua função é
@@ -104,7 +105,7 @@ semântica.
 
 Entrada:
 
-```text
+```imagemlang
 imagem foto = "foto.jpg";
 ```
 
