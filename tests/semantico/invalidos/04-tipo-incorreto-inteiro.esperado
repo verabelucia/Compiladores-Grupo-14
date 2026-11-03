@@ -1,0 +1,3 @@
+04-tipo-incorreto-inteiro.img:3:25: erro semantico: largura deve ser inteiro, mas 'foto' e imagem
+
+analise concluida com 1 erro(s): 0 lexico(s), 0 sintatico(s), 1 semantico(s).

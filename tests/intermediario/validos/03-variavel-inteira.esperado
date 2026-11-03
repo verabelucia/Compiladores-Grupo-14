@@ -1,0 +1,8 @@
+RI (4 instrucoes)
+   1  LOAD_IMAGE "foto.jpg" -> foto
+   2  CONST 500 -> largura
+   3  RESIZE foto, largura, 300
+   4  FREE foto
+
+
+analise concluida sem erros.

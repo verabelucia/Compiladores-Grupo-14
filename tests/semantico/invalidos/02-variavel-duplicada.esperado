@@ -1,0 +1,3 @@
+02-variavel-duplicada.img:2:9: erro semantico: 'largura' ja foi declarada na linha 1
+
+analise concluida com 1 erro(s): 0 lexico(s), 0 sintatico(s), 1 semantico(s).

@@ -1,0 +1,7 @@
+RI (3 instrucoes)
+   1  LOAD_IMAGE "foto.jpg" -> foto
+   2  ROTATE foto, 90
+   3  FREE foto
+
+
+analise concluida sem erros.

@@ -1,0 +1,3 @@
+05-angulo-invalido.img:3:17: erro semantico: angulo deve ser 90, 180 ou 270, mas vale 45
+
+analise concluida com 1 erro(s): 0 lexico(s), 0 sintatico(s), 1 semantico(s).

@@ -1,0 +1,3 @@
+06-dimensao-zero.img:3:25: erro semantico: largura deve ser maior que zero, mas vale 0
+
+analise concluida com 1 erro(s): 0 lexico(s), 0 sintatico(s), 1 semantico(s).

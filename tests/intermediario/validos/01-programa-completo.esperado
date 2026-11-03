@@ -1,0 +1,12 @@
+RI (8 instrucoes)
+   1  LOAD_IMAGE "foto.jpg" -> foto
+   2  CONST 750 -> largura
+   3  RESIZE foto, largura, 800
+   4  GRAYSCALE foto
+   5  ROTATE foto, 90
+   6  CROP foto, 10, 20, 300, 200
+   7  SAVE foto, "resultado.jpg"
+   8  FREE foto
+
+
+analise concluida sem erros.
