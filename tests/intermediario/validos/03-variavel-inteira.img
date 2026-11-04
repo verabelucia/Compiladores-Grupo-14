@@ -1,0 +1,4 @@
+imagem foto = "foto.jpg";
+inteiro largura = 500;
+redimensionar foto para largura por 300;
+

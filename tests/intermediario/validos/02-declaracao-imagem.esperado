@@ -1,0 +1,7 @@
+RI (3 instrucoes)
+   1  LOAD_IMAGE "paisagem.jpg" -> paisagem
+   2  SAVE paisagem, "copia.jpg"
+   3  FREE paisagem
+
+
+analise concluida sem erros.

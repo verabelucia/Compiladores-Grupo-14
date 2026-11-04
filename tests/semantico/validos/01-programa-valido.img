@@ -1,0 +1,10 @@
+imagem foto = "foto.jpg";
+inteiro largura = 750;
+inteiro angulo = 90;
+
+redimensionar foto para largura por 800;
+tons_de_cinza foto;
+rotacionar foto angulo;
+salvar foto como "resultado.jpg";
+
+

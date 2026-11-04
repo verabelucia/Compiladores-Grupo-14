@@ -1,0 +1,6 @@
+TABELA DE SIMBOLOS (3 simbolos)
+|-- foto: imagem [1:8]
+|-- largura: inteiro = 750 [2:9]
+`-- angulo: inteiro = 90 [3:9]
+
+analise concluida sem erros.
