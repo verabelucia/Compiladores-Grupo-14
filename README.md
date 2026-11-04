@@ -50,7 +50,7 @@ salvar foto como "resultado.jpg";
 | 3 | Árvore sintática abstrata | `src/ast.h`, `src/ast.c` | ✅ pronto |
 | 4 | Tabela de símbolos | `src/tabela.h`, `src/tabela.c` | ✅ pronto |
 | 5 | Análise semântica | `src/semantico.h`, `src/semantico.c` | ✅ pronto |
-| 6 | Representação intermediária | `src/ri.h`, `src/ri.c` | 🚧 em andamento |
+| 6 | Representação intermediária | `src/ri.h`, `src/ri.c` | ✅ pronto |
 | 7 | Geração de código C | | ⏳ planejado |
 | 8 | Runtime (`stb`) e executável | | ⏳ planejado |
 
@@ -98,7 +98,7 @@ make clean    # apaga a pasta build/
 | `imagemc --tokens prog.img` | a sequência de tokens (só a análise léxica) |
 | `imagemc --ast prog.img` | a árvore sintática abstrata |
 | `imagemc --tabela prog.img` | a tabela de símbolos |
-| `imagemc --ri prog.img` | a representação intermediária (em andamento) |
+| `imagemc --ri prog.img` | a representação intermediária |
 
 Códigos de saída: `0` sem erros, `1` com qualquer erro léxico, sintático ou
 semântico, `2` para uso incorreto ou arquivo inexistente.
@@ -106,8 +106,9 @@ semântico, `2` para uso incorreto ou arquivo inexistente.
 ### Testes
 
 Cada `tests/<fase>/<grupo>/<nome>.img` tem ao lado um `<nome>.esperado` com a
-saída exata do compilador; o `run_tests.sh` compara as duas. Hoje são 17
-casos, cobrindo as fases léxica e sintática. Detalhes em
+saída exata do compilador; o `run_tests.sh` compara as duas. Hoje são 30
+casos, cobrindo as fases léxica, sintática, semântica e a representação
+intermediária. Detalhes em
 [Como compilar e testar](https://verabelucia.github.io/Compiladores-Grupo-14/desenvolvimento.html).
 
 ## Estrutura do repositório

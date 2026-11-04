@@ -50,7 +50,7 @@ encontrados e para.
   <li class="il-ok"><div class="il-fase"><strong>AST</strong><span>Árvore sintática abstrata do programa (<code>--ast</code>).</span></div><span class="il-status il-ok">pronto</span></li>
   <li class="il-ok"><div class="il-fase"><strong>Tabela de símbolos</strong><span>Declarações, redeclarações e nomes não declarados (<code>--tabela</code>).</span></div><span class="il-status il-ok">pronto</span></li>
   <li class="il-ok"><div class="il-fase"><strong>Análise semântica</strong><span>Tipos e domínio: dimensões &gt; 0, ângulos 90, 180 ou 270.</span></div><span class="il-status il-ok">pronto</span></li>
-  <li class="il-wip"><div class="il-fase"><strong>Representação intermediária</strong><span>Uma instrução linear por comando (<code>--ri</code>).</span></div><span class="il-status il-wip">em andamento</span></li>
+  <li class="il-ok"><div class="il-fase"><strong>Representação intermediária</strong><span>Uma instrução linear por comando (<code>--ri</code>).</span></div><span class="il-status il-ok">pronto</span></li>
   <li><div class="il-fase"><strong>Geração de código C</strong><span>Chamadas a uma API pequena: <code>img_load</code>, <code>img_resize</code>…</span></div><span class="il-status il-plan">planejado</span></li>
   <li><div class="il-fase"><strong>Runtime e executável</strong><span>GCC + bibliotecas header-only <code>stb</code>.</span></div><span class="il-status il-plan">planejado</span></li>
 </ol>

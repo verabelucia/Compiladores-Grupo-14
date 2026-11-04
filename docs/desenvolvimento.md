@@ -40,7 +40,7 @@ executável `imagemc`, todos reconstruíveis a partir de `src/`.
 | `imagemc --tokens prog.img` | a sequência de tokens (só a análise léxica) |
 | `imagemc --ast prog.img` | a árvore sintática abstrata |
 | `imagemc --tabela prog.img` | a tabela de símbolos |
-| `imagemc --ri prog.img` | a representação intermediária (em andamento) |
+| `imagemc --ri prog.img` | a representação intermediária |
 
 Por padrão, `imagemc` analisa o programa e informa se há erros:
 
@@ -113,8 +113,9 @@ make test
 Cada arquivo `tests/<fase>/<grupo>/<nome>.img` tem um par `<nome>.esperado`
 com a saída completa (stdout e stderr) que o compilador deve produzir. O
 script `run_tests.sh` compara as duas e informa `PASSOU` ou `FALHOU`. A fase
-decide o modo: `tests/lexico/` roda `imagemc --tokens` e `tests/sintatico/`
-roda `imagemc --ast`.
+decide o modo: `tests/lexico/` roda `imagemc --tokens`, `tests/sintatico/`
+roda `imagemc --ast`, `tests/semantico/` roda `imagemc --tabela` e
+`tests/intermediario/` roda `imagemc --ri`.
 
 | Pasta | Cobre |
 |---|---|
@@ -122,3 +123,6 @@ roda `imagemc --ast`.
 | `tests/lexico/invalidos/` | caractere inválido, string não terminada, vários erros léxicos |
 | `tests/sintatico/validos/` | a AST dos sete comandos, de valores passados por variável e de um programa sem comandos |
 | `tests/sintatico/invalidos/` | ordem errada, falta de `;`, palavra reservada como nome, fim inesperado, lixo no início de comando, vários erros com recuperação, erro léxico somado a sintático, string não terminada |
+| `tests/semantico/validos/` | tabela de símbolos de um programa sem erros |
+| `tests/semantico/invalidos/` | os seis erros do catálogo: variável não declarada, redeclarada, comando de imagem sobre inteiro, imagem usada como inteiro, ângulo inválido, dimensão zero |
+| `tests/intermediario/validos/` | a RI de um programa completo e de cada comando (declarações, tons de cinza, rotação, recorte) |

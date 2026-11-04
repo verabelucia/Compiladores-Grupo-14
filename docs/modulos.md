@@ -28,7 +28,7 @@ AST (raiz_ast)           src/ast.c         (pronto)
    │    └ tabela_*       src/tabela.c      (pronto)
    ▼
 AST validada + tabela de símbolos
-   │  gerar_ri           src/ri.c          Pessoa 4
+   │  gerar_ri           src/ri.c          (pronto)
    ▼
 RI (lista de instruções)
 ```
@@ -44,7 +44,7 @@ resumo.
 | Pessoa 1: AST e parser | `src/ast.h`, `src/ast.c`, `src/parser.y` | **pronto** |
 | Pessoa 2: tabela de símbolos | `src/tabela.h`, `src/tabela.c` | **pronto** |
 | Pessoa 3: análise semântica | `src/semantico.h`, `src/semantico.c` | **pronto** |
-| Pessoa 4: RI e testes | `src/ri.h` (congelado), `src/ri.c`, `tests/semantico/`, `tests/intermediario/` | esqueleto; implementar |
+| Pessoa 4: RI e testes | `src/ri.h`, `src/ri.c`, `tests/semantico/`, `tests/intermediario/` | **pronto** |
 | Compartilhados | `src/main.c`, `Makefile`, `run_tests.sh` | **prontos**; não precisam mudar no P2 |
 
 Regras:

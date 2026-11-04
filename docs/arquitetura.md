@@ -31,7 +31,7 @@ GCC + runtime
 Executável
 ```
 
-## Componentes planejados
+## Componentes
 
 ### Lexer
 
@@ -119,17 +119,28 @@ pelo runtime durante a execução.
 
 ### Representação intermediária
 
-Uma forma textual inicial poderá ser:
+Implementada em `src/ri.h` e `src/ri.c` e exibida com `imagemc --ri`. É uma
+lista linear com uma instrução por comando, na ordem do programa, e no fim um
+`FREE` para cada imagem, que vai virar `img_destroy` no gerador de C:
 
 ```text
-LOAD_IMAGE "foto.jpg" -> foto
-RESIZE foto, 750, 800
-GRAYSCALE foto
-ROTATE foto, 90
-SAVE foto, "resultado.jpg"
+RI (8 instrucoes)
+   1  LOAD_IMAGE "foto.jpg" -> foto
+   2  CONST 750 -> largura
+   3  RESIZE foto, largura, 800
+   4  GRAYSCALE foto
+   5  ROTATE foto, 90
+   6  CROP foto, 10, 20, 300, 200
+   7  SAVE foto, "resultado.jpg"
+   8  FREE foto
 ```
 
-### Gerador de C
+Variáveis inteiras aparecem pelo nome (`RESIZE foto, largura, 800`). Trocar o
+nome pelo valor (propagação de constantes) é a otimização prevista para a
+semana 09. A lista completa de instruções está em
+[Módulos e contratos](modulos.md).
+
+### Gerador de C (planejado)
 
 Percorrerá a representação intermediária e emitirá chamadas para uma API
 pequena e estável:
@@ -144,7 +155,7 @@ img_save
 img_destroy
 ```
 
-### Runtime
+### Runtime (planejado)
 
 O runtime esconderá os detalhes da biblioteca de imagens. A implementação usará
 as bibliotecas header-only do conjunto `stb`:
