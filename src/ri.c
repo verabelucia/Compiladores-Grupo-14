@@ -235,8 +235,6 @@ void imprimir_ri(FILE *saida, const ProgramaRI *ri)
 
         fprintf(saida, "\n");
     }
-
-    fprintf(saida, "\n");
 }
 
 /* Libera toda a memoria utilizada pela RI. */
