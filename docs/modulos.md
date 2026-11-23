@@ -235,3 +235,26 @@ AddressSanitizer:
 gcc -Wall -Wextra -g -fsanitize=address,undefined -Isrc -Ibuild \
     -o build/asan build/parser.tab.c build/lex.yy.c src/*.c
 ```
+
+## Contratos da etapa final (semanas 09 e 10)
+
+Para fechar a otimização, a geração de código C e o runtime `stb` em paralelo,
+os contratos abaixo foram congelados a partir de `src/ri.h`:
+
+| Papel | Arquivos | Função principal |
+|---|---|---|
+| Pessoa 1: otimizador da RI | `src/otimizador.h`, `src/otimizador.c` | `otimizar_ri(ProgramaRI *ri)` |
+| Pessoa 2: gerador de código C | `src/codegen.h`, `src/codegen.c` | `gerar_c(FILE *saida, const ProgramaRI *ri)` |
+| Pessoa 3: runtime de imagens (`stb`) | `runtime/runtime.h`, `runtime/runtime.c`, `runtime/stb_*.h` | `img_load`, `img_resize`, `img_grayscale`, `img_rotate`, `img_crop`, `img_save`, `img_destroy` |
+| Pessoa 4: CLI, testes e `make demo` | `src/main.c`, `Makefile`, `run_tests.sh`, `tests/{otimizacao,codegen}/` | `--ri-otim`, `--c` e alvo `make demo` |
+
+- **Otimizador (`src/otimizador.h`):** atua *in-place* sobre `ProgramaRI`,
+  propagando constantes de `RI_CONST` para `RI_RESIZE`, `RI_ROTATE` e
+  `RI_CROP` e removendo instruções `RI_CONST` sem uso.
+- **Gerador de C (`src/codegen.h`):** emite `#include "runtime.h"`,
+  `int main(void)` e chamadas `img_*`, prefixando identificadores da DSL com
+  `im_` para evitar conflitos com palavras reservadas do C.
+- **Runtime (`runtime/runtime.h`):** `img_load` devolve `Imagem *` (ou `NULL`
+  em erro); `img_resize`, `img_grayscale`, `img_rotate`, `img_crop` e
+  `img_save` devolvem `0` em sucesso e diferente de `0` em erro; `img_destroy`
+  aceita `NULL`.
