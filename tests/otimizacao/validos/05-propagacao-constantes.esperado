@@ -1,0 +1,8 @@
+RI (5 instrucoes)
+   1  LOAD_IMAGE "foto.jpg" -> foto
+   2  ROTATE foto, 180
+   3  CROP foto, 10, 20, 300, 300
+   4  SAVE foto, "resultado.jpg"
+   5  FREE foto
+
+analise concluida sem erros.
