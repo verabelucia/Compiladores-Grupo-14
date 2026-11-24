@@ -1,0 +1,13 @@
+
+
+
+imagem foto = "foto.jpg";
+inteiro angulo = 180;
+inteiro x = 10;
+inteiro y = 20;
+inteiro lado = 300;
+
+rotacionar foto angulo;
+recortar foto de x, y tamanho lado por lado;
+
+salvar foto como "resultado.jpg";

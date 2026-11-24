@@ -1,0 +1,9 @@
+// Testa a propagação de constantes no redimensionamento.
+imagem foto = "foto.jpg";
+
+inteiro largura = 750;
+inteiro altura = 800;
+
+redimensionar foto para largura por altura;
+
+salvar foto como "resultado.jpg";
