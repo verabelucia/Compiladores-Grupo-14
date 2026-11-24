@@ -41,11 +41,25 @@ static void emitir_instrucao(FILE *saida, const InstrucaoRI *inst)
     case RI_CONST:
         fprintf(saida, "    int im_%s = %ld;\n", inst->alvo, inst->numero);
         break;
+    case RI_RESIZE:
+        fprintf(saida, "    if (img_resize(im_%s, ", inst->alvo);
+        emitir_valor(saida, &inst->args[RESIZE_LARGURA]);
+        fprintf(saida, ", ");
+        emitir_valor(saida, &inst->args[RESIZE_ALTURA]);
+        fprintf(saida, ") != 0) return 1;\n");
+        break;
+    case RI_GRAYSCALE:
+        fprintf(saida, "    if (img_grayscale(im_%s) != 0) return 1;\n", inst->alvo);
+        break;
+    case RI_ROTATE:
+        fprintf(saida, "    if (img_rotate(im_%s, ", inst->alvo);
+        emitir_valor(saida, &inst->args[ROTATE_ANGULO]);
+        fprintf(saida, ") != 0) return 1;\n");
+        break;
     case RI_FREE:
         fprintf(saida, "    img_destroy(im_%s);\n", inst->alvo);
         break;
     default:
-        (void) emitir_valor;
         break;
     }
 }
