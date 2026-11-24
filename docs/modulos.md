@@ -262,3 +262,28 @@ os contratos abaixo foram congelados a partir de `src/ri.h`:
   em erro); `img_resize`, `img_grayscale`, `img_rotate`, `img_crop` e
   `img_save` devolvem `0` em sucesso e diferente de `0` em erro; `img_destroy`
   aceita `NULL`.
+
+### Formato do `--c` (Pessoa 2)
+
+Para o programa `tests/sintatico/validos/01-programa-completo.img` (sem o
+otimizador, correspondente à RI de 8 instruções acima), `imagemc --c` gera:
+
+```c
+#include "runtime.h"
+
+int main(void) {
+    Imagem *im_foto = img_load("foto.jpg");
+    if (!im_foto) return 1;
+    int im_largura = 750;
+    if (img_resize(im_foto, im_largura, 800) != 0) return 1;
+    if (img_grayscale(im_foto) != 0) return 1;
+    if (img_rotate(im_foto, 90) != 0) return 1;
+    if (img_crop(im_foto, 10, 20, 300, 200) != 0) return 1;
+    if (img_save(im_foto, "resultado.jpg") != 0) return 1;
+    img_destroy(im_foto);
+    return 0;
+}
+```
+
+Após o otimizador da semana 09, a linha `int im_largura = 750;` deixa de ser
+emitida e o argumento `im_largura` em `img_resize` passa a ser o literal `750`.
