@@ -1,3 +1,4 @@
+
 #!/bin/sh
 # FGA0003 - Compiladores 1
 # Curso de Engenharia de Software
@@ -7,14 +8,13 @@
 # Cada arquivo tests/<fase>/<grupo>/<nome>.img tem um par <nome>.esperado com
 # a saida completa (stdout e stderr) que o compilador deve produzir. O teste
 # passa quando a saida observada e identica a esperada.
-#
 # Fases:
-#   lexico     - roda "imagemc --tokens" (sequencia de tokens)
-#   sintatico      - roda "imagemc --ast" (arvore sintatica abstrata e
-#                    erros sintaticos)
-#   semantico      - roda "imagemc --tabela" (tabela de simbolos e erros
-#                    semanticos)
+#   lexico         - roda "imagemc --tokens" (sequencia de tokens)
+#   sintatico      - roda "imagemc --ast" (arvore sintatica abstrata)
+#   semantico      - roda "imagemc --tabela" (tabela de simbolos)
 #   intermediario  - roda "imagemc --ri" (representacao intermediaria)
+#   otimizacao     - roda "imagemc --ri-otim" (RI otimizada)
+#   codegen        - roda "imagemc --c" (codigo C gerado)
 #
 # Com qualquer erro, o compilador imprime so as mensagens e o resumo.
 
@@ -30,11 +30,18 @@ fi
 
 passou=0
 falhou=0
+fase_filtro="${1:-}"
 
 for entrada in "$RAIZ"/tests/*/*/*.img; do
     esperado="${entrada%.img}.esperado"
     grupo=$(dirname "$entrada")
     fase=$(basename "$(dirname "$grupo")")
+
+    # Se uma fase foi informada, executa somente os testes dela.
+    if [ -n "$fase_filtro" ] && [ "$fase" != "$fase_filtro" ]; then
+        continue
+    fi
+
     nome=$fase/$(basename "$grupo")/$(basename "$entrada")
 
     case "$fase" in
@@ -42,6 +49,8 @@ for entrada in "$RAIZ"/tests/*/*/*.img; do
         sintatico)     opcoes="--ast" ;;
         semantico)     opcoes="--tabela" ;;
         intermediario) opcoes="--ri" ;;
+        otimizacao)    opcoes="--ri-otim" ;;
+        codegen)       opcoes="--c" ;;
         *)             opcoes="" ;;
     esac
 
