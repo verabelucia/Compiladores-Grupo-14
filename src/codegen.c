@@ -56,10 +56,24 @@ static void emitir_instrucao(FILE *saida, const InstrucaoRI *inst)
         emitir_valor(saida, &inst->args[ROTATE_ANGULO]);
         fprintf(saida, ") != 0) return 1;\n");
         break;
+    case RI_CROP:
+        fprintf(saida, "    if (img_crop(im_%s, ", inst->alvo);
+        emitir_valor(saida, &inst->args[CROP_X]);
+        fprintf(saida, ", ");
+        emitir_valor(saida, &inst->args[CROP_Y]);
+        fprintf(saida, ", ");
+        emitir_valor(saida, &inst->args[CROP_LARGURA]);
+        fprintf(saida, ", ");
+        emitir_valor(saida, &inst->args[CROP_ALTURA]);
+        fprintf(saida, ") != 0) return 1;\n");
+        break;
+    case RI_SAVE:
+        fprintf(saida, "    if (img_save(im_%s, ", inst->alvo);
+        emitir_string(saida, inst->arquivo);
+        fprintf(saida, ") != 0) return 1;\n");
+        break;
     case RI_FREE:
         fprintf(saida, "    img_destroy(im_%s);\n", inst->alvo);
-        break;
-    default:
         break;
     }
 }
