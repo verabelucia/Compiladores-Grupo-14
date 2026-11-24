@@ -287,3 +287,33 @@ int main(void) {
 
 Após o otimizador da semana 09, a linha `int im_largura = 750;` deixa de ser
 emitida e o argumento `im_largura` em `img_resize` passa a ser o literal `750`.
+
+### Otimização da RI (Pessoa 1)
+
+`otimizar_ri` faz a propagação de constantes em duas passagens sobre a RI:
+
+1. cada argumento de `RI_RESIZE`, `RI_ROTATE` e `RI_CROP` que é uma variável
+   passa a ser o valor do `RI_CONST` que a declarou;
+2. os `RI_CONST` que ficaram sem nenhum uso são removidos da lista. Cada
+   instrução removida é liberada com as suas strings, e `quantidade` e
+   `ultima` são ajustados.
+
+A troca não muda o resultado do programa porque a ImagemLang não tem
+atribuição: o valor de um `inteiro` nunca muda depois da declaração.
+
+Para `tests/sintatico/validos/02-valores-por-variavel.img`, a RI passa de 9
+para 5 instruções:
+
+```text
+antes                                 depois
+RI (9 instrucoes)                     RI (5 instrucoes)
+   1  LOAD_IMAGE "foto.jpg" -> foto      1  LOAD_IMAGE "foto.jpg" -> foto
+   2  CONST 180 -> angulo                2  ROTATE foto, 180
+   3  CONST 0 -> x                       3  CROP foto, 0, 0, 64, 64
+   4  CONST 0 -> y                       4  SAVE foto, "miniatura.png"
+   5  CONST 64 -> lado                   5  FREE foto
+   6  ROTATE foto, angulo
+   7  CROP foto, x, y, lado, lado
+   8  SAVE foto, "miniatura.png"
+   9  FREE foto
+```
