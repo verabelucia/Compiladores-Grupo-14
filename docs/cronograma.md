@@ -19,7 +19,7 @@ do professor.
 | 30/09 (equipes 9 a 16) | P1 | Apresentar proposta, lexer, parser e AST inicial | ✅ concluído |
 | 07/10 | Análise semântica | Implementar declarações, tipos e validação de argumentos | ✅ concluído |
 | 14/10 | Código intermediário | Gerar instruções intermediárias da DSL | ✅ concluído |
-| 21/10 | Otimização | Avaliar uma otimização simples, sem ampliar o escopo |  |
+| 21/10 | Otimização | Avaliar uma otimização simples, sem ampliar o escopo | ✅ concluído |
 | 28/10 | Código final | Gerar a primeira versão de C |  |
 | 04/11, 23h59 | Formulário P2 | Líder registra a evolução desde o P1 |  |
 | 09/11 (equipes 16 a 9) | P2 | Demonstrar um protótipo quase ponta a ponta |  |
