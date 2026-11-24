@@ -32,9 +32,19 @@ static void emitir_valor(FILE *saida, const Valor *valor)
 static void emitir_instrucao(FILE *saida, const InstrucaoRI *inst)
 {
     switch (inst->op) {
+    case RI_LOAD_IMAGE:
+        fprintf(saida, "    Imagem *im_%s = img_load(", inst->alvo);
+        emitir_string(saida, inst->arquivo);
+        fprintf(saida, ");\n");
+        fprintf(saida, "    if (!im_%s) return 1;\n", inst->alvo);
+        break;
+    case RI_CONST:
+        fprintf(saida, "    int im_%s = %ld;\n", inst->alvo, inst->numero);
+        break;
+    case RI_FREE:
+        fprintf(saida, "    img_destroy(im_%s);\n", inst->alvo);
+        break;
     default:
-        (void) saida;
-        (void) emitir_string;
         (void) emitir_valor;
         break;
     }
