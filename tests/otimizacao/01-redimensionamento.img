@@ -1,0 +1,6 @@
+// Testa a otimização de uma operação de redimensionamento.
+imagem foto = "foto.jpg";
+
+redimensionar foto para 750 por 800;
+
+salvar foto como "resultado.jpg";

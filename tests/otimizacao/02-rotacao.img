@@ -1,0 +1,6 @@
+// Testa a otimização de uma operação de rotação.
+imagem foto = "foto.jpg";
+
+rotacionar foto 90;
+
+salvar foto como "resultado.jpg";
