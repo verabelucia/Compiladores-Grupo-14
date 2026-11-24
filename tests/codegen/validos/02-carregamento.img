@@ -1,0 +1,3 @@
+// Testa carregamento e salvamento.
+imagem foto = "foto.jpg";
+salvar foto como "resultado.jpg";
