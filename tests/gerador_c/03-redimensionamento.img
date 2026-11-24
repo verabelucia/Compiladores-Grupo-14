@@ -1,0 +1,6 @@
+// Testa o redimensionamento de uma imagem.
+imagem foto = "foto.jpg";
+
+redimensionar foto para 750 por 800;
+
+salvar foto como "resultado.jpg";
