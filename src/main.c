@@ -1,3 +1,4 @@
+
 /* FGA0003 - Compiladores 1 */
 /* Curso de Engenharia de Software */
 /* Universidade de Brasília (UnB) */
@@ -12,6 +13,7 @@
 #include "ri.h"
 #include "semantico.h"
 #include "tabela.h"
+#include "codegen.h"
 
 extern int yylex(void);
 extern FILE *yyin;
@@ -82,8 +84,9 @@ typedef enum {
     MODO_TOKENS,        /* --tokens: sequencia de tokens (so o lexico) */
     MODO_AST,           /* --ast: arvore sintatica abstrata */
     MODO_TABELA,        /* --tabela: tabela de simbolos */
-    MODO_RI,             /* --ri: representacao intermediaria */
-    MODO_RI_OTIM
+    MODO_RI,            /* --ri: representacao intermediaria */
+    MODO_RI_OTIM,       /* --ri-otim: RI otimizada */
+    MODO_C              /* --c: codigo C gerado */
 } Modo;
 
 /* Analise completa: lexico + sintatico (yyparse) e, se nao houve erro,
@@ -117,31 +120,44 @@ static int analisar(Modo modo)
         imprimir_ast(stdout, raiz_ast);
         printf("\n");
         break;
+
     case MODO_TABELA:
         tabela_imprimir(stdout, &tabela);
         printf("\n");
         break;
+
     case MODO_RI:
         ri = gerar_ri(raiz_ast);
         imprimir_ri(stdout, ri);
         printf("\n");
         liberar_ri(ri);
         break;
+
+    case MODO_RI_OTIM:
+        ri = gerar_ri(raiz_ast);
+        otimizar_ri(ri);
+        imprimir_ri(stdout, ri);
+        printf("\n");
+        liberar_ri(ri);
+        break;
+
+    case MODO_C:
+        ri = gerar_ri(raiz_ast);
+        gerar_c(stdout, ri);
+        liberar_ri(ri);
+        break;
+
     default:
         break;
-    case MODO_RI_OTIM:
-    ri = gerar_ri(raiz_ast);
-    otimizar_ri(ri);
-    imprimir_ri(stdout, ri);
-    printf("\n");
-    liberar_ri(ri);
-    break;
     }
 
     tabela_liberar(&tabela);
     liberar_ast(raiz_ast);
 
-    printf("analise concluida sem erros.\n");
+    /* O codigo C precisa sair sem mensagens adicionais no stdout. */
+    if (modo != MODO_C)
+        printf("analise concluida sem erros.\n");
+
     return 0;
 }
 
@@ -150,10 +166,11 @@ static const struct {
     Modo modo;
 } OPCOES[] = {
     { "--tokens", MODO_TOKENS },
-    { "--ast",    MODO_AST },
+    { "--ast", MODO_AST },
     { "--tabela", MODO_TABELA },
-    { "--ri",     MODO_RI },
+    { "--ri", MODO_RI },
     { "--ri-otim", MODO_RI_OTIM },
+    { "--c", MODO_C },
 };
 
 int main(int argc, char **argv)
@@ -169,18 +186,23 @@ int main(int argc, char **argv)
         int reconhecida = 0;
 
         for (size_t k = 0; k < sizeof OPCOES / sizeof OPCOES[0]; k++) {
-            if (strcmp(argv[i], OPCOES[k].opcao) == 0 && modo == MODO_ANALISE) {
+            if (strcmp(argv[i], OPCOES[k].opcao) == 0 &&
+                modo == MODO_ANALISE) {
                 modo = OPCOES[k].modo;
                 reconhecida = 1;
             }
         }
+
         if (reconhecida)
             continue;
+
         if (caminho == NULL && argv[i][0] != '-') {
             caminho = argv[i];
         } else {
-            fprintf(stderr, "uso: %s [--tokens | --ast | --tabela | --ri | --ri-otim] "
-                    "[arquivo.img]\n", argv[0]);
+            fprintf(stderr,
+                    "uso: %s [--tokens | --ast | --tabela | --ri | --ri-otim | --c] "
+                    "[arquivo.img]\n",
+                    argv[0]);
             return 2;
         }
     }
@@ -196,5 +218,6 @@ int main(int argc, char **argv)
 
     if (modo == MODO_TOKENS)
         return listar_tokens();
+
     return analisar(modo);
 }
