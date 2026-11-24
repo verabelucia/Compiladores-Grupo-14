@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "otimizador.h"
 #include "parser.tab.h"
 #include "ri.h"
 #include "semantico.h"
@@ -81,7 +82,8 @@ typedef enum {
     MODO_TOKENS,        /* --tokens: sequencia de tokens (so o lexico) */
     MODO_AST,           /* --ast: arvore sintatica abstrata */
     MODO_TABELA,        /* --tabela: tabela de simbolos */
-    MODO_RI             /* --ri: representacao intermediaria */
+    MODO_RI,             /* --ri: representacao intermediaria */
+    MODO_RI_OTIM
 } Modo;
 
 /* Analise completa: lexico + sintatico (yyparse) e, se nao houve erro,
@@ -127,6 +129,13 @@ static int analisar(Modo modo)
         break;
     default:
         break;
+    case MODO_RI_OTIM:
+    ri = gerar_ri(raiz_ast);
+    otimizar_ri(ri);
+    imprimir_ri(stdout, ri);
+    printf("\n");
+    liberar_ri(ri);
+    break;
     }
 
     tabela_liberar(&tabela);
@@ -144,6 +153,7 @@ static const struct {
     { "--ast",    MODO_AST },
     { "--tabela", MODO_TABELA },
     { "--ri",     MODO_RI },
+    { "--ri-otim", MODO_RI_OTIM },
 };
 
 int main(int argc, char **argv)
@@ -169,7 +179,7 @@ int main(int argc, char **argv)
         if (caminho == NULL && argv[i][0] != '-') {
             caminho = argv[i];
         } else {
-            fprintf(stderr, "uso: %s [--tokens | --ast | --tabela | --ri] "
+            fprintf(stderr, "uso: %s [--tokens | --ast | --tabela | --ri | --ri-otim] "
                     "[arquivo.img]\n", argv[0]);
             return 2;
         }
