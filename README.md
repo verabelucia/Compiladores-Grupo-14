@@ -24,7 +24,8 @@
 A ImagemLang é uma linguagem específica de domínio (DSL) para processamento de
 imagens, desenvolvida pelo Grupo 14 na disciplina FGA0003 - Compiladores 1 da
 Universidade de Brasília. O compilador `imagemc` verifica o programa e gera
-código C, que usa um pequeno runtime próprio construído sobre as bibliotecas
+código C. Compilado pelo GCC, ele vira um executável que processa imagens de
+verdade, usando um pequeno runtime próprio construído sobre as bibliotecas
 header-only `stb_image`, `stb_image_write` e `stb_image_resize2`.
 
 ```text
@@ -41,6 +42,16 @@ recortar foto de 10, 20 tamanho 300 por 200;
 salvar foto como "resultado.jpg";
 ```
 
+```text
+programa.img  →  imagemc --c  →  programa.c  →  gcc + runtime  →  executável  →  resultado.jpg
+```
+
+| Original | `tons_de_cinza foto;` | `rotacionar foto 90;` | `recortar foto de 30, 160 tamanho 160 por 120;` |
+|:-:|:-:|:-:|:-:|
+| <img src="docs/assets/img/runtime/original.jpg" width="220" alt="Paisagem original"> | <img src="docs/assets/img/runtime/tons-de-cinza.jpg" width="220" alt="Paisagem em tons de cinza"> | <img src="docs/assets/img/runtime/rotacionar-90.jpg" width="140" alt="Paisagem girada 90 graus"> | <img src="docs/assets/img/runtime/recortar.jpg" width="160" alt="Recorte da casa"> |
+
+<sub>Imagens geradas pelo próprio compilador e runtime.</sub>
+
 ## Estado do compilador
 
 | # | Fase | Arquivos | Situação |
@@ -51,8 +62,8 @@ salvar foto como "resultado.jpg";
 | 4 | Tabela de símbolos | `src/tabela.h`, `src/tabela.c` | ✅ pronto |
 | 5 | Análise semântica | `src/semantico.h`, `src/semantico.c` | ✅ pronto |
 | 6 | Representação intermediária | `src/ri.h`, `src/ri.c` | ✅ pronto |
-| 7 | Geração de código C | | ⏳ planejado |
-| 8 | Runtime (`stb`) e executável | | ⏳ planejado |
+| 7 | Otimização e geração de código C | `src/otimizador.h`, `src/otimizador.c`, `src/codegen.h`, `src/codegen.c` | ✅ pronto |
+| 8 | Runtime (`stb`) e executável ([como funciona](https://verabelucia.github.io/Compiladores-Grupo-14/runtime.html)) | `runtime/runtime.h`, `runtime/runtime.c`, `runtime/stb_*.h` | ✅ pronto |
 
 As três categorias de erro (léxico, sintático e semântico) saem com arquivo,
 linha e coluna, e o compilador relata todos os erros de uma fase de uma vez:
@@ -83,6 +94,7 @@ analise concluida com 3 erro(s): 0 lexico(s), 0 sintatico(s), 3 semantico(s).
 ```sh
 make          # gera build/imagemc
 make test     # compila, se preciso, e roda a suíte de testes
+make demo     # gera, compila e executa o programa de demonstração
 make clean    # apaga a pasta build/
 ```
 
@@ -99,16 +111,42 @@ make clean    # apaga a pasta build/
 | `imagemc --ast prog.img` | a árvore sintática abstrata |
 | `imagemc --tabela prog.img` | a tabela de símbolos |
 | `imagemc --ri prog.img` | a representação intermediária |
+| `imagemc --ri-otim prog.img` | a representação intermediária otimizada |
+| `imagemc --c prog.img` | o código C gerado |
 
 Códigos de saída: `0` sem erros, `1` com qualquer erro léxico, sintático ou
 semântico, `2` para uso incorreto ou arquivo inexistente.
 
+### Do programa à imagem
+
+O `make demo` abre `foto.jpg` na raiz do repositório. Use uma foto sua ou a da
+documentação:
+
+```sh
+cp docs/assets/img/runtime/original.jpg foto.jpg
+make demo
+```
+
+O resultado é `resultado.jpg`. Para compilar um programa seu:
+
+```sh
+./build/imagemc --c programa.img > programa.c
+gcc -Iruntime -o programa programa.c runtime/runtime.c -lm
+./programa
+```
+
+O que só dá para saber com a imagem aberta é verificado pelo runtime:
+
+```text
+erro de execucao: recortar: area de 800, 0 tamanho 300x200 fora da imagem 960x640
+```
+
 ### Testes
 
 Cada `tests/<fase>/<grupo>/<nome>.img` tem ao lado um `<nome>.esperado` com a
-saída exata do compilador; o `run_tests.sh` compara as duas. Hoje são 30
-casos, cobrindo as fases léxica, sintática, semântica e a representação
-intermediária. Detalhes em
+saída exata do compilador; o `run_tests.sh` compara as duas. Hoje são 40
+casos, cobrindo as fases léxica, sintática e semântica, a representação
+intermediária, a otimização e a geração de C. Detalhes em
 [Como compilar e testar](https://verabelucia.github.io/Compiladores-Grupo-14/desenvolvimento.html).
 
 ## Estrutura do repositório
@@ -122,7 +160,12 @@ intermediária. Detalhes em
 │   ├── tabela.{h,c}     tabela de símbolos
 │   ├── semantico.{h,c}  checagem de tipos e de domínio
 │   ├── ri.{h,c}         representação intermediária
+│   ├── otimizador.{h,c} propagação de constantes na RI
+│   ├── codegen.{h,c}    geração de código C
 │   └── main.c           linha de comando e ligação entre as fases
+├── runtime/
+│   ├── runtime.{h,c}    as 7 operações de imagem
+│   └── stb_*.h          bibliotecas de leitura, escrita e redimensionamento
 ├── tests/               casos .img e saídas .esperado, por fase
 ├── examples/            programas de exemplo
 ├── docs/                documentação, publicada no GitHub Pages
@@ -153,7 +196,8 @@ O raciocínio completo está na [especificação da linguagem](docs/linguagem.md
 | [Gramática](https://verabelucia.github.io/Compiladores-Grupo-14/gramatica.html) | a gramática em EBNF |
 | [Arquitetura](https://verabelucia.github.io/Compiladores-Grupo-14/arquitetura.html) | fases do compilador e formato dos erros |
 | [Módulos e contratos](https://verabelucia.github.io/Compiladores-Grupo-14/modulos.html) | interfaces, saídas e catálogo de erros semânticos |
-| [Como compilar e testar](https://verabelucia.github.io/Compiladores-Grupo-14/desenvolvimento.html) | requisitos, modos e suíte de testes |
+| [Runtime e executável](https://verabelucia.github.io/Compiladores-Grupo-14/runtime.html) | como o C gerado processa as imagens, com demonstrações interativas |
+| [Como compilar e testar](https://verabelucia.github.io/Compiladores-Grupo-14/desenvolvimento.html) | requisitos, modos, demonstração e suíte de testes |
 | [Cronograma](https://verabelucia.github.io/Compiladores-Grupo-14/cronograma.html) | datas, metas e problemas resolvidos |
 
 ## Contribuidores

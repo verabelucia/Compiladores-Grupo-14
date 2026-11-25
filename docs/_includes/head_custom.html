@@ -3,3 +3,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 <meta name="theme-color" content="#0e1015">
 <script src="{{ '/assets/js/realce.js' | relative_url }}" defer></script>
+{% for nome in page.styles %}<link rel="stylesheet" href="{{ '/assets/css/' | append: nome | append: '.css' | relative_url }}">
+{% endfor %}{% for nome in page.scripts %}<script src="{{ '/assets/js/' | append: nome | append: '.js' | relative_url }}" defer></script>
+{% endfor %}

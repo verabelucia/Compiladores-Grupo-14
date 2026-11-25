@@ -3,13 +3,14 @@ layout: default
 title: Início
 nav_order: 1
 permalink: /
+styles: [integrantes]
 description: "ImagemLang: uma DSL em português para processar imagens, compilada para C. FGA0003 Compiladores 1, UnB, Grupo 14."
 ---
 
 <section class="il-hero">
   <span class="il-badge">FGA0003 Compiladores 1 · UnB · Grupo 14</span>
   <h1>ImagemLang</h1>
-  <p class="il-tagline">Uma linguagem específica de domínio, escrita em português, para descrever transformações de imagens. O compilador verifica o programa e gera código C.</p>
+  <p class="il-tagline">Uma linguagem específica de domínio, escrita em português, para descrever transformações de imagens. O compilador verifica o programa, gera código C e, com o runtime, produz um executável.</p>
   <div class="il-actions">
     <a class="btn btn-primary" href="{{ '/linguagem.html' | relative_url }}">Conhecer a linguagem</a>
     <a class="btn btn-ghost" href="{{ '/desenvolvimento.html' | relative_url }}">Compilar e testar</a>
@@ -33,8 +34,8 @@ salvar foto como "resultado.jpg";</code></pre>
 
 <div class="il-stats">
   <div><strong>7</strong><span>comandos no escopo mínimo</span></div>
-  <div><strong>5 de 8</strong><span>fases do compilador prontas</span></div>
-  <div><strong>17</strong><span>testes automatizados</span></div>
+  <div><strong>8 de 8</strong><span>fases do compilador prontas</span></div>
+  <div><strong>40</strong><span>testes automatizados</span></div>
   <div><strong>3</strong><span>categorias de erro com linha e coluna</span></div>
 </div>
 
@@ -50,9 +51,9 @@ encontrados e para.
   <li class="il-ok"><div class="il-fase"><strong>AST</strong><span>Árvore sintática abstrata do programa (<code>--ast</code>).</span></div><span class="il-status il-ok">pronto</span></li>
   <li class="il-ok"><div class="il-fase"><strong>Tabela de símbolos</strong><span>Declarações, redeclarações e nomes não declarados (<code>--tabela</code>).</span></div><span class="il-status il-ok">pronto</span></li>
   <li class="il-ok"><div class="il-fase"><strong>Análise semântica</strong><span>Tipos e domínio: dimensões &gt; 0, ângulos 90, 180 ou 270.</span></div><span class="il-status il-ok">pronto</span></li>
-  <li class="il-ok"><div class="il-fase"><strong>Representação intermediária</strong><span>Uma instrução linear por comando (<code>--ri</code>).</span></div><span class="il-status il-ok">pronto</span></li>
-  <li><div class="il-fase"><strong>Geração de código C</strong><span>Chamadas a uma API pequena: <code>img_load</code>, <code>img_resize</code>…</span></div><span class="il-status il-plan">planejado</span></li>
-  <li><div class="il-fase"><strong>Runtime e executável</strong><span>GCC + bibliotecas header-only <code>stb</code>.</span></div><span class="il-status il-plan">planejado</span></li>
+  <li class="il-ok"><div class="il-fase"><strong>Representação intermediária</strong><span>Uma instrução linear por comando (<code>--ri</code>), com propagação de constantes (<code>--ri-otim</code>).</span></div><span class="il-status il-ok">pronto</span></li>
+  <li class="il-ok"><div class="il-fase"><strong>Geração de código C</strong><span>Chamadas a uma API pequena: <code>img_load</code>, <code>img_resize</code>… (<code>--c</code>).</span></div><span class="il-status il-ok">pronto</span></li>
+  <li class="il-ok"><div class="il-fase"><strong>Runtime e executável</strong><span>GCC + bibliotecas header-only <code>stb</code>. <a href="{{ '/runtime.html' | relative_url }}">Veja como funciona</a>.</span></div><span class="il-status il-ok">pronto</span></li>
 </ol>
 
 ## Comandos da linguagem
@@ -117,10 +118,14 @@ A confirmar com o professor: C como linguagem-alvo, uma representação
 intermediária própria antes da geração de C e a data exata da entrega final
 no repositório.
 
+## Integrantes
+
+{% include integrantes.html %}
+
 ## Explore a documentação
 
 <div class="il-grid">
-  <a class="il-card" href="{{ '/secoes/linguagem/' | relative_url }}"><span class="il-eyebrow">Linguagem</span><h3>Especificação, tokens e gramática</h3><p>O que a ImagemLang aceita e por quê.</p><span class="il-card-more">Abrir →</span></a>
-  <a class="il-card" href="{{ '/secoes/compilador/' | relative_url }}"><span class="il-eyebrow">Compilador</span><h3>Arquitetura e contratos</h3><p>Fases, módulos e o formato de cada saída.</p><span class="il-card-more">Abrir →</span></a>
-  <a class="il-card" href="{{ '/secoes/projeto/' | relative_url }}"><span class="il-eyebrow">Projeto</span><h3>Compilar, testar e cronograma</h3><p>Como rodar e o andamento do grupo.</p><span class="il-card-more">Abrir →</span></a>
+  <a class="il-card" href="{{ '/secoes/linguagem/' | relative_url }}"><span class="il-eyebrow">Linguagem</span><h3 class="no_anchor">Especificação, tokens e gramática</h3><p>O que a ImagemLang aceita e por quê.</p><span class="il-card-more">Abrir →</span></a>
+  <a class="il-card" href="{{ '/secoes/compilador/' | relative_url }}"><span class="il-eyebrow">Compilador</span><h3 class="no_anchor">Arquitetura, contratos e runtime</h3><p>Fases, módulos, o formato de cada saída e como os pixels são processados.</p><span class="il-card-more">Abrir →</span></a>
+  <a class="il-card" href="{{ '/secoes/projeto/' | relative_url }}"><span class="il-eyebrow">Projeto</span><h3 class="no_anchor">Compilar, testar e cronograma</h3><p>Como rodar e o andamento do grupo.</p><span class="il-card-more">Abrir →</span></a>
 </div>

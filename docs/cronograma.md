@@ -20,7 +20,7 @@ do professor.
 | 07/10 | Análise semântica | Implementar declarações, tipos e validação de argumentos | ✅ concluído |
 | 14/10 | Código intermediário | Gerar instruções intermediárias da DSL | ✅ concluído |
 | 21/10 | Otimização | Avaliar uma otimização simples, sem ampliar o escopo | ✅ concluído |
-| 28/10 | Código final | Gerar a primeira versão de C |  |
+| 28/10 | Código final | Gerar a primeira versão de C | ✅ concluído |
 | 04/11, 23h59 | Formulário P2 | Líder registra a evolução desde o P1 |  |
 | 09/11 (equipes 16 a 9) | P2 | Demonstrar um protótipo quase ponta a ponta |  |
 | 16/11 a 25/11 | Implementação final | Integrar runtime, testes e documentação |  |
@@ -67,6 +67,9 @@ do professor.
 | Uma string não terminada engole o `;` e causa um erro sintático em cascata. | Limitação aceita: os comandos seguintes continuam sendo analisados, e o caso tem teste próprio. |
 | O prólogo `%{ %}` do Bison é copiado antes do `%code requires`, então o tipo `NoAST` ainda não existia onde `raiz_ast` era declarada. | `ast.h` incluído também no prólogo do `parser.y`. |
 | Trocar o eco provisório dos comandos pela AST mudaria a saída de todos os testes sintáticos. | Saída padrão passou a ser só o resumo; a árvore sai com `--ast`, e os testes sintáticos passaram a conferir a árvore. |
-| Duas pessoas iam editar o mesmo `semantico.c` (declarações e tipos). | Cada arquivo tem um dono; as verificações de declaração ficaram no `tabela.c`, e a função `erro_semantico` é compartilhada (ver [Módulos e contratos](modulos.md)). |
-| A tabela de símbolos só podia ser testada quando a semântica a chamasse, o que obrigaria uma pessoa a esperar a outra. | No Dia 1, o percurso da AST que chama a tabela já foi entregue no `semantico.c`; a semântica ficou só com as verificações de tipo e domínio. |
+| As verificações de declaração e de tipos iam ficar no mesmo `semantico.c`. | As verificações de declaração ficaram no `tabela.c`, e a função `erro_semantico` é compartilhada (ver [Módulos e contratos](modulos.md)). |
+| A tabela de símbolos só podia ser testada quando a semântica a chamasse, o que impediria desenvolver as duas em paralelo. | No Dia 1, o percurso da AST que chama a tabela já foi entregue no `semantico.c`; a semântica ficou só com as verificações de tipo e domínio. |
 | Na integração, o `--ri` imprimia uma linha em branco a mais que o combinado no contrato. | Corrigido no `ri.c`; os `.esperado` da RI foram ajustados ao formato do contrato. |
+| A `stb_image_resize2.h` saiu do repositório `nothings/stb` em outubro de 2026, e o download passou a dar erro 404. | Cópia obtida do novo repositório oficial, `nothings/stb_image_resize`, com a versão registrada em [Runtime e executável](runtime.md). |
+| A checagem `x + largura <= largura da imagem` do recorte pode estourar o `int` com valores muito grandes. | A mesma condição foi escrita com subtração, que não estoura. |
+| PNG em tons de cinza tem 1 ou 2 canais, e cada operação do runtime precisaria tratar esses casos. | `img_load` converte tudo para RGB ou RGBA, e as operações só tratam 3 ou 4 canais. |

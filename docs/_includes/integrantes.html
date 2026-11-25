@@ -1,0 +1,9 @@
+<div class="it-grade">
+  {% for integrante in site.data.integrantes %}
+  <a class="il-card it-card" href="https://github.com/{{ integrante.github }}" target="_blank" rel="noopener">
+    <img src="https://github.com/{{ integrante.github }}.png?size=160" width="80" height="80" alt="" loading="lazy">
+    <strong>{{ integrante.nome }}</strong>
+    <span>@{{ integrante.github }}</span>
+  </a>
+  {% endfor %}
+</div>

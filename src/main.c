@@ -1,9 +1,3 @@
-
-/* FGA0003 - Compiladores 1 */
-/* Curso de Engenharia de Software */
-/* Universidade de Brasília (UnB) */
-/* ImagemLang - ponto de entrada do compilador */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,7 +41,6 @@ static const char *nome_token(int token)
     }
 }
 
-/* Modo --tokens: imprime a sequencia de tokens, sem analise sintatica. */
 static int listar_tokens(void)
 {
     int token;
@@ -78,19 +71,16 @@ static int listar_tokens(void)
     return 0;
 }
 
-/* O que imprimir quando o programa nao tem erros. */
 typedef enum {
-    MODO_ANALISE,       /* so o resumo */
-    MODO_TOKENS,        /* --tokens: sequencia de tokens (so o lexico) */
-    MODO_AST,           /* --ast: arvore sintatica abstrata */
-    MODO_TABELA,        /* --tabela: tabela de simbolos */
-    MODO_RI,            /* --ri: representacao intermediaria */
-    MODO_RI_OTIM,       /* --ri-otim: RI otimizada */
-    MODO_C              /* --c: codigo C gerado */
+    MODO_ANALISE,
+    MODO_TOKENS,
+    MODO_AST,
+    MODO_TABELA,
+    MODO_RI,
+    MODO_RI_OTIM,
+    MODO_C
 } Modo;
 
-/* Analise completa: lexico + sintatico (yyparse) e, se nao houve erro,
-   semantica. Com qualquer erro, so as mensagens e o resumo sao impressos. */
 static int analisar(Modo modo)
 {
     TabelaSimbolos tabela;
@@ -101,7 +91,6 @@ static int analisar(Modo modo)
 
     yyparse();
 
-    /* A semantica precisa de uma arvore completa e confiavel. */
     if (erros_lexicos + erros_sintaticos == 0)
         analisar_semantica(raiz_ast, &tabela);
 
@@ -154,7 +143,6 @@ static int analisar(Modo modo)
     tabela_liberar(&tabela);
     liberar_ast(raiz_ast);
 
-    /* O codigo C precisa sair sem mensagens adicionais no stdout. */
     if (modo != MODO_C)
         printf("analise concluida sem erros.\n");
 
@@ -178,8 +166,6 @@ int main(int argc, char **argv)
     Modo modo = MODO_ANALISE;
     const char *caminho = NULL;
 
-    /* stdout line-buffered: sem isso o stderr sai fora de ordem quando as
-       duas saidas vao para o mesmo arquivo, como no run_tests.sh. */
     setvbuf(stdout, NULL, _IOLBF, 0);
 
     for (int i = 1; i < argc; i++) {

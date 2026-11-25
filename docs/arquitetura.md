@@ -114,14 +114,14 @@ o tipo e a posição de cada variável; a semântica percorre a AST e verifica:
   negativos);
 - ângulo de rotação não permitido.
 
-Limites de recorte que dependam das dimensões reais da imagem serão verificados
-pelo runtime durante a execução.
+Limites de recorte que dependam das dimensões reais da imagem são verificados
+pelo [runtime](runtime.md) durante a execução.
 
 ### Representação intermediária
 
 Implementada em `src/ri.h` e `src/ri.c` e exibida com `imagemc --ri`. É uma
 lista linear com uma instrução por comando, na ordem do programa, e no fim um
-`FREE` para cada imagem, que vai virar `img_destroy` no gerador de C:
+`FREE` para cada imagem, que vira `img_destroy` no gerador de C:
 
 ```text
 RI (8 instrucoes)
@@ -135,15 +135,19 @@ RI (8 instrucoes)
    8  FREE foto
 ```
 
-Variáveis inteiras aparecem pelo nome (`RESIZE foto, largura, 800`). Trocar o
-nome pelo valor (propagação de constantes) é a otimização prevista para a
-semana 09. A lista completa de instruções está em
-[Módulos e contratos](modulos.md).
+Variáveis inteiras aparecem pelo nome (`RESIZE foto, largura, 800`). A
+lista completa de instruções está em [Módulos e contratos](modulos.md).
 
-### Gerador de C (planejado)
+### Otimizador
 
-Percorrerá a representação intermediária e emitirá chamadas para uma API
-pequena e estável:
+Implementado em `src/otimizador.c` e exibido com `imagemc --ri-otim`. Troca as
+variáveis inteiras pelos seus valores (propagação de constantes) e remove as
+instruções `CONST` que ficam sem uso.
+
+### Gerador de C
+
+Implementado em `src/codegen.c` e exibido com `imagemc --c`. Percorre a
+representação intermediária e emite chamadas para uma API pequena e estável:
 
 ```text
 img_load
@@ -155,25 +159,28 @@ img_save
 img_destroy
 ```
 
-### Runtime (planejado)
+### Runtime
 
-O runtime esconderá os detalhes da biblioteca de imagens. A implementação usará
-as bibliotecas header-only do conjunto `stb`:
+Implementado em `runtime/runtime.h` e `runtime/runtime.c`, esconde os detalhes
+da biblioteca de imagens e usa as bibliotecas header-only do conjunto `stb`:
 
 - `stb_image.h` para leitura de arquivos;
 - `stb_image_write.h` para gravação;
 - `stb_image_resize2.h` para redimensionamento.
 
-Os arquivos serão versionados no próprio repositório. A escolha substitui
+Os arquivos são versionados no próprio repositório. A escolha substitui
 MagickWand, que exigiria instalar `libmagickwand-dev` em cada máquina e
 introduziria uma dependência externa capaz de impedir a compilação durante uma
 demonstração. Com `stb`, o projeto compila com `gcc` e `make` em um ambiente
 que tenha apenas Flex, Bison e um compilador C.
 
-As operações de tons de cinza, rotação em múltiplos de 90 graus e recorte serão
+As operações de tons de cinza, rotação em múltiplos de 90 graus e recorte são
 implementadas diretamente no runtime, percorrendo o vetor de pixels. São
 algoritmos curtos, e mantê-los sob nosso controle preserva a separação entre o
 compilador e a biblioteca de imagens.
+
+A explicação passo a passo, com demonstrações, está em
+[Runtime e executável](runtime.md).
 
 ## Tratamento de erros
 
@@ -196,5 +203,8 @@ E da categoria `erro semantico`:
 programa.img:3:16: erro semantico: 'tons_de_cinza' espera imagem, mas 'x' e inteiro
 ```
 
-Ao final, o compilador resume a contagem por categoria e sai com código `1`
+Durante a execução do programa gerado, o runtime usa o formato
+`erro de execucao: mensagem` e termina com código `1`.
+
+Ao final da análise, o compilador resume a contagem por categoria e sai com código `1`
 se houve qualquer erro.

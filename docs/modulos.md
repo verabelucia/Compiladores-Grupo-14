@@ -6,9 +6,9 @@ description: "Interfaces entre os módulos, formato exato de cada saída e o cat
 ---
 
 Esta página registra as interfaces entre os módulos do compilador, combinadas
-pelo grupo para o P2 (semanas 06, 07 e 08). O objetivo é que cada pessoa
-trabalhe no seu módulo em paralelo, sem esperar a outra e sem editar o
-arquivo de outra pessoa.
+pelo grupo para o P2 (semanas 06, 07 e 08). O objetivo é que os módulos
+possam ser desenvolvidos em paralelo, cada um dependendo apenas da interface
+dos demais.
 
 Os arquivos `.h` são a fonte da verdade das assinaturas. Esta página
 acrescenta o que um `.h` não diz: o texto exato de cada saída e de cada
@@ -31,29 +31,37 @@ AST validada + tabela de símbolos
    │  gerar_ri           src/ri.c          (pronto)
    ▼
 RI (lista de instruções)
+   │  otimizar_ri        src/otimizador.c  (pronto)
+   ▼
+RI otimizada
+   │  gerar_c            src/codegen.c     (pronto)
+   ▼
+programa.c
+   │  gcc                runtime/runtime.c (pronto)
+   ▼
+executável
 ```
 
 O `src/main.c` já liga as fases: a semântica só roda se não houve erro léxico
 nem sintático, e com qualquer erro o compilador imprime só as mensagens e o
 resumo.
 
-## Quem é dono de qual arquivo
+## Arquivos de cada módulo
 
-| Papel | Arquivos | Situação |
+| Módulo | Arquivos | Situação |
 |---|---|---|
-| Pessoa 1: AST e parser | `src/ast.h`, `src/ast.c`, `src/parser.y` | **pronto** |
-| Pessoa 2: tabela de símbolos | `src/tabela.h`, `src/tabela.c` | **pronto** |
-| Pessoa 3: análise semântica | `src/semantico.h`, `src/semantico.c` | **pronto** |
-| Pessoa 4: RI e testes | `src/ri.h`, `src/ri.c`, `tests/semantico/`, `tests/intermediario/` | **pronto** |
+| AST e parser | `src/ast.h`, `src/ast.c`, `src/parser.y` | **pronto** |
+| Tabela de símbolos | `src/tabela.h`, `src/tabela.c` | **pronto** |
+| Análise semântica | `src/semantico.h`, `src/semantico.c` | **pronto** |
+| RI e testes | `src/ri.h`, `src/ri.c`, `tests/semantico/`, `tests/intermediario/` | **pronto** |
 | Compartilhados | `src/main.c`, `Makefile`, `run_tests.sh` | **prontos**; não precisam mudar no P2 |
 
 Regras:
 
-- Ninguém edita o arquivo de outra pessoa. Quem precisa de algo de outro
-  módulo usa só o `.h` dele.
+- Um módulo usa outro só por meio do `.h` dele.
 - As assinaturas dos `.h` estão congeladas. Mudar alguma exige combinar antes
-  com quem a usa.
-- Uma branch por pessoa (`feat/tabela`, `feat/semantico`, `feat/ri`). Antes
+  com o grupo.
+- Uma branch por módulo (`feat/tabela`, `feat/semantico`, `feat/ri`). Antes
   de juntar na `main`: `make clean && make test` com tudo verde.
 - Commits no padrão `tipo(escopo): descrição`, por exemplo
   `feat(tabela): insercao e busca de simbolos`.
@@ -65,10 +73,12 @@ Regras:
 | `imagemc prog.img` | só `analise concluida sem erros.` |
 | `imagemc --tokens prog.img` | a sequência de tokens (só a análise léxica) |
 | `imagemc --ast prog.img` | a AST |
-| `imagemc --tabela prog.img` | a tabela de símbolos (Pessoa 2) |
-| `imagemc --ri prog.img` | a representação intermediária (Pessoa 4) |
+| `imagemc --tabela prog.img` | a tabela de símbolos |
+| `imagemc --ri prog.img` | a representação intermediária |
+| `imagemc --ri-otim prog.img` | a representação intermediária otimizada |
+| `imagemc --c prog.img` | o código C gerado |
 
-Nos modos `--ast`, `--tabela` e `--ri`, depois da estrutura vem uma linha em
+Nos modos `--ast`, `--tabela`, `--ri` e `--ri-otim`, depois da estrutura vem uma linha em
 branco e `analise concluida sem erros.`. Com erro, a saída é:
 
 ```saida
@@ -84,7 +94,7 @@ mensagens de erro, a AST oferece `palavra_chave_no(cmd->tipo)`, que devolve
 `"tons_de_cinza"`, `"recortar"`..., e `rotulo_arg(cmd->tipo, i)`, que devolve
 `"largura"`, `"angulo"`, `"x"`...
 
-## Tabela de símbolos (Pessoa 2)
+## Tabela de símbolos
 
 Contrato: `src/tabela.h`. A linguagem não tem escopos (não há funções nem
 blocos), então uma lista encadeada na ordem das declarações basta.
@@ -106,7 +116,7 @@ analise concluida sem erros.
   posição é a do nome na declaração.
 - Cabeçalho: `(1 simbolo)` no singular; `(0 simbolos)` para a tabela vazia.
 
-## Análise semântica (Pessoa 3)
+## Análise semântica
 
 Contrato: `src/semantico.h`. O percurso da AST já está pronto em
 `src/semantico.c`:
@@ -178,7 +188,7 @@ analise concluida com 6 erro(s): 0 lexico(s), 0 sintatico(s), 6 semantico(s).
 
 As posições foram conferidas com `imagemc --ast` sobre a mesma entrada.
 
-## Representação intermediária (Pessoa 4)
+## Representação intermediária
 
 Contrato: `src/ri.h`. A RI tem uma instrução por comando, na ordem do
 programa, e no fim um `FREE` para cada imagem, na ordem de declaração. O
@@ -196,8 +206,8 @@ programa, e no fim um `FREE` para cada imagem, na ordem de declaração. O
 | `RI_FREE` | (fim do programa) | `FREE foto` |
 
 Argumentos que são variáveis aparecem **pelo nome** (`RESIZE foto, largura,
-800`). Trocar o nome pelo valor (propagação de constantes) fica para a
-otimização da semana 09.
+800`). Trocar o nome pelo valor (propagação de constantes) é trabalho do
+[otimizador](#otimização-da-ri).
 
 **Formato do `--ri`**, para `tests/sintatico/validos/01-programa-completo.img`:
 
@@ -229,6 +239,8 @@ O `run_tests.sh` já reconhece as pastas novas e escolhe o modo pela fase:
 | `tests/sintatico/{validos,invalidos}/` | `--ast` |
 | `tests/semantico/{validos,invalidos}/` | `--tabela` |
 | `tests/intermediario/validos/` | `--ri` |
+| `tests/otimizacao/validos/` | `--ri-otim` |
+| `tests/codegen/validos/` | `--c` |
 
 Para criar um caso: `NOME.img` e, ao lado, `NOME.esperado` com a saída
 exata. Os exemplos desta página (a tabela, o catálogo de erros e a RI) podem
@@ -245,12 +257,12 @@ gcc -Wall -Wextra -g -fsanitize=address,undefined -Isrc -Ibuild \
 Para fechar a otimização, a geração de código C e o runtime `stb` em paralelo,
 os contratos abaixo foram congelados a partir de `src/ri.h`:
 
-| Papel | Arquivos | Função principal |
+| Módulo | Arquivos | Função principal |
 |---|---|---|
-| Pessoa 1: otimizador da RI | `src/otimizador.h`, `src/otimizador.c` | `otimizar_ri(ProgramaRI *ri)` |
-| Pessoa 2: gerador de código C | `src/codegen.h`, `src/codegen.c` | `gerar_c(FILE *saida, const ProgramaRI *ri)` |
-| Pessoa 3: runtime de imagens (`stb`) | `runtime/runtime.h`, `runtime/runtime.c`, `runtime/stb_*.h` | `img_load`, `img_resize`, `img_grayscale`, `img_rotate`, `img_crop`, `img_save`, `img_destroy` |
-| Pessoa 4: CLI, testes e `make demo` | `src/main.c`, `Makefile`, `run_tests.sh`, `tests/{otimizacao,codegen}/` | `--ri-otim`, `--c` e alvo `make demo` |
+| Otimizador da RI | `src/otimizador.h`, `src/otimizador.c` | `otimizar_ri(ProgramaRI *ri)` |
+| Gerador de código C | `src/codegen.h`, `src/codegen.c` | `gerar_c(FILE *saida, const ProgramaRI *ri)` |
+| Runtime de imagens (`stb`) | `runtime/runtime.h`, `runtime/runtime.c`, `runtime/stb_*.h` | `img_load`, `img_resize`, `img_grayscale`, `img_rotate`, `img_crop`, `img_save`, `img_destroy` |
+| CLI, testes e `make demo` | `src/main.c`, `Makefile`, `run_tests.sh`, `tests/{otimizacao,codegen}/` | `--ri-otim`, `--c` e alvo `make demo` |
 
 - **Otimizador (`src/otimizador.h`):** atua *in-place* sobre `ProgramaRI`,
   propagando constantes de `RI_CONST` para `RI_RESIZE`, `RI_ROTATE` e
@@ -261,9 +273,9 @@ os contratos abaixo foram congelados a partir de `src/ri.h`:
 - **Runtime (`runtime/runtime.h`):** `img_load` devolve `Imagem *` (ou `NULL`
   em erro); `img_resize`, `img_grayscale`, `img_rotate`, `img_crop` e
   `img_save` devolvem `0` em sucesso e diferente de `0` em erro; `img_destroy`
-  aceita `NULL`.
+  aceita `NULL`. Detalhes em [Runtime e executável](runtime.md).
 
-### Formato do `--c` (Pessoa 2)
+### Formato do `--c`
 
 Para o programa `tests/sintatico/validos/01-programa-completo.img` (sem o
 otimizador, correspondente à RI de 8 instruções acima), `imagemc --c` gera:
@@ -288,7 +300,7 @@ int main(void) {
 Após o otimizador da semana 09, a linha `int im_largura = 750;` deixa de ser
 emitida e o argumento `im_largura` em `img_resize` passa a ser o literal `750`.
 
-### Otimização da RI (Pessoa 1)
+### Otimização da RI
 
 `otimizar_ri` faz a propagação de constantes em duas passagens sobre a RI:
 

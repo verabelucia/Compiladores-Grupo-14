@@ -1,5 +1,3 @@
-// Realce de sintaxe dos blocos de código que o Rouge (GitHub Pages) não
-// conhece: ```imagemlang, ```saida (saída do compilador) e ```ebnf.
 (function () {
   "use strict";
 
@@ -16,8 +14,6 @@
     return '<span class="' + classe + '">' + escapar(texto) + "</span>";
   }
 
-  // Aplica 'regra' (expressão com grupos) ao texto; cada grupo casado vira um
-  // <span> com a classe correspondente em 'classes'.
   function tokenizar(texto, regra, classes, classificar) {
     var saida = "";
     var ultimo = 0;

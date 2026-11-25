@@ -1,8 +1,3 @@
-/* FGA0003 - Compiladores 1 */
-/* Curso de Engenharia de Software */
-/* Universidade de Brasília (UnB) */
-/* ImagemLang - analisador léxico com Flex */
-
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,8 +8,6 @@
 const char *arquivo_atual = "<stdin>";
 int erros_lexicos = 0;
 
-/* O Flex conta a linha sozinho (%option yylineno), mas nao conta a coluna.
-   A posicao de cada token vai para yylloc, que o Bison usa em @1, @2... */
 static int coluna = 1;
 
 #define YY_USER_ACTION                   \
@@ -67,7 +60,7 @@ STRING_ABERTA \"[^\"\n]*
 {INTEIRO}         { yylval.inteiro = strtol(yytext, NULL, 10);
                     return LITERAL_INTEIRO; }
 
-{STRING}          { /* sem as aspas */
+{STRING}          {
                     yylval.texto = copiar_texto(yytext + 1, yyleng - 2);
                     return LITERAL_STRING; }
 
@@ -79,16 +72,13 @@ STRING_ABERTA \"[^\"\n]*
 
 .                 { erro_lexico("caractere invalido", yytext); }
 
-<<EOF>>           { /* O fim do arquivo nao passa por YY_USER_ACTION: sem
-                       isto, um erro "encontrado fim do arquivo" citaria a
-                       posicao do ultimo caractere lido. */
+<<EOF>>           {
                     yylloc.first_line = yylloc.last_line = yylineno;
                     yylloc.first_column = yylloc.last_column = coluna;
                     return FIM; }
 
 %%
 
-/* Devolve uma copia propria do lexema; quem recebe o token libera. */
 static char *copiar_texto(const char *inicio, int tamanho)
 {
     char *texto = malloc((size_t) tamanho + 1);
