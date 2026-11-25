@@ -31,8 +31,12 @@ $(BUILD)/programa_basico.c: $(ALVO) examples/programa_basico.img
 $(BUILD)/programa_basico: $(BUILD)/programa_basico.c runtime/runtime.c runtime/runtime.h
 	$(CC) -Wall -Wextra -g -Iruntime -o $@ $(BUILD)/programa_basico.c runtime/runtime.c -lm
 
+FOTO_DEMO = $(if $(wildcard foto.jpg),foto.jpg,docs/assets/img/runtime/original.jpg)
+
 demo: $(BUILD)/programa_basico
-	./$(BUILD)/programa_basico
+	cp $(FOTO_DEMO) $(BUILD)/foto.jpg
+	cd $(BUILD) && ./programa_basico
+	@echo "imagem gerada: $(BUILD)/resultado.jpg"
 
 clean:
 	rm -rf $(BUILD)

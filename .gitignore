@@ -1,3 +1,5 @@
 build/
 lex.yy.c
 *.o
+/foto.jpg
+/resultado.jpg
