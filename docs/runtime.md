@@ -32,11 +32,11 @@ Cada linha do programa vira uma ou duas linhas de C:
 | ImagemLang | C gerado por `imagemc --c` |
 |---|---|
 | `imagem foto = "foto.jpg";` | `Imagem *im_foto = img_load("foto.jpg");` |
-| `redimensionar foto para 750 por 800;` | `if (img_resize(im_foto, 750, 800) != 0) return 1;` |
-| `tons_de_cinza foto;` | `if (img_grayscale(im_foto) != 0) return 1;` |
-| `rotacionar foto 90;` | `if (img_rotate(im_foto, 90) != 0) return 1;` |
-| `recortar foto de 10, 20 tamanho 300 por 200;` | `if (img_crop(im_foto, 10, 20, 300, 200) != 0) return 1;` |
-| `salvar foto como "resultado.jpg";` | `if (img_save(im_foto, "resultado.jpg") != 0) return 1;` |
+| `redimensionar foto para 750 por 800;` | `if (img_resize(im_foto, 750, 800) != 0) { img_destroy(im_foto); return 1; }` |
+| `tons_de_cinza foto;` | `if (img_grayscale(im_foto) != 0) { img_destroy(im_foto); return 1; }` |
+| `rotacionar foto 90;` | `if (img_rotate(im_foto, 90) != 0) { img_destroy(im_foto); return 1; }` |
+| `recortar foto de 10, 20 tamanho 300 por 200;` | `if (img_crop(im_foto, 10, 20, 300, 200) != 0) { img_destroy(im_foto); return 1; }` |
+| `salvar foto como "resultado.jpg";` | `if (img_save(im_foto, "resultado.jpg") != 0) { img_destroy(im_foto); return 1; }` |
 | *(fim do programa)* | `img_destroy(im_foto);` |
 
 {: .nota }
@@ -261,21 +261,22 @@ O detalhe depois de `carregar` vem da `stb_image`, por isso está em inglês.
 
 ## Rode você mesmo
 
-O `make demo` usa `examples/programa_basico.img`, que abre `foto.jpg` na raiz do
-repositório. Use uma foto sua ou a desta página:
+O `make demo` usa `examples/programa_basico.img`. Sem preparar nada, ele aplica
+o programa à foto desta página; para usar a sua, coloque-a como `foto.jpg` na
+raiz do repositório:
 
 ```sh
-cp docs/assets/img/runtime/original.jpg foto.jpg
 make demo
 ```
 
-O resultado é `resultado.jpg`, com 300x200 pixels. Passo a passo, o mesmo que o
-`make demo` faz:
+O resultado é `build/resultado.jpg`, com 300x200 pixels. Passo a passo, o mesmo
+que o `make demo` faz:
 
 ```sh
 ./build/imagemc --c examples/programa_basico.img > build/programa_basico.c
 gcc -Wall -Wextra -g -Iruntime -o build/programa_basico build/programa_basico.c runtime/runtime.c -lm
-./build/programa_basico
+cp docs/assets/img/runtime/original.jpg build/foto.jpg
+cd build && ./programa_basico
 ```
 
 {: .dica }
@@ -287,7 +288,7 @@ Todas as fotos desta página foram geradas assim: um programa `.img`, o
 | Verificação | Resultado |
 |---|---|
 | GCC e Clang com `-Wall -Wextra` | nenhum aviso |
-| `make test` | 40 passou, 0 falhou |
+| `make test` | 42 passou, 0 falhou |
 | Testes do runtime com AddressSanitizer e UBSan | 114 verificações, 0 falhas |
 | Valgrind na demonstração | nenhum erro ou vazamento |
 | Rotação e recorte comparados ao ImageMagick | idênticos, pixel a pixel |
