@@ -1,69 +1,281 @@
 /* FGA0003 - Compiladores 1 */
 /* Curso de Engenharia de Software */
 /* Universidade de Brasília (UnB) */
-/* ImagemLang - runtime de imagens em C (dono: Pessoa 3) */
+/* ImagemLang - runtime de imagens em C */
 
-/* A FAZER (Pessoa 3): versionar stb_image.h, stb_image_write.h e
-   stb_image_resize2.h em runtime/ e implementar as 7 funções conforme
-   runtime/runtime.h e docs/modulos.md. Os corpos abaixo são só um esqueleto
-   para que o código C gerado pelo codegen já compile em paralelo. */
+/* As bibliotecas stb cuidam de ler, redimensionar e gravar; tons de cinza,
+   rotação e recorte são implementados aqui, sobre o vetor de pixels.
 
+   Os arquivos stb_*.h são cópias sem alterações (domínio público / MIT):
+     stb_image.h         v2.34  github.com/nothings/stb             6b5799b
+     stb_image_write.h   v1.19  github.com/nothings/stb             6b5799b
+     stb_image_resize2.h v2.51  github.com/nothings/stb_image_resize a4f303e */
+
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+
+/* A implementação de cada stb é gerada neste arquivo. Os avisos de -Wall e
+   -Wextra são desligados só no código de terceiros. */
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wall"
+#pragma GCC diagnostic ignored "-Wextra"
+#endif
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+
+#define STB_IMAGE_RESIZE_IMPLEMENTATION
+#include "stb_image_resize2.h"
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 #include "runtime.h"
 
+#define QUALIDADE_JPG 90
+#define LADO_MAXIMO_JPG 65535 /* o formato guarda cada lado em 16 bits */
+
+/* Devolve 1 se 'img' pode ser usada; senão imprime erro e devolve 0. */
+static int imagem_valida(const Imagem *img, const char *operacao)
+{
+    if (img != NULL && img->dados != NULL)
+        return 1;
+    fprintf(stderr, "erro de execucao: %s: imagem invalida\n", operacao);
+    return 0;
+}
+
+/* Aloca um buffer para largura x altura pixels. Em caso de erro, imprime
+   mensagem e devolve NULL. */
+static unsigned char *alocar_pixels(int largura, int altura, int canais,
+                                    const char *operacao)
+{
+    unsigned char *dados = malloc((size_t) largura * altura * canais);
+
+    if (dados == NULL)
+        fprintf(stderr, "erro de execucao: %s: memoria insuficiente\n",
+                operacao);
+    return dados;
+}
+
+/* Troca o buffer de pixels de 'img', liberando o anterior. */
+static void trocar_pixels(Imagem *img, unsigned char *dados, int largura,
+                          int altura)
+{
+    free(img->dados);
+    img->dados = dados;
+    img->largura = largura;
+    img->altura = altura;
+}
+
+/* Endereço do pixel (x, y) num buffer de linhas com 'largura' pixels. */
+static unsigned char *pixel(unsigned char *dados, int largura, int canais,
+                            int x, int y)
+{
+    return dados + ((size_t) y * largura + x) * canais;
+}
+
 Imagem *img_load(const char *caminho)
 {
-    /* A FAZER: carregar com stbi_load e preencher a struct Imagem. */
-    fprintf(stderr, "aviso: img_load('%s') ainda nao implementado\n",
-            caminho != NULL ? caminho : "");
-    return NULL;
+    int largura, altura, canais;
+
+    if (caminho == NULL) {
+        fprintf(stderr, "erro de execucao: img_load: caminho ausente\n");
+        return NULL;
+    }
+
+    /* Só RGB ou RGBA: cinza vira RGB e cinza com alfa vira RGBA. */
+    if (!stbi_info(caminho, &largura, &altura, &canais)) {
+        fprintf(stderr, "erro de execucao: nao foi possivel carregar '%s': %s\n",
+                caminho, stbi_failure_reason());
+        return NULL;
+    }
+    canais = (canais == 2 || canais == 4) ? 4 : 3;
+
+    unsigned char *dados = stbi_load(caminho, &largura, &altura, NULL, canais);
+    if (dados == NULL) {
+        fprintf(stderr, "erro de execucao: nao foi possivel carregar '%s': %s\n",
+                caminho, stbi_failure_reason());
+        return NULL;
+    }
+
+    Imagem *img = malloc(sizeof *img);
+    if (img == NULL) {
+        fprintf(stderr, "erro de execucao: img_load: memoria insuficiente\n");
+        stbi_image_free(dados);
+        return NULL;
+    }
+    img->dados = dados;
+    img->largura = largura;
+    img->altura = altura;
+    img->canais = canais;
+    return img;
 }
 
 int img_resize(Imagem *img, int largura, int altura)
 {
-    /* A FAZER: redimensionar com stbir_resize_uint8_linear. */
-    (void) img;
-    (void) largura;
-    (void) altura;
+    if (!imagem_valida(img, "redimensionar"))
+        return 1;
+    if (largura <= 0 || altura <= 0
+        || (long long) largura * altura > INT_MAX / img->canais) {
+        fprintf(stderr,
+                "erro de execucao: redimensionar: dimensoes invalidas %dx%d\n",
+                largura, altura);
+        return 1;
+    }
+
+    unsigned char *dados = alocar_pixels(largura, altura, img->canais,
+                                         "redimensionar");
+    if (dados == NULL)
+        return 1;
+
+    /* STBIR_RGB e STBIR_RGBA valem 3 e 4; com RGBA a stb pondera a cor pelo
+       alfa, o que evita halos nas bordas transparentes. */
+    if (stbir_resize_uint8_linear(img->dados, img->largura, img->altura, 0,
+                                  dados, largura, altura, 0,
+                                  (stbir_pixel_layout) img->canais) == NULL) {
+        fprintf(stderr, "erro de execucao: redimensionar: falha ao gerar "
+                        "imagem %dx%d\n", largura, altura);
+        free(dados);
+        return 1;
+    }
+    trocar_pixels(img, dados, largura, altura);
     return 0;
 }
 
 int img_grayscale(Imagem *img)
 {
-    /* A FAZER: converter pixels para luminância mantendo o número de canais. */
-    (void) img;
+    if (!imagem_valida(img, "tons_de_cinza"))
+        return 1;
+
+    size_t total = (size_t) img->largura * img->altura;
+    for (size_t i = 0; i < total; i++) {
+        unsigned char *p = img->dados + i * img->canais;
+
+        /* Luminância BT.601 (0,299 R + 0,587 G + 0,114 B) em inteiros, com
+           arredondamento. O alfa, se houver, não muda. */
+        p[0] = p[1] = p[2] =
+            (unsigned char) ((299 * p[0] + 587 * p[1] + 114 * p[2] + 500) / 1000);
+    }
+    return 0;
+}
+
+/* Rotaciona 'img' 90 graus em sentido horário: o pixel (x, y) vai para
+   (altura - 1 - y, x). */
+static int rotacionar_90(Imagem *img)
+{
+    int largura = img->altura;
+    int altura = img->largura;
+    unsigned char *dados = alocar_pixels(largura, altura, img->canais,
+                                         "rotacionar");
+    if (dados == NULL)
+        return 1;
+
+    for (int y = 0; y < img->altura; y++)
+        for (int x = 0; x < img->largura; x++)
+            memcpy(pixel(dados, largura, img->canais, img->altura - 1 - y, x),
+                   pixel(img->dados, img->largura, img->canais, x, y),
+                   img->canais);
+
+    trocar_pixels(img, dados, largura, altura);
     return 0;
 }
 
 int img_rotate(Imagem *img, int angulo)
 {
-    /* A FAZER: implementar rotação de 90 graus e chamar em loop (2x para 180,
-       3x para 270). */
-    (void) img;
-    (void) angulo;
+    if (!imagem_valida(img, "rotacionar"))
+        return 1;
+    if (angulo != 90 && angulo != 180 && angulo != 270) {
+        fprintf(stderr, "erro de execucao: rotacionar: angulo deve ser 90, 180 "
+                        "ou 270, mas vale %d\n", angulo);
+        return 1;
+    }
+
+    for (int i = 0; i < angulo / 90; i++)
+        if (rotacionar_90(img) != 0)
+            return 1;
     return 0;
 }
 
 int img_crop(Imagem *img, int x, int y, int largura, int altura)
 {
-    /* A FAZER: validar x + largura <= img->largura e y + altura <= img->altura
-       em tempo de execução e copiar o retângulo para um novo buffer. */
-    (void) img;
-    (void) x;
-    (void) y;
-    (void) largura;
-    (void) altura;
+    if (!imagem_valida(img, "recortar"))
+        return 1;
+    if (largura <= 0 || altura <= 0) {
+        fprintf(stderr, "erro de execucao: recortar: dimensoes invalidas %dx%d\n",
+                largura, altura);
+        return 1;
+    }
+    /* x + largura <= img->largura e y + altura <= img->altura, escritos com
+       subtração para que a soma não estoure o int. */
+    if (x < 0 || y < 0
+        || x > img->largura - largura || y > img->altura - altura) {
+        fprintf(stderr, "erro de execucao: recortar: area de %d, %d tamanho "
+                        "%dx%d fora da imagem %dx%d\n",
+                x, y, largura, altura, img->largura, img->altura);
+        return 1;
+    }
+
+    unsigned char *dados = alocar_pixels(largura, altura, img->canais,
+                                         "recortar");
+    if (dados == NULL)
+        return 1;
+
+    for (int linha = 0; linha < altura; linha++)
+        memcpy(pixel(dados, largura, img->canais, 0, linha),
+               pixel(img->dados, img->largura, img->canais, x, y + linha),
+               (size_t) largura * img->canais);
+
+    trocar_pixels(img, dados, largura, altura);
     return 0;
 }
 
 int img_save(const Imagem *img, const char *caminho)
 {
-    /* A FAZER: detectar extensão .png ou .jpg/.jpeg e gravar com
-       stbi_write_png / stbi_write_jpg. */
-    (void) img;
-    (void) caminho;
+    if (!imagem_valida(img, "salvar"))
+        return 1;
+    if (caminho == NULL) {
+        fprintf(stderr, "erro de execucao: salvar: caminho ausente\n");
+        return 1;
+    }
+
+    /* A extensão é o que vem depois do último ponto do nome do arquivo, sem
+       contar pontos no nome das pastas. */
+    const char *nome = strrchr(caminho, '/');
+    const char *ext = strrchr(nome != NULL ? nome : caminho, '.');
+    int gravou;
+
+    if (ext != NULL && strcasecmp(ext, ".png") == 0) {
+        gravou = stbi_write_png(caminho, img->largura, img->altura, img->canais,
+                                img->dados, 0);
+    } else if (ext != NULL && (strcasecmp(ext, ".jpg") == 0
+                               || strcasecmp(ext, ".jpeg") == 0)) {
+        if (img->largura > LADO_MAXIMO_JPG || img->altura > LADO_MAXIMO_JPG) {
+            fprintf(stderr, "erro de execucao: salvar: imagem %dx%d grande "
+                            "demais para JPG\n", img->largura, img->altura);
+            return 1;
+        }
+        /* JPG não tem transparência: a stb descarta o alfa. */
+        gravou = stbi_write_jpg(caminho, img->largura, img->altura, img->canais,
+                                img->dados, QUALIDADE_JPG);
+    } else {
+        fprintf(stderr, "erro de execucao: salvar: extensao nao suportada em "
+                        "'%s' (use .png ou .jpg)\n", caminho);
+        return 1;
+    }
+
+    if (!gravou) {
+        fprintf(stderr, "erro de execucao: nao foi possivel salvar '%s'\n",
+                caminho);
+        return 1;
+    }
     return 0;
 }
 
