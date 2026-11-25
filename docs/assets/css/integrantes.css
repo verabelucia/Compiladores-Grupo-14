@@ -1,0 +1,32 @@
+.it-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.main-content .it-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-align: center;
+}
+
+.it-card img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 0.6rem;
+  border: 2px solid rgba(141, 162, 255, 0.4);
+  border-radius: 50%;
+}
+
+.it-card strong {
+  color: #f2f4f8;
+  font-weight: 650;
+}
+
+.it-card span {
+  color: #8b91a1;
+  font-size: 0.82rem;
+}
