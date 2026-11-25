@@ -119,15 +119,16 @@ semântico, `2` para uso incorreto ou arquivo inexistente.
 
 ### Do programa à imagem
 
-O `make demo` abre `foto.jpg` na raiz do repositório. Use uma foto sua ou a da
-documentação:
+O `make demo` compila `examples/programa_basico.img` e aplica o programa a uma
+foto. Sem preparar nada, ele usa a foto da documentação; para usar a sua,
+coloque-a como `foto.jpg` na raiz do repositório:
 
 ```sh
-cp docs/assets/img/runtime/original.jpg foto.jpg
 make demo
 ```
 
-O resultado é `resultado.jpg`. Para compilar um programa seu:
+O resultado é `build/resultado.jpg`, com 300x200 pixels. Para compilar um
+programa seu:
 
 ```sh
 ./build/imagemc --c programa.img > programa.c
@@ -144,7 +145,7 @@ erro de execucao: recortar: area de 800, 0 tamanho 300x200 fora da imagem 960x64
 ### Testes
 
 Cada `tests/<fase>/<grupo>/<nome>.img` tem ao lado um `<nome>.esperado` com a
-saída exata do compilador; o `run_tests.sh` compara as duas. Hoje são 40
+saída exata do compilador; o `run_tests.sh` compara as duas. Hoje são 42
 casos, cobrindo as fases léxica, sintática e semântica, a representação
 intermediária, a otimização e a geração de C. Detalhes em
 [Como compilar e testar](https://verabelucia.github.io/Compiladores-Grupo-14/desenvolvimento.html).

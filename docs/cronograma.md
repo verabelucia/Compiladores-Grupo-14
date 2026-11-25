@@ -21,9 +21,9 @@ do professor.
 | 14/10 | Código intermediário | Gerar instruções intermediárias da DSL | ✅ concluído |
 | 21/10 | Otimização | Avaliar uma otimização simples, sem ampliar o escopo | ✅ concluído |
 | 28/10 | Código final | Gerar a primeira versão de C | ✅ concluído |
-| 04/11, 23h59 | Formulário P2 | Líder registra a evolução desde o P1 |  |
-| 09/11 (equipes 16 a 9) | P2 | Demonstrar um protótipo quase ponta a ponta |  |
-| 16/11 a 25/11 | Implementação final | Integrar runtime, testes e documentação |  |
+| 04/11, 23h59 | Formulário P2 | Líder registra a evolução desde o P1 | ✅ concluído |
+| 09/11 (equipes 16 a 9) | P2 | Demonstrar um protótipo quase ponta a ponta | ✅ concluído |
+| 16/11 a 25/11 | Implementação final | Integrar runtime, testes e documentação | ✅ concluído |
 | 30/11 ou 02/12 | Entrevista final | Demonstrar e explicar o compilador completo |  |
 
 ## Meta para o P1
@@ -73,3 +73,7 @@ do professor.
 | A `stb_image_resize2.h` saiu do repositório `nothings/stb` em outubro de 2026, e o download passou a dar erro 404. | Cópia obtida do novo repositório oficial, `nothings/stb_image_resize`, com a versão registrada em [Runtime e executável](runtime.md). |
 | A checagem `x + largura <= largura da imagem` do recorte pode estourar o `int` com valores muito grandes. | A mesma condição foi escrita com subtração, que não estoura. |
 | PNG em tons de cinza tem 1 ou 2 canais, e cada operação do runtime precisaria tratar esses casos. | `img_load` converte tudo para RGB ou RGBA, e as operações só tratam 3 ou 4 canais. |
+| Ao remover um `RI_CONST` sem uso, a lista da RI podia ficar com o ponteiro do fim apontando para uma instrução já liberada (caso de um programa só com inteiros). | O otimizador ajusta `primeira`, `ultima` e `quantidade` ao remover; o caso tem teste próprio e roda limpo com AddressSanitizer. |
+| Na validação final, o `--c` não passava pelo otimizador: o C gerado mantinha `int im_largura = 750;`, e uma constante sem uso virava variável C não usada (aviso do GCC). | O `main.c` chama `otimizar_ri` antes de `gerar_c`; novo teste `tests/codegen/validos/05-constantes`. Todo C gerado dos programas válidos compila com `-Wall -Wextra -Werror`. |
+| Quando uma operação falhava em execução (recorte fora da imagem, extensão inválida), o programa gerado saía com `return 1` sem liberar as imagens, e o AddressSanitizer acusava vazamento. | O gerador de C libera todas as imagens já carregadas antes de sair por erro; novo teste `tests/codegen/validos/07-varias-imagens`. |
+| O `make demo` dependia de copiar uma `foto.jpg` à mão para a raiz do repositório e não funcionava num clone limpo. | O `Makefile` usa a foto da documentação quando não há `foto.jpg` e roda a demonstração dentro de `build/`; `foto.jpg` e `resultado.jpg` na raiz ficam no `.gitignore`. |

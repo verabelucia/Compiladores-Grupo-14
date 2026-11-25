@@ -1,0 +1,7 @@
+imagem foto = "foto.jpg";
+inteiro largura = 640;
+inteiro angulo = 270;
+inteiro sobra = 1;
+redimensionar foto para largura por 480;
+rotacionar foto angulo;
+salvar foto como "resultado.png";

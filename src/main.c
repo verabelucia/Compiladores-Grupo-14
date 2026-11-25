@@ -132,6 +132,7 @@ static int analisar(Modo modo)
 
     case MODO_C:
         ri = gerar_ri(raiz_ast);
+        otimizar_ri(ri);
         gerar_c(stdout, ri);
         liberar_ri(ri);
         break;

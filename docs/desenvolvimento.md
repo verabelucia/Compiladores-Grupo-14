@@ -35,15 +35,15 @@ executável `imagemc`, todos reconstruíveis a partir de `src/`.
 ## Demonstração completa
 
 `make demo` gera o C de `examples/programa_basico.img`, compila-o com o runtime
-e executa o resultado. O programa abre `foto.jpg` na raiz do repositório; use
-uma foto sua ou a da documentação:
+e executa o resultado dentro de `build/`. Sem preparar nada, ele usa a foto da
+documentação; para usar a sua, coloque-a como `foto.jpg` na raiz do
+repositório:
 
 ```sh
-cp docs/assets/img/runtime/original.jpg foto.jpg
 make demo
 ```
 
-O resultado é `resultado.jpg`, com 300x200 pixels. A página
+O resultado é `build/resultado.jpg`, com 300x200 pixels. A página
 [Runtime e executável](runtime.md) explica cada passo.
 
 ## Executando o compilador
@@ -132,7 +132,7 @@ script `run_tests.sh` compara as duas e informa `PASSOU` ou `FALHOU`. A fase
 decide o modo: `tests/lexico/` roda `imagemc --tokens`, `tests/sintatico/`
 roda `imagemc --ast`, `tests/semantico/` roda `imagemc --tabela`,
 `tests/intermediario/` roda `imagemc --ri`, `tests/otimizacao/` roda
-`imagemc --ri-otim` e `tests/codegen/` roda `imagemc --c`. Hoje são 40 casos.
+`imagemc --ri-otim` e `tests/codegen/` roda `imagemc --c`. Hoje são 42 casos.
 Para rodar uma fase só, passe o nome dela: `./run_tests.sh codegen`.
 
 | Pasta | Cobre |
