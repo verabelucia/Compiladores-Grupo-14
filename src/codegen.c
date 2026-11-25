@@ -1,11 +1,5 @@
-/* FGA0003 - Compiladores 1 */
-/* Curso de Engenharia de Software */
-/* Universidade de Brasília (UnB) */
-/* ImagemLang - gerador de código C */
-
 #include "codegen.h"
 
-/* Emite um literal string C escapando aspas duplas e barras invertidas. */
 static void emitir_string(FILE *saida, const char *texto)
 {
     fputc('"', saida);
@@ -19,7 +13,6 @@ static void emitir_string(FILE *saida, const char *texto)
     fputc('"', saida);
 }
 
-/* Emite um argumento inteiro: número literal ou variável prefixada (im_). */
 static void emitir_valor(FILE *saida, const Valor *valor)
 {
     if (valor->tipo == VALOR_LITERAL)
@@ -28,7 +21,6 @@ static void emitir_valor(FILE *saida, const Valor *valor)
         fprintf(saida, "im_%s", valor->nome);
 }
 
-/* Emite o código C correspondente a uma única instrução da RI. */
 static void emitir_instrucao(FILE *saida, const InstrucaoRI *inst)
 {
     switch (inst->op) {

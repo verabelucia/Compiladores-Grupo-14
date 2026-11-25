@@ -1,16 +1,9 @@
-
-/* FGA0003 - Compiladores 1 */
-/* Curso de Engenharia de Software */
-/* Universidade de Brasilia (UnB) */
-/* ImagemLang - representacao intermediaria */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "ri.h"
 
-/* Faz uma copia de um texto na memoria. */
 static char *copiar_texto(const char *texto)
 {
     size_t tamanho = strlen(texto) + 1;
@@ -26,7 +19,6 @@ static char *copiar_texto(const char *texto)
     return copia;
 }
 
-/* Cria uma nova instrucao da RI. */
 static InstrucaoRI *criar_instrucao(OpRI op, Posicao pos)
 {
     InstrucaoRI *nova = calloc(1, sizeof *nova);
@@ -42,7 +34,6 @@ static InstrucaoRI *criar_instrucao(OpRI op, Posicao pos)
     return nova;
 }
 
-/* Adiciona uma instrucao ao final da lista. */
 static void adicionar_instrucao(ProgramaRI *ri, InstrucaoRI *nova)
 {
     if (ri->primeira == NULL) {
@@ -55,7 +46,6 @@ static void adicionar_instrucao(ProgramaRI *ri, InstrucaoRI *nova)
     ri->quantidade++;
 }
 
-/* Copia os argumentos de um comando da AST para a RI. */
 static void copiar_argumentos(InstrucaoRI *nova, const NoAST *comando)
 {
     nova->num_args = comando->num_args;
@@ -70,7 +60,6 @@ static void copiar_argumentos(InstrucaoRI *nova, const NoAST *comando)
     }
 }
 
-/* Transforma a AST em representacao intermediaria. */
 ProgramaRI *gerar_ri(const NoAST *raiz)
 {
     ProgramaRI *ri = calloc(1, sizeof *ri);
@@ -84,7 +73,6 @@ ProgramaRI *gerar_ri(const NoAST *raiz)
         return ri;
     }
 
-    /* Primeira passagem: gera uma instrucao para cada comando. */
     for (const NoAST *comando = raiz->comandos;
          comando != NULL;
          comando = comando->proximo) {
@@ -143,7 +131,6 @@ ProgramaRI *gerar_ri(const NoAST *raiz)
         }
     }
 
-    /* Segunda passagem: libera as imagens na ordem de declaracao. */
     for (const NoAST *comando = raiz->comandos;
          comando != NULL;
          comando = comando->proximo) {
@@ -160,7 +147,6 @@ ProgramaRI *gerar_ri(const NoAST *raiz)
     return ri;
 }
 
-/* Imprime as instrucoes da representacao intermediaria. */
 void imprimir_ri(FILE *saida, const ProgramaRI *ri)
 {
     fprintf(saida, "RI (%d %s)\n",
@@ -237,7 +223,6 @@ void imprimir_ri(FILE *saida, const ProgramaRI *ri)
     }
 }
 
-/* Libera toda a memoria utilizada pela RI. */
 void liberar_ri(ProgramaRI *ri)
 {
     if (ri == NULL) {

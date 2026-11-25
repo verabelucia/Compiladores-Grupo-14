@@ -1,11 +1,5 @@
-/* FGA0003 - Compiladores 1 */
-/* Curso de Engenharia de Software */
-/* Universidade de Brasília (UnB) */
-/* ImagemLang - analisador sintático com Bison */
-
 %require "3.6"
 
-/* A AST precisa ser conhecida em parser.tab.h, que o lexer e o main incluem. */
 %code requires {
 #include "ast.h"
 }
@@ -24,7 +18,6 @@ extern const char *arquivo_atual;
 int erros_sintaticos = 0;
 NoAST *raiz_ast = NULL;
 
-/* Posição (linha e coluna) de um símbolo da regra, a partir de @n. */
 #define POS(local) posicao((local).first_line, (local).first_column)
 %}
 
@@ -38,7 +31,6 @@ NoAST *raiz_ast = NULL;
     Valor valor;
 }
 
-/* Os apelidos entre aspas aparecem nas mensagens de erro sintático. */
 %token FIM 0                    "fim do arquivo"
 %token KW_IMAGEM                "'imagem'"
 %token KW_INTEIRO               "'inteiro'"
@@ -63,8 +55,6 @@ NoAST *raiz_ast = NULL;
 %type <no> redimensionamento conversao_cinza rotacao recorte salvamento
 %type <valor> valor_inteiro
 
-/* Libera o que o parser descarta durante a recuperação de erros ou quando
-   a análise é abortada. */
 %destructor { free($$); } <texto>
 %destructor { liberar_ast($$); } <no>
 %destructor { liberar_valor(&$$); } <valor>
@@ -73,8 +63,6 @@ NoAST *raiz_ast = NULL;
 
 %%
 
-/* inicio não tem valor: quando a análise termina, a árvore já foi entregue
-   em raiz_ast e o Bison não tem nada a descartar. */
 inicio
     : programa                  { raiz_ast = $1; }
     ;
@@ -139,8 +127,6 @@ valor_inteiro
 
 %%
 
-/* Chamada pelo Bison (parse.error custom) a cada erro sintático. Monta a
-   mensagem no formato arquivo:linha:coluna: erro sintatico: ... */
 static int yyreport_syntax_error(const yypcontext_t *contexto)
 {
     enum { MAX_ESPERADOS = 5 };
@@ -153,8 +139,6 @@ static int yyreport_syntax_error(const yypcontext_t *contexto)
             arquivo_atual, local->first_line, local->first_column,
             yysymbol_name(yypcontext_token(contexto)));
 
-    /* n == 0 quando ha mais de MAX_ESPERADOS alternativas. Nesta gramatica
-       isso so acontece onde comeca um comando (sao 7 palavras-chave). */
     if (n == 0)
         fprintf(stderr, ", esperado inicio de comando");
     for (int i = 0; i < n; i++)
@@ -164,7 +148,6 @@ static int yyreport_syntax_error(const yypcontext_t *contexto)
     return 0;
 }
 
-/* Erros que nao sao sintaticos (ex.: pilha esgotada) passam por aqui. */
 void yyerror(const char *mensagem)
 {
     fprintf(stderr, "%s: erro: %s\n", arquivo_atual, mensagem);

@@ -1,6 +1,3 @@
-// Estilos próprios da documentação da ImagemLang, aplicados por cima do
-// just-the-docs. Cores base em _sass/color_schemes/imagemlang.scss.
-
 $il-accent: #8da2ff;
 $il-accent-2: #5eead4;
 $il-muted: #8b91a1;
@@ -10,8 +7,6 @@ $il-ok: #4ade80;
 $il-wip: #fbbf24;
 $il-plan: #8b91a1;
 $il-error: #f87171;
-
-// ---- Base ------------------------------------------------------------------
 
 body {
   -webkit-font-smoothing: antialiased;
@@ -28,8 +23,6 @@ body {
     letter-spacing: -0.015em;
   }
 
-  // Cada seção de primeiro nível ganha uma linha divisória, para separar
-  // visualmente os assuntos da página.
   h2 {
     margin-top: 3rem;
     padding-top: 1.75rem;
@@ -72,8 +65,6 @@ body {
   }
 }
 
-// ---- Cabeçalho das páginas --------------------------------------------------
-
 .il-page-header {
   margin-bottom: 2.5rem;
   padding-bottom: 1.75rem;
@@ -98,8 +89,6 @@ body {
     line-height: 1.6;
   }
 }
-
-// ---- Barra lateral e topo ---------------------------------------------------
 
 .site-title {
   font-weight: 700;
@@ -188,8 +177,6 @@ body {
   }
 }
 
-// ---- Código -----------------------------------------------------------------
-
 .main-content {
   code {
     padding: 0.15em 0.4em;
@@ -231,8 +218,6 @@ body {
   }
 }
 
-// Linguagens que o Rouge não conhece (imagemlang, saida, ebnf) saem como um
-// <pre><code> sem o invólucro do tema; recebem a mesma caixa.
 .main-content > pre,
 .main-content main > pre,
 .main-content li > pre {
@@ -254,8 +239,6 @@ body {
   }
 }
 
-// Realce da ImagemLang, da saída do compilador e da EBNF
-// (assets/js/realce.js).
 .il-kw { color: #c4a7ff; font-weight: 500; }
 .il-str { color: #86efac; }
 .il-num { color: #fdba74; }
@@ -267,8 +250,6 @@ body {
 .il-err { color: $il-error; font-weight: 600; }
 .il-ok { color: $il-ok; font-weight: 600; }
 .il-warn { color: $il-wip; font-weight: 600; }
-
-// ---- Tabelas ----------------------------------------------------------------
 
 .main-content .table-wrapper {
   border: 1px solid $border-color;
@@ -306,8 +287,6 @@ body {
   }
 }
 
-// ---- Blocos de destaque (callouts) ---------------------------------------
-
 @mixin il-callout($cor, $titulo) {
   border: 1px solid rgba($cor, 0.3);
   border-left: 3px solid $cor;
@@ -335,8 +314,6 @@ body {
   p.atencao, blockquote.atencao { @include il-callout($il-wip, "Atenção"); }
   p.importante, blockquote.importante { @include il-callout(#c084fc, "Importante"); }
 }
-
-// ---- Componentes da página inicial e das seções -----------------------------
 
 .il-hero {
   position: relative;
@@ -488,7 +465,6 @@ body {
   text-transform: uppercase;
 }
 
-// Grade de cartões.
 .il-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
@@ -560,7 +536,6 @@ body {
   }
 }
 
-// Linha do tempo das fases do compilador.
 .main-content .il-pipeline {
   list-style: none;
   margin: 1.5rem 0 2rem;
@@ -577,8 +552,6 @@ body {
     margin: 0;
     padding: 0 0 1.25rem;
 
-    // O tema numera "ol > li" com um ::before absoluto; aqui ele vira a
-    // primeira coluna da grade.
     &::before {
       counter-increment: fase;
       content: counter(fase);
@@ -597,7 +570,6 @@ body {
       font-weight: 700;
     }
 
-    // Traço vertical que liga as fases.
     &:not(:last-child)::after {
       content: "";
       position: absolute;
@@ -655,7 +627,6 @@ body {
   &.il-plan { background: rgba($il-plan, 0.12); color: $il-plan; }
 }
 
-// Números em destaque.
 .il-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
@@ -684,7 +655,6 @@ body {
   }
 }
 
-// Listas "dentro" e "fora" do escopo.
 .il-scope {
   ul {
     margin: 0.5rem 0 0;
@@ -710,8 +680,6 @@ body {
   .il-out li::before { content: "–"; color: $il-muted; }
 }
 
-// ---- Rodapé -------------------------------------------------------------------
-
 .il-footer {
   display: flex;
   flex-wrap: wrap;
@@ -720,8 +688,6 @@ body {
   color: $il-muted;
   font-size: 0.8rem;
 }
-
-// ---- Telas pequenas -----------------------------------------------------------
 
 @media (max-width: 50rem) {
   .il-hero h1 { font-size: 2.4rem !important; }

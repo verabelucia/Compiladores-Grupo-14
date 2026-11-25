@@ -19,7 +19,6 @@ relative_links:
   enabled: true
   collections: false
 
-# Esquema próprio: docs/_sass/color_schemes/imagemlang.scss.
 color_scheme: imagemlang
 search_enabled: true
 search:
@@ -29,8 +28,6 @@ search:
 
 heading_anchors: true
 
-# As páginas internas usam docs/_layouts/pagina.html, que imprime o título e
-# a descrição do front matter acima do conteúdo.
 defaults:
   - scope:
       path: ""
@@ -52,7 +49,6 @@ gh_edit_branch: main
 gh_edit_source: docs
 gh_edit_view_mode: edit
 
-# Blocos de destaque: {: .nota }, {: .dica }, {: .atencao }, {: .importante }.
 callouts:
   nota:
     title: Nota

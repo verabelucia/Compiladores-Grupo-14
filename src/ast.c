@@ -1,8 +1,3 @@
-/* FGA0003 - Compiladores 1 */
-/* Curso de Engenharia de Software */
-/* Universidade de Brasília (UnB) */
-/* ImagemLang - árvore sintática abstrata (AST) */
-
 #include <stdlib.h>
 
 #include "ast.h"
@@ -48,7 +43,6 @@ NoAST *criar_no_programa(void)
     return novo_no(AST_PROGRAM, posicao(1, 1));
 }
 
-/* Comandos com erro sintático chegam como NULL e são ignorados. */
 void adicionar_comando(NoAST *programa, NoAST *comando)
 {
     if (comando == NULL)
@@ -155,9 +149,6 @@ const char *palavra_chave_no(TipoNo tipo)
     return "";
 }
 
-/* ---- Impressão ---------------------------------------------------------- */
-
-/* Rótulos dos argumentos de cada comando, na ordem de NoAST.args. */
 static const char *const ROTULOS_RESIZE[] = { "largura", "altura" };
 static const char *const ROTULOS_ROTATE[] = { "angulo" };
 static const char *const ROTULOS_CROP[] = { "x", "y", "largura", "altura" };
@@ -172,7 +163,6 @@ static const char *const *rotulos_args(TipoNo tipo)
     }
 }
 
-/* Desenha o começo de uma linha da árvore: "|-- " ou, no último filho, "`-- ". */
 const char *rotulo_arg(TipoNo tipo, int i)
 {
     const char *const *rotulos = rotulos_args(tipo);
@@ -203,7 +193,6 @@ static void imprimir_valor(FILE *saida, const char *rotulo, const Valor *valor)
 
 static void imprimir_comando(FILE *saida, const NoAST *no, int ultimo)
 {
-    /* Prefixo dos filhos: continua a linha vertical se ainda há comandos. */
     const char *prefixo = ultimo ? "    " : "|   ";
     const char *const *rotulos = rotulos_args(no->tipo);
     int tem_arquivo = no->tipo == AST_IMAGE_DECL || no->tipo == AST_SAVE;
@@ -215,7 +204,6 @@ static void imprimir_comando(FILE *saida, const NoAST *no, int ultimo)
     fprintf(saida, "%s", nome_tipo_no(no->tipo));
     imprimir_posicao(saida, no->pos);
 
-    /* Declarações nomeiam a variável criada; os demais comandos, a imagem. */
     ramo(saida, prefixo, filhos == 1);
     fprintf(saida, "%s: %s",
             (no->tipo == AST_IMAGE_DECL || tem_numero) ? "nome" : "imagem",
@@ -250,8 +238,6 @@ void imprimir_ast(FILE *saida, const NoAST *raiz)
         imprimir_comando(saida, cmd, cmd->proximo == NULL);
 }
 
-/* ---- Liberação ---------------------------------------------------------- */
-
 void liberar_valor(Valor *valor)
 {
     free(valor->nome);
@@ -269,8 +255,6 @@ static void liberar_comando(NoAST *cmd)
     free(cmd);
 }
 
-/* Aceita a raiz (AST_PROGRAM, libera todos os comandos) ou um comando
-   avulso, que é o que o Bison descarta quando a análise é abortada. */
 void liberar_ast(NoAST *raiz)
 {
     NoAST *cmd, *seguinte;

@@ -1,24 +1,9 @@
-/* FGA0003 - Compiladores 1 */
-/* Curso de Engenharia de Software */
-/* Universidade de Brasília (UnB) */
-/* ImagemLang - runtime de imagens em C */
-
-/* As bibliotecas stb cuidam de ler, redimensionar e gravar; tons de cinza,
-   rotação e recorte são implementados aqui, sobre o vetor de pixels.
-
-   Os arquivos stb_*.h são cópias sem alterações (domínio público / MIT):
-     stb_image.h         v2.34  github.com/nothings/stb             6b5799b
-     stb_image_write.h   v1.19  github.com/nothings/stb             6b5799b
-     stb_image_resize2.h v2.51  github.com/nothings/stb_image_resize a4f303e */
-
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
 
-/* A implementação de cada stb é gerada neste arquivo. Os avisos de -Wall e
-   -Wextra são desligados só no código de terceiros. */
 #if defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wall"
@@ -41,9 +26,8 @@
 #include "runtime.h"
 
 #define QUALIDADE_JPG 90
-#define LADO_MAXIMO_JPG 65535 /* o formato guarda cada lado em 16 bits */
+#define LADO_MAXIMO_JPG 65535
 
-/* Devolve 1 se 'img' pode ser usada; senão imprime erro e devolve 0. */
 static int imagem_valida(const Imagem *img, const char *operacao)
 {
     if (img != NULL && img->dados != NULL)
@@ -52,8 +36,6 @@ static int imagem_valida(const Imagem *img, const char *operacao)
     return 0;
 }
 
-/* Aloca um buffer para largura x altura pixels. Em caso de erro, imprime
-   mensagem e devolve NULL. */
 static unsigned char *alocar_pixels(int largura, int altura, int canais,
                                     const char *operacao)
 {
@@ -65,7 +47,6 @@ static unsigned char *alocar_pixels(int largura, int altura, int canais,
     return dados;
 }
 
-/* Troca o buffer de pixels de 'img', liberando o anterior. */
 static void trocar_pixels(Imagem *img, unsigned char *dados, int largura,
                           int altura)
 {
@@ -75,7 +56,6 @@ static void trocar_pixels(Imagem *img, unsigned char *dados, int largura,
     img->altura = altura;
 }
 
-/* Endereço do pixel (x, y) num buffer de linhas com 'largura' pixels. */
 static unsigned char *pixel(unsigned char *dados, int largura, int canais,
                             int x, int y)
 {
@@ -91,7 +71,6 @@ Imagem *img_load(const char *caminho)
         return NULL;
     }
 
-    /* Só RGB ou RGBA: cinza vira RGB e cinza com alfa vira RGBA. */
     if (!stbi_info(caminho, &largura, &altura, &canais)) {
         fprintf(stderr, "erro de execucao: nao foi possivel carregar '%s': %s\n",
                 caminho, stbi_failure_reason());
@@ -136,8 +115,6 @@ int img_resize(Imagem *img, int largura, int altura)
     if (dados == NULL)
         return 1;
 
-    /* STBIR_RGB e STBIR_RGBA valem 3 e 4; com RGBA a stb pondera a cor pelo
-       alfa, o que evita halos nas bordas transparentes. */
     if (stbir_resize_uint8_linear(img->dados, img->largura, img->altura, 0,
                                   dados, largura, altura, 0,
                                   (stbir_pixel_layout) img->canais) == NULL) {
@@ -159,16 +136,12 @@ int img_grayscale(Imagem *img)
     for (size_t i = 0; i < total; i++) {
         unsigned char *p = img->dados + i * img->canais;
 
-        /* Luminância BT.601 (0,299 R + 0,587 G + 0,114 B) em inteiros, com
-           arredondamento. O alfa, se houver, não muda. */
         p[0] = p[1] = p[2] =
             (unsigned char) ((299 * p[0] + 587 * p[1] + 114 * p[2] + 500) / 1000);
     }
     return 0;
 }
 
-/* Rotaciona 'img' 90 graus em sentido horário: o pixel (x, y) vai para
-   (altura - 1 - y, x). */
 static int rotacionar_90(Imagem *img)
 {
     int largura = img->altura;
@@ -213,8 +186,6 @@ int img_crop(Imagem *img, int x, int y, int largura, int altura)
                 largura, altura);
         return 1;
     }
-    /* x + largura <= img->largura e y + altura <= img->altura, escritos com
-       subtração para que a soma não estoure o int. */
     if (x < 0 || y < 0
         || x > img->largura - largura || y > img->altura - altura) {
         fprintf(stderr, "erro de execucao: recortar: area de %d, %d tamanho "
@@ -246,8 +217,6 @@ int img_save(const Imagem *img, const char *caminho)
         return 1;
     }
 
-    /* A extensão é o que vem depois do último ponto do nome do arquivo, sem
-       contar pontos no nome das pastas. */
     const char *nome = strrchr(caminho, '/');
     const char *ext = strrchr(nome != NULL ? nome : caminho, '.');
     int gravou;
@@ -262,7 +231,6 @@ int img_save(const Imagem *img, const char *caminho)
                             "demais para JPG\n", img->largura, img->altura);
             return 1;
         }
-        /* JPG não tem transparência: a stb descarta o alfa. */
         gravou = stbi_write_jpg(caminho, img->largura, img->altura, img->canais,
                                 img->dados, QUALIDADE_JPG);
     } else {
