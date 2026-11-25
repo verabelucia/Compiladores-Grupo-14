@@ -3,7 +3,7 @@
 int main(void) {
     Imagem *im_foto = img_load("foto.jpg");
     if (!im_foto) return 1;
-    if (img_save(im_foto, "resultado.jpg") != 0) return 1;
+    if (img_save(im_foto, "resultado.jpg") != 0) { img_destroy(im_foto); return 1; }
     img_destroy(im_foto);
     return 0;
 }

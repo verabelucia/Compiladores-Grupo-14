@@ -1,0 +1,6 @@
+imagem f = "f.png";
+imagem g = "g.png";
+tons_de_cinza f;
+rotacionar g 90;
+salvar f como "f2.png";
+salvar g como "g2.png";
