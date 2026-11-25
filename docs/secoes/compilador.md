@@ -6,7 +6,7 @@ has_toc: false
 description: "Como o imagemc transforma um programa .img: fases, módulos e os contratos entre eles."
 ---
 
-<div class="il-grid il-grid-2">
+<div class="il-grid">
   <a class="il-card" href="{{ '/arquitetura.html' | relative_url }}">
     <span class="il-eyebrow">Visão geral</span>
     <h3>Arquitetura</h3>
@@ -18,5 +18,11 @@ description: "Como o imagemc transforma um programa .img: fases, módulos e os c
     <h3>Módulos e contratos</h3>
     <p>Os arquivos de cada módulo, o texto exato das saídas e o catálogo de erros semânticos.</p>
     <span class="il-card-more">Ver os contratos →</span>
+  </a>
+  <a class="il-card" href="{{ '/runtime.html' | relative_url }}">
+    <span class="il-eyebrow">Na prática</span>
+    <h3>Runtime e executável</h3>
+    <p>Como o C gerado transforma imagens de verdade, com exemplos e demonstrações interativas.</p>
+    <span class="il-card-more">Ver o runtime →</span>
   </a>
 </div>

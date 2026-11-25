@@ -1,0 +1,237 @@
+.rt-analogia {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+  margin: 0 0 2rem;
+}
+
+.rt-demo {
+  margin: 1.5rem 0 2rem;
+  padding: 1.25rem;
+  border: 1px solid rgba(141, 162, 255, 0.35);
+  border-radius: 12px;
+  background: #13151c;
+}
+
+.main-content .rt-demo .rt-titulo {
+  margin: 0 0 1rem;
+  color: #8da2ff;
+  font-weight: 600;
+}
+
+.rt-duas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.rt-duas > .rt-painel,
+.rt-duas > .rt-controles {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.rt-grade {
+  display: inline-grid;
+  gap: 4px;
+  min-height: 9rem;
+  align-content: center;
+}
+
+.rt-celula {
+  display: grid;
+  place-items: center;
+  height: 3rem;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  color: #0e1015;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+button.rt-celula {
+  cursor: pointer;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
+}
+
+.rt-celula.rt-ativo {
+  border-color: #fff;
+  box-shadow: 0 0 0 3px rgba(141, 162, 255, 0.6);
+}
+
+.rt-letra-a { background: #fca5a5; }
+.rt-letra-b { background: #fdba74; }
+.rt-letra-c { background: #fde047; }
+.rt-letra-d { background: #86efac; }
+.rt-letra-e { background: #7dd3fc; }
+.rt-letra-f { background: #c4a7ff; }
+
+.rt-mini {
+  gap: 2px;
+  min-height: 0;
+}
+
+.rt-mini .rt-celula {
+  height: 1.15rem;
+  border: 0;
+  border-radius: 3px;
+  background: #2c2f3a;
+}
+
+.rt-mini .rt-dentro { background: #4ade80; }
+.rt-mini .rt-fora { background: #f87171; }
+
+.rt-painel {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  background: #090a0e;
+  color: #c3c8d4;
+  font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.rt-demo > .rt-painel {
+  margin-top: 1rem;
+}
+
+.rt-forte { color: #fff; font-weight: 600; }
+.rt-sim { color: #4ade80; }
+.rt-nao { color: #f87171; }
+
+.rt-fita {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: 1rem;
+}
+
+.rt-byte {
+  min-width: 2.1rem;
+  padding: 0.15rem 0.2rem;
+  border-radius: 4px;
+  background: #1b1e27;
+  color: #8b91a1;
+  font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.rt-byte.rt-r { border-bottom: 2px solid #f87171; }
+.rt-byte.rt-g { border-bottom: 2px solid #4ade80; }
+.rt-byte.rt-b { border-bottom: 2px solid #60a5fa; }
+
+.rt-byte.rt-ativo {
+  background: #5b6cf0;
+  color: #fff;
+}
+
+.rt-controles label {
+  display: grid;
+  grid-template-columns: 3rem 1fr 2.5rem;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.4rem 0;
+  font-size: 0.9rem;
+}
+
+.rt-controles input {
+  width: 100%;
+  accent-color: #8da2ff;
+}
+
+.rt-controles output {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.rt-cores {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.rt-cores i {
+  display: block;
+  width: 5.5rem;
+  height: 4.5rem;
+  margin-bottom: 0.4rem;
+  border: 1px solid #232631;
+  border-radius: 8px;
+}
+
+.rt-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.rt-botoes button {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid #232631;
+  border-radius: 8px;
+  background: #1b1e27;
+  color: #f2f4f8;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.rt-botoes button:hover,
+.rt-botoes button:focus-visible {
+  border-color: #8da2ff;
+}
+
+.rt-fotos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: end;
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+
+.rt-fotos.rt-tres {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.rt-fotos figure {
+  margin: 0;
+  text-align: center;
+}
+
+.rt-fotos img {
+  max-width: 100%;
+  max-height: 18rem;
+  border-radius: 8px;
+}
+
+.rt-fotos figcaption {
+  margin-top: 0.4rem;
+  color: #8b91a1;
+  font-size: 0.8rem;
+}
+
+.main-content details {
+  margin: 0.6rem 0;
+  padding: 0.7rem 1rem;
+  border: 1px solid #232631;
+  border-radius: 8px;
+  background: #13151c;
+}
+
+.main-content summary {
+  color: #f2f4f8;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 40rem) {
+  .rt-fotos,
+  .rt-fotos.rt-tres { grid-template-columns: 1fr; }
+}
