@@ -67,6 +67,6 @@ do professor.
 | Uma string não terminada engole o `;` e causa um erro sintático em cascata. | Limitação aceita: os comandos seguintes continuam sendo analisados, e o caso tem teste próprio. |
 | O prólogo `%{ %}` do Bison é copiado antes do `%code requires`, então o tipo `NoAST` ainda não existia onde `raiz_ast` era declarada. | `ast.h` incluído também no prólogo do `parser.y`. |
 | Trocar o eco provisório dos comandos pela AST mudaria a saída de todos os testes sintáticos. | Saída padrão passou a ser só o resumo; a árvore sai com `--ast`, e os testes sintáticos passaram a conferir a árvore. |
-| Duas pessoas iam editar o mesmo `semantico.c` (declarações e tipos). | Cada arquivo tem um dono; as verificações de declaração ficaram no `tabela.c`, e a função `erro_semantico` é compartilhada (ver [Módulos e contratos](modulos.md)). |
-| A tabela de símbolos só podia ser testada quando a semântica a chamasse, o que obrigaria uma pessoa a esperar a outra. | No Dia 1, o percurso da AST que chama a tabela já foi entregue no `semantico.c`; a semântica ficou só com as verificações de tipo e domínio. |
+| As verificações de declaração e de tipos iam ficar no mesmo `semantico.c`. | As verificações de declaração ficaram no `tabela.c`, e a função `erro_semantico` é compartilhada (ver [Módulos e contratos](modulos.md)). |
+| A tabela de símbolos só podia ser testada quando a semântica a chamasse, o que impediria desenvolver as duas em paralelo. | No Dia 1, o percurso da AST que chama a tabela já foi entregue no `semantico.c`; a semântica ficou só com as verificações de tipo e domínio. |
 | Na integração, o `--ri` imprimia uma linha em branco a mais que o combinado no contrato. | Corrigido no `ri.c`; os `.esperado` da RI foram ajustados ao formato do contrato. |

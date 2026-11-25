@@ -1,7 +1,7 @@
 /* FGA0003 - Compiladores 1 */
 /* Curso de Engenharia de Software */
 /* Universidade de Brasília (UnB) */
-/* ImagemLang - runtime de imagens em C (dono: Pessoa 3) */
+/* ImagemLang - runtime de imagens em C */
 
 /* CONTRATO CONGELADO: as assinaturas abaixo foram combinadas pelo grupo.
    Mudar alguma delas exige combinar antes com quem a usa (codegen.c).

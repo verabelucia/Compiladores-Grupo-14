@@ -1,7 +1,7 @@
 /* FGA0003 - Compiladores 1 */
 /* Curso de Engenharia de Software */
 /* Universidade de Brasília (UnB) */
-/* ImagemLang - otimizador de RI (dono: Pessoa 1) */
+/* ImagemLang - otimizador de RI */
 
 /* Propagação de constantes em duas passagens sobre a RI:
      1. cada argumento de RI_RESIZE, RI_ROTATE e RI_CROP que é uma variável

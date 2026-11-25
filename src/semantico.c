@@ -1,7 +1,7 @@
 /* FGA0003 - Compiladores 1 */
 /* Curso de Engenharia de Software */
 /* Universidade de Brasília (UnB) */
-/* ImagemLang - análise semântica (dono: Pessoa 3) */
+/* ImagemLang - análise semântica */
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -12,7 +12,7 @@ extern const char *arquivo_atual;
 
 int erros_semanticos = 0;
 
-/* Pronta: é a parte do contrato que a tabela (Pessoa 2) também usa. */
+/* Pronta: é a parte do contrato que a tabela também usa. */
 void erro_semantico(Posicao pos, const char *formato, ...)
 {
     va_list args;

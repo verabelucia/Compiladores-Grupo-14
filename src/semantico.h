@@ -1,7 +1,7 @@
 /* FGA0003 - Compiladores 1 */
 /* Curso de Engenharia de Software */
 /* Universidade de Brasília (UnB) */
-/* ImagemLang - análise semântica (dono: Pessoa 3) */
+/* ImagemLang - análise semântica */
 
 /* CONTRATO CONGELADO: ver tabela.h. Lista completa das verificações e o
    texto exato de cada mensagem: docs/modulos.md. */

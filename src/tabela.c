@@ -1,7 +1,7 @@
 /* FGA0003 - Compiladores 1 */
 /* Curso de Engenharia de Software */
 /* Universidade de Brasília (UnB) */
-/* ImagemLang - tabela de símbolos (dono: Pessoa 2) */
+/* ImagemLang - tabela de símbolos */
 
 #include <stdlib.h>
 #include <string.h>

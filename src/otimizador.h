@@ -1,7 +1,7 @@
 /* FGA0003 - Compiladores 1 */
 /* Curso de Engenharia de Software */
 /* Universidade de Brasília (UnB) */
-/* ImagemLang - otimizador de RI (dono: Pessoa 1) */
+/* ImagemLang - otimizador de RI */
 
 /* CONTRATO CONGELADO: as assinaturas abaixo foram combinadas pelo grupo.
    Mudar alguma delas exige combinar antes com quem a usa (main.c).

@@ -1,7 +1,7 @@
 /* FGA0003 - Compiladores 1 */
 /* Curso de Engenharia de Software */
 /* Universidade de Brasília (UnB) */
-/* ImagemLang - tabela de símbolos (dono: Pessoa 2) */
+/* ImagemLang - tabela de símbolos */
 
 /* CONTRATO CONGELADO: as assinaturas abaixo foram combinadas pelo grupo.
    Mudar alguma delas exige combinar antes com quem a usa (semantico.c,

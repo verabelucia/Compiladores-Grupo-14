@@ -16,7 +16,7 @@ description: "Como o imagemc transforma um programa .img: fases, módulos e os c
   <a class="il-card" href="{{ '/modulos.html' | relative_url }}">
     <span class="il-eyebrow">Interfaces</span>
     <h3>Módulos e contratos</h3>
-    <p>Quem é dono de cada arquivo, o texto exato das saídas e o catálogo de erros semânticos.</p>
+    <p>Os arquivos de cada módulo, o texto exato das saídas e o catálogo de erros semânticos.</p>
     <span class="il-card-more">Ver os contratos →</span>
   </a>
 </div>

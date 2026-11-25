@@ -1,7 +1,7 @@
 /* FGA0003 - Compiladores 1 */
 /* Curso de Engenharia de Software */
 /* Universidade de Brasília (UnB) */
-/* ImagemLang - gerador de código C (dono: Pessoa 2) */
+/* ImagemLang - gerador de código C */
 
 #include "codegen.h"
 

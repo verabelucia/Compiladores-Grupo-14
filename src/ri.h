@@ -1,7 +1,7 @@
 /* FGA0003 - Compiladores 1 */
 /* Curso de Engenharia de Software */
 /* Universidade de Brasília (UnB) */
-/* ImagemLang - representação intermediária (dono: Pessoa 4) */
+/* ImagemLang - representação intermediária */
 
 /* CONTRATO CONGELADO: ver tabela.h. Formato de texto exato do modo --ri
    e exemplo completo: docs/modulos.md. */

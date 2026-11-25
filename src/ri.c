@@ -2,7 +2,7 @@
 /* FGA0003 - Compiladores 1 */
 /* Curso de Engenharia de Software */
 /* Universidade de Brasilia (UnB) */
-/* ImagemLang - representacao intermediaria (Pessoa 4) */
+/* ImagemLang - representacao intermediaria */
 
 #include <stdio.h>
 #include <stdlib.h>
