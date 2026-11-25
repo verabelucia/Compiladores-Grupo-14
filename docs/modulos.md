@@ -31,6 +31,15 @@ AST validada + tabela de símbolos
    │  gerar_ri           src/ri.c          (pronto)
    ▼
 RI (lista de instruções)
+   │  otimizar_ri        src/otimizador.c  (pronto)
+   ▼
+RI otimizada
+   │  gerar_c            src/codegen.c     (pronto)
+   ▼
+programa.c
+   │  gcc                runtime/runtime.c (pronto)
+   ▼
+executável
 ```
 
 O `src/main.c` já liga as fases: a semântica só roda se não houve erro léxico
@@ -66,8 +75,10 @@ Regras:
 | `imagemc --ast prog.img` | a AST |
 | `imagemc --tabela prog.img` | a tabela de símbolos |
 | `imagemc --ri prog.img` | a representação intermediária |
+| `imagemc --ri-otim prog.img` | a representação intermediária otimizada |
+| `imagemc --c prog.img` | o código C gerado |
 
-Nos modos `--ast`, `--tabela` e `--ri`, depois da estrutura vem uma linha em
+Nos modos `--ast`, `--tabela`, `--ri` e `--ri-otim`, depois da estrutura vem uma linha em
 branco e `analise concluida sem erros.`. Com erro, a saída é:
 
 ```saida
@@ -195,8 +206,8 @@ programa, e no fim um `FREE` para cada imagem, na ordem de declaração. O
 | `RI_FREE` | (fim do programa) | `FREE foto` |
 
 Argumentos que são variáveis aparecem **pelo nome** (`RESIZE foto, largura,
-800`). Trocar o nome pelo valor (propagação de constantes) fica para a
-otimização da semana 09.
+800`). Trocar o nome pelo valor (propagação de constantes) é trabalho do
+[otimizador](#otimização-da-ri).
 
 **Formato do `--ri`**, para `tests/sintatico/validos/01-programa-completo.img`:
 
@@ -228,6 +239,8 @@ O `run_tests.sh` já reconhece as pastas novas e escolhe o modo pela fase:
 | `tests/sintatico/{validos,invalidos}/` | `--ast` |
 | `tests/semantico/{validos,invalidos}/` | `--tabela` |
 | `tests/intermediario/validos/` | `--ri` |
+| `tests/otimizacao/validos/` | `--ri-otim` |
+| `tests/codegen/validos/` | `--c` |
 
 Para criar um caso: `NOME.img` e, ao lado, `NOME.esperado` com a saída
 exata. Os exemplos desta página (a tabela, o catálogo de erros e a RI) podem
@@ -260,7 +273,7 @@ os contratos abaixo foram congelados a partir de `src/ri.h`:
 - **Runtime (`runtime/runtime.h`):** `img_load` devolve `Imagem *` (ou `NULL`
   em erro); `img_resize`, `img_grayscale`, `img_rotate`, `img_crop` e
   `img_save` devolvem `0` em sucesso e diferente de `0` em erro; `img_destroy`
-  aceita `NULL`.
+  aceita `NULL`. Detalhes em [Runtime e executável](runtime.md).
 
 ### Formato do `--c`
 

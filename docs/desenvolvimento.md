@@ -32,6 +32,20 @@ A pasta `build/` não é versionada: ela guarda o `parser.tab.c` e o
 `parser.tab.h` gerados pelo Bison, o `lex.yy.c` gerado pelo Flex e o
 executável `imagemc`, todos reconstruíveis a partir de `src/`.
 
+## Demonstração completa
+
+`make demo` gera o C de `examples/programa_basico.img`, compila-o com o runtime
+e executa o resultado. O programa abre `foto.jpg` na raiz do repositório; use
+uma foto sua ou a da documentação:
+
+```sh
+cp docs/assets/img/runtime/original.jpg foto.jpg
+make demo
+```
+
+O resultado é `resultado.jpg`, com 300x200 pixels. A página
+[Runtime e executável](runtime.md) explica cada passo.
+
 ## Executando o compilador
 
 | Comando | Imprime quando não há erro |
@@ -41,6 +55,8 @@ executável `imagemc`, todos reconstruíveis a partir de `src/`.
 | `imagemc --ast prog.img` | a árvore sintática abstrata |
 | `imagemc --tabela prog.img` | a tabela de símbolos |
 | `imagemc --ri prog.img` | a representação intermediária |
+| `imagemc --ri-otim prog.img` | a representação intermediária otimizada |
+| `imagemc --c prog.img` | o código C gerado, sem mais nada |
 
 Por padrão, `imagemc` analisa o programa e informa se há erros:
 
@@ -114,8 +130,10 @@ Cada arquivo `tests/<fase>/<grupo>/<nome>.img` tem um par `<nome>.esperado`
 com a saída completa (stdout e stderr) que o compilador deve produzir. O
 script `run_tests.sh` compara as duas e informa `PASSOU` ou `FALHOU`. A fase
 decide o modo: `tests/lexico/` roda `imagemc --tokens`, `tests/sintatico/`
-roda `imagemc --ast`, `tests/semantico/` roda `imagemc --tabela` e
-`tests/intermediario/` roda `imagemc --ri`.
+roda `imagemc --ast`, `tests/semantico/` roda `imagemc --tabela`,
+`tests/intermediario/` roda `imagemc --ri`, `tests/otimizacao/` roda
+`imagemc --ri-otim` e `tests/codegen/` roda `imagemc --c`. Hoje são 40 casos.
+Para rodar uma fase só, passe o nome dela: `./run_tests.sh codegen`.
 
 | Pasta | Cobre |
 |---|---|
@@ -126,3 +144,5 @@ roda `imagemc --ast`, `tests/semantico/` roda `imagemc --tabela` e
 | `tests/semantico/validos/` | tabela de símbolos de um programa sem erros |
 | `tests/semantico/invalidos/` | os seis erros do catálogo: variável não declarada, redeclarada, comando de imagem sobre inteiro, imagem usada como inteiro, ângulo inválido, dimensão zero |
 | `tests/intermediario/validos/` | a RI de um programa completo e de cada comando (declarações, tons de cinza, rotação, recorte) |
+| `tests/otimizacao/validos/` | propagação de constantes e remoção de `CONST` em redimensionamento, rotação, recorte e programa completo |
+| `tests/codegen/validos/` | o C gerado para o programa básico, carregamento, redimensionamento, tons de cinza e recorte |
