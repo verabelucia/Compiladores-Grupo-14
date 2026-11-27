@@ -1,0 +1,4 @@
+imagem foto = "foto.jpg";
+redimensionar foto para 100 por 100;
+recortar foto de 50, 50 tamanho 80 por 80;
+salvar foto como "saida.jpg";

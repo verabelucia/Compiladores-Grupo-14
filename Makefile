@@ -32,6 +32,9 @@ $(BUILD)/imagemc-asan: $(BUILD)/parser.tab.c $(BUILD)/lex.yy.c $(FONTES) $(HEADE
 asan: $(BUILD)/imagemc-asan
 	COMPILADOR="$(CURDIR)/$(BUILD)/imagemc-asan" ./run_tests.sh
 
+test-runtime: $(ALVO)
+	./tests/runtime/run_runtime_tests.sh
+
 $(BUILD)/programa_basico.c: $(ALVO) examples/programa_basico.img
 	./$(ALVO) --c examples/programa_basico.img > $@
 
@@ -48,4 +51,4 @@ demo: $(BUILD)/programa_basico
 clean:
 	rm -rf $(BUILD)
 
-.PHONY: all test asan demo clean
+.PHONY: all test asan test-runtime demo clean
