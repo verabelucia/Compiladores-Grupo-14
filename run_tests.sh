@@ -1,7 +1,7 @@
 set -u
 
 RAIZ=$(cd "$(dirname "$0")" && pwd)
-COMPILADOR="$RAIZ/build/imagemc"
+COMPILADOR="${COMPILADOR:-$RAIZ/build/imagemc}"
 
 if [ ! -x "$COMPILADOR" ]; then
     echo "erro: '$COMPILADOR' nao encontrado. Rode 'make' antes de testar." >&2
