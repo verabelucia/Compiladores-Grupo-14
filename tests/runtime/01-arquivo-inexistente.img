@@ -1,0 +1,2 @@
+imagem foto = "nao-existe.jpg";
+salvar foto como "saida.jpg";

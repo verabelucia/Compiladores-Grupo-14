@@ -1,7 +1,8 @@
-CC     = gcc
-CFLAGS = -Wall -Wextra -g -Isrc -Ibuild
-BUILD  = build
-ALVO   = $(BUILD)/imagemc
+CC         = gcc
+CFLAGS     = -Wall -Wextra -g -Isrc -Ibuild
+ASAN_FLAGS = -fsanitize=address,undefined
+BUILD      = build
+ALVO       = $(BUILD)/imagemc
 
 all: $(ALVO)
 
@@ -25,6 +26,15 @@ $(ALVO): $(BUILD)/parser.tab.c $(BUILD)/lex.yy.c $(FONTES) $(HEADERS)
 test: $(ALVO)
 	./run_tests.sh
 
+$(BUILD)/imagemc-asan: $(BUILD)/parser.tab.c $(BUILD)/lex.yy.c $(FONTES) $(HEADERS)
+	$(CC) $(CFLAGS) $(ASAN_FLAGS) -o $@ $(BUILD)/parser.tab.c $(BUILD)/lex.yy.c $(FONTES)
+
+asan: $(BUILD)/imagemc-asan
+	COMPILADOR="$(CURDIR)/$(BUILD)/imagemc-asan" ./run_tests.sh
+
+test-runtime: $(ALVO)
+	./tests/runtime/run_runtime_tests.sh
+
 $(BUILD)/programa_basico.c: $(ALVO) examples/programa_basico.img
 	./$(ALVO) --c examples/programa_basico.img > $@
 
@@ -41,4 +51,4 @@ demo: $(BUILD)/programa_basico
 clean:
 	rm -rf $(BUILD)
 
-.PHONY: all test demo clean
+.PHONY: all test asan test-runtime demo clean
