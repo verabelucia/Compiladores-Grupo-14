@@ -23,9 +23,11 @@ no início com a mensagem `require bison 3.6`.
 ## Compilando
 
 ```sh
-make          # gera build/imagemc
-make test     # compila, se preciso, e roda a suíte de testes
-make clean    # apaga a pasta build/
+make              # gera build/imagemc
+make test         # compila, se preciso, e roda a suíte de testes
+make asan         # compila com AddressSanitizer/UBSan e roda os testes
+make test-runtime # testa erros de execução do runtime com AddressSanitizer
+make clean        # apaga a pasta build/
 ```
 
 A pasta `build/` não é versionada: ela guarda o `parser.tab.c` e o
@@ -146,3 +148,12 @@ Para rodar uma fase só, passe o nome dela: `./run_tests.sh codegen`.
 | `tests/intermediario/validos/` | a RI de um programa completo e de cada comando (declarações, tons de cinza, rotação, recorte) |
 | `tests/otimizacao/validos/` | propagação de constantes e remoção de `CONST` em redimensionamento, rotação, recorte e programa completo |
 | `tests/codegen/validos/` | o C gerado para o programa básico, carregamento, redimensionamento, tons de cinza e recorte |
+
+Para verificar memória e comportamento em tempo de execução:
+
+- `make asan`: compila o `imagemc` com `-fsanitize=address,undefined` e executa
+  toda a suíte `./run_tests.sh`.
+- `make test-runtime`: compila com AddressSanitizer e UBSan programas que
+  disparam erros reais no runtime (arquivo inexistente, recorte fora dos
+  limites da imagem e extensão não suportada), garantindo o tratamento de erro
+  sem vazamento de memória.
